@@ -6,208 +6,154 @@
 <title>RollingCode — Panel de Comisiones</title>
 <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Syne:wght@400;600;700;800&display=swap" rel="stylesheet">
 <style>
-*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-[data-theme="dark"] {
---bg: #0D0F12; --surface: #141619; --surface2: #1C1F24;
---border: rgba(255,255,255,0.07); --border2: rgba(255,255,255,0.14);
---text: #F0EDE8; --muted: #6B7280; --accent: #E8F542;
---topbar-bg: rgba(13,15,18,0.92);
---green-dim: rgba(62,207,160,0.12); --amber-col: #F5A623;
---amber-dim: rgba(245,166,35,0.12); --red-col: #FF5757;
---red-dim: rgba(255,87,87,0.12); --blue-col: #60A5FA;
---blue-dim: rgba(96,165,250,0.12);
-}
-[data-theme="light"] {
---bg: #F5F4F0; --surface: #FFFFFF; --surface2: #EEECEA;
---border: rgba(0,0,0,0.08); --border2: rgba(0,0,0,0.16);
---text: #1A1C1E; --muted: #7A7E87; --accent: #2D5A00;
---topbar-bg: rgba(245,244,240,0.92);
---green-dim: rgba(62,207,160,0.10); --amber-col: #C47A00;
---amber-dim: rgba(196,122,0,0.10); --red-col: #D63333;
---red-dim: rgba(214,51,51,0.09); --blue-col: #2563EB;
---blue-dim: rgba(37,99,235,0.09);
-}
-:root { --green: #3ECFA0; --font-head: 'Syne', sans-serif; --font-mono: 'DM Mono', monospace; }
-body { background: var(--bg); color: var(--text); font-family: var(--font-head); min-height: 100vh; transition: background 0.3s, color 0.3s; }
-.topbar { display: flex; justify-content: space-between; align-items: center; padding: 1.25rem 2rem; border-bottom: 1px solid var(--border); position: sticky; top: 0; background: var(--topbar-bg); backdrop-filter: blur(12px); z-index: 100; transition: background 0.3s, border-color 0.3s; }
-.logo { display: flex; align-items: center; gap: 10px; }
-.logo-mark { width: 32px; height: 32px; background: var(--accent); border-radius: 6px; display: flex; align-items: center; justify-content: center; transition: background 0.3s; }
-.logo-mark svg { width: 18px; height: 18px; }
-.logo-text { font-size: 15px; font-weight: 700; letter-spacing: -0.02em; }
-.logo-sub { font-size: 11px; color: var(--muted); font-family: var(--font-mono); letter-spacing: 0.05em; }
-.topbar-right { display: flex; align-items: center; gap: 12px; }
-.theme-toggle { display: flex; background: var(--surface2); border: 1px solid var(--border); border-radius: 22px; padding: 3px; gap: 2px; transition: background 0.3s, border-color 0.3s; }
-.toggle-btn { display: flex; align-items: center; gap: 5px; font-size: 11px; font-family: var(--font-mono); padding: 5px 12px; border-radius: 18px; border: none; background: transparent; color: var(--muted); cursor: pointer; transition: background 0.2s, color 0.2s; white-space: nowrap; }
-.toggle-btn svg { width: 12px; height: 12px; flex-shrink: 0; }
-.toggle-btn.active { color: var(--text); background: var(--surface); box-shadow: 0 1px 4px rgba(0,0,0,0.12); }
-.live-dot { display: flex; align-items: center; gap: 6px; font-size: 12px; color: var(--muted); font-family: var(--font-mono); }
-.live-dot::before { content: ''; width: 7px; height: 7px; border-radius: 50%; background: var(--green); animation: pulse 2s infinite; }
-@keyframes pulse { 0%,100%{opacity:1}50%{opacity:0.3} }
-@keyframes fadeUp { from{opacity:0;transform:translateY(16px)} to{opacity:1;transform:translateY(0)} }
-.main { padding: 2rem; max-width: 1400px; margin: 0 auto; }
-.page-header { margin-bottom: 2.5rem; animation: fadeUp 0.5s ease both; }
-.page-header h1 { font-size: clamp(28px, 4vw, 42px); font-weight: 800; letter-spacing: -0.03em; line-height: 1.1; margin-bottom: 8px; }
-.page-header h1 span { color: var(--accent); }
-.page-header p { color: var(--muted); font-size: 14px; font-family: var(--font-mono); }
-.metrics-row { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 12px; margin-bottom: 2.5rem; animation: fadeUp 0.5s 0.1s ease both; }
-.metric { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 1rem 1.25rem; transition: background 0.3s, border-color 0.3s; }
-.metric-label { font-size: 11px; color: var(--muted); font-family: var(--font-mono); letter-spacing: 0.06em; text-transform: uppercase; margin-bottom: 6px; }
-.metric-value { font-size: 28px; font-weight: 800; letter-spacing: -0.03em; line-height: 1; }
-.metric-sub { font-size: 11px; color: var(--muted); margin-top: 4px; font-family: var(--font-mono); }
-.zone-bar { display: flex; gap: 8px; margin-bottom: 2rem; flex-wrap: wrap; animation: fadeUp 0.5s 0.15s ease both; }
-.zone-pill { display: flex; align-items: center; gap: 6px; font-size: 12px; font-family: var(--font-mono); padding: 5px 12px; border-radius: 20px; border: 1px solid; }
-.zone-pill.green { border-color: var(--green); color: var(--green); background: var(--green-dim); }
-.zone-pill.amber { border-color: var(--amber-col); color: var(--amber-col); background: var(--amber-dim); }
-.zone-pill.red { border-color: var(--red-col); color: var(--red-col); background: var(--red-dim); }
-.zone-pill::before { content:''; width:6px; height:6px; border-radius:50%; background:currentColor; }
-.section-label { font-size: 11px; color: var(--muted); font-family: var(--font-mono); letter-spacing: 0.1em; text-transform: uppercase; margin-bottom: 1rem; padding-bottom: 0.5rem; border-bottom: 1px solid var(--border); }
-.cards-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(340px, 1fr)); gap: 16px; margin-bottom: 2.5rem; }
-.commission-card { background: var(--surface); border: 1px solid var(--border); border-radius: 16px; padding: 1.5rem; position: relative; overflow: hidden; transition: border-color 0.2s, transform 0.2s, background 0.3s; animation: fadeUp 0.5s ease both; }
-.commission-card:hover { border-color: var(--border2); transform: translateY(-2px); }
-.commission-card::before { content:''; position:absolute; top:0; left:0; right:0; height:3px; border-radius:16px 16px 0 0; }
-.card-green::before { background: var(--green); }
-.card-amber::before { background: var(--amber-col); }
-.card-red::before { background: var(--red-col); }
-.card-blue::before { background: var(--blue-col); }
-.card-top { display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:1rem; }
-.card-title { font-size:17px; font-weight:700; letter-spacing:-0.02em; }
-.card-subtitle { font-size:12px; color:var(--muted); font-family:var(--font-mono); margin-top:2px; }
-.status-badge { font-size:10px; font-family:var(--font-mono); font-weight:500; padding:4px 10px; border-radius:20px; white-space:nowrap; letter-spacing:0.04em; text-transform:uppercase; }
-.badge-green { background:var(--green-dim); color:var(--green); }
-.badge-amber { background:var(--amber-dim); color:var(--amber-col); }
-.badge-red { background:var(--red-dim); color:var(--red-col); }
-.badge-blue { background:var(--blue-dim); color:var(--blue-col); }
-.progress-section { margin-bottom:1.25rem; }
-.progress-header { display:flex; justify-content:space-between; font-size:12px; color:var(--muted); font-family:var(--font-mono); margin-bottom:6px; }
-.progress-track { height:6px; background:var(--surface2); border-radius:3px; overflow:hidden; transition:background 0.3s; }
-.progress-fill { height:100%; border-radius:3px; transition:width 1s cubic-bezier(0.16,1,0.3,1); }
-.stats-row { display:flex; gap:12px; margin-bottom:1.25rem; }
-.stat-box { flex:1; background:var(--surface2); border-radius:8px; padding:10px 12px; text-align:center; transition:background 0.3s; }
-.stat-num { font-size:22px; font-weight:800; letter-spacing:-0.03em; }
-.stat-lbl { font-size:10px; color:var(--muted); font-family:var(--font-mono); margin-top:2px; letter-spacing:0.04em; }
-.alert-box { font-size:12px; font-family:var(--font-mono); padding:10px 12px; border-radius:8px; line-height:1.5; }
-.alert-green { background:var(--green-dim); color:var(--green); }
-.alert-amber { background:var(--amber-dim); color:var(--amber-col); }
-.alert-red { background:var(--red-dim); color:var(--red-col); }
-.alert-blue { background:var(--blue-dim); color:var(--blue-col); }
-.note-box { font-size:11px; font-family:var(--font-mono); padding:8px 10px; border-radius:6px; line-height:1.5; margin-top:8px; background:var(--blue-dim); color:var(--blue-col); }
-.urgency-bar { height:4px; background:var(--surface2); border-radius:2px; margin-top:10px; overflow:hidden; }
-.chart-section { margin-top:2rem; animation:fadeUp 0.5s 0.2s ease both; }
-.chart-wrap { background:var(--surface); border:1px solid var(--border); border-radius:16px; padding:1.5rem; transition:background 0.3s,border-color 0.3s; }
-.zones-section { margin-top:2rem; animation:fadeUp 0.5s 0.4s ease both; }
-.zones-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:12px; }
-.zone-card { border-radius:12px; padding:1.25rem; border:1px solid; transition:background 0.3s; }
-.zone-card.z-green { border-color:rgba(62,207,160,0.3); background:var(--green-dim); }
-.zone-card.z-amber { border-color:rgba(245,166,35,0.25); background:var(--amber-dim); }
-.zone-card.z-red { border-color:rgba(255,87,87,0.25); background:var(--red-dim); }
-.zone-title { font-size:13px; font-weight:700; margin-bottom:4px; }
-.zone-title.green{color:var(--green)} .zone-title.amber{color:var(--amber-col)} .zone-title.red{color:var(--red-col)}
-.zone-range { font-size:11px; font-family:var(--font-mono); color:var(--muted); margin-bottom:10px; }
-.zone-actions { list-style:none; }
-.zone-actions li { font-size:12px; color:var(--muted); font-family:var(--font-mono); padding:4px 0; border-bottom:1px solid var(--border); display:flex; align-items:center; gap:6px; }
-.zone-actions li:last-child { border-bottom:none; }
-.zone-actions li::before { content:'→'; font-size:10px; }
-.strategy-section { margin-top:2rem; animation:fadeUp 0.5s 0.3s ease both; }
-.strategy-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(300px,1fr)); gap:12px; }
-.strategy-card { background:var(--surface); border:1px solid var(--border); border-radius:12px; padding:1.25rem; transition:background 0.3s,border-color 0.3s; }
-.strategy-tag { font-size:10px; font-family:var(--font-mono); letter-spacing:0.08em; text-transform:uppercase; margin-bottom:8px; }
-.strategy-title { font-size:15px; font-weight:700; margin-bottom:8px; letter-spacing:-0.01em; }
-.strategy-body { font-size:13px; color:var(--muted); line-height:1.6; font-family:var(--font-mono); }
-.footer { text-align:center; padding:2rem; font-size:11px; color:var(--muted); font-family:var(--font-mono); border-top:1px solid var(--border); margin-top:3rem; }
-.commission-card:nth-child(1){animation-delay:0.05s}
-.commission-card:nth-child(2){animation-delay:0.1s}
-.commission-card:nth-child(3){animation-delay:0.15s}
-.commission-card:nth-child(4){animation-delay:0.2s}
-.commission-card:nth-child(5){animation-delay:0.25s}
-.commission-card:nth-child(6){animation-delay:0.3s}
-@media(max-width:700px){
-.zones-grid,.cards-grid{grid-template-columns:1fr}
-.topbar{padding:1rem} .main{padding:1rem} .live-dot{display:none}
-.toggle-btn span{display:none}
-}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+[data-theme="dark"]{--bg:#0D0F12;--surface:#141619;--surface2:#1C1F24;--border:rgba(255,255,255,0.07);--border2:rgba(255,255,255,0.14);--text:#F0EDE8;--muted:#6B7280;--accent:#E8F542;--topbar-bg:rgba(13,15,18,0.92);--green-dim:rgba(62,207,160,0.12);--amber-col:#F5A623;--amber-dim:rgba(245,166,35,0.12);--red-col:#FF5757;--red-dim:rgba(255,87,87,0.12);--blue-col:#60A5FA;--blue-dim:rgba(96,165,250,0.12);}
+[data-theme="light"]{--bg:#F5F4F0;--surface:#FFFFFF;--surface2:#EEECEA;--border:rgba(0,0,0,0.08);--border2:rgba(0,0,0,0.16);--text:#1A1C1E;--muted:#7A7E87;--accent:#2D5A00;--topbar-bg:rgba(245,244,240,0.92);--green-dim:rgba(62,207,160,0.10);--amber-col:#C47A00;--amber-dim:rgba(196,122,0,0.10);--red-col:#D63333;--red-dim:rgba(214,51,51,0.09);--blue-col:#2563EB;--blue-dim:rgba(37,99,235,0.09);}
+:root{--green:#3ECFA0;--font-head:'Syne',sans-serif;--font-mono:'DM Mono',monospace;}
+body{background:var(--bg);color:var(--text);font-family:var(--font-head);min-height:100vh;transition:background 0.3s,color 0.3s;}
+.topbar{display:flex;justify-content:space-between;align-items:center;padding:1.25rem 2rem;border-bottom:1px solid var(--border);position:sticky;top:0;background:var(--topbar-bg);backdrop-filter:blur(12px);z-index:100;}
+.logo{display:flex;align-items:center;gap:10px;}
+.logo-mark{width:32px;height:32px;background:var(--accent);border-radius:6px;display:flex;align-items:center;justify-content:center;}
+.logo-mark svg{width:18px;height:18px;}
+.logo-text{font-size:15px;font-weight:700;letter-spacing:-0.02em;}
+.logo-sub{font-size:11px;color:var(--muted);font-family:var(--font-mono);letter-spacing:0.05em;}
+.topbar-right{display:flex;align-items:center;gap:12px;}
+.theme-toggle{display:flex;background:var(--surface2);border:1px solid var(--border);border-radius:22px;padding:3px;gap:2px;}
+.toggle-btn{display:flex;align-items:center;gap:5px;font-size:11px;font-family:var(--font-mono);padding:5px 12px;border-radius:18px;border:none;background:transparent;color:var(--muted);cursor:pointer;transition:background 0.2s,color 0.2s;white-space:nowrap;}
+.toggle-btn svg{width:12px;height:12px;flex-shrink:0;}
+.toggle-btn.active{color:var(--text);background:var(--surface);box-shadow:0 1px 4px rgba(0,0,0,0.12);}
+.live-dot{display:flex;align-items:center;gap:6px;font-size:12px;color:var(--muted);font-family:var(--font-mono);}
+.live-dot::before{content:'';width:7px;height:7px;border-radius:50%;background:var(--green);animation:pulse 2s infinite;}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:0.3}}
+@keyframes fadeUp{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:translateY(0)}}
+.main{padding:2rem;max-width:1400px;margin:0 auto;}
+.page-header{margin-bottom:2.5rem;animation:fadeUp 0.5s ease both;}
+.page-header h1{font-size:clamp(28px,4vw,42px);font-weight:800;letter-spacing:-0.03em;line-height:1.1;margin-bottom:8px;}
+.page-header h1 span{color:var(--accent);}
+.page-header p{color:var(--muted);font-size:14px;font-family:var(--font-mono);}
+.metrics-row{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:12px;margin-bottom:2.5rem;animation:fadeUp 0.5s 0.1s ease both;}
+.metric{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:1rem 1.25rem;}
+.metric-label{font-size:11px;color:var(--muted);font-family:var(--font-mono);letter-spacing:0.06em;text-transform:uppercase;margin-bottom:6px;}
+.metric-value{font-size:28px;font-weight:800;letter-spacing:-0.03em;line-height:1;}
+.metric-sub{font-size:11px;color:var(--muted);margin-top:4px;font-family:var(--font-mono);}
+.zone-bar{display:flex;gap:8px;margin-bottom:2rem;flex-wrap:wrap;animation:fadeUp 0.5s 0.15s ease both;}
+.zone-pill{display:flex;align-items:center;gap:6px;font-size:12px;font-family:var(--font-mono);padding:5px 12px;border-radius:20px;border:1px solid;}
+.zone-pill.green{border-color:var(--green);color:var(--green);background:var(--green-dim);}
+.zone-pill.amber{border-color:var(--amber-col);color:var(--amber-col);background:var(--amber-dim);}
+.zone-pill.red{border-color:var(--red-col);color:var(--red-col);background:var(--red-dim);}
+.zone-pill::before{content:'';width:6px;height:6px;border-radius:50%;background:currentColor;}
+.section-label{font-size:11px;color:var(--muted);font-family:var(--font-mono);letter-spacing:0.1em;text-transform:uppercase;margin-bottom:1rem;padding-bottom:0.5rem;border-bottom:1px solid var(--border);}
+.cards-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(340px,1fr));gap:16px;margin-bottom:2.5rem;}
+.commission-card{background:var(--surface);border:1px solid var(--border);border-radius:16px;padding:1.5rem;position:relative;overflow:hidden;transition:border-color 0.2s,transform 0.2s;animation:fadeUp 0.5s ease both;}
+.commission-card:hover{border-color:var(--border2);transform:translateY(-2px);}
+.commission-card::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;border-radius:16px 16px 0 0;}
+.card-green::before{background:var(--green)}.card-amber::before{background:var(--amber-col)}.card-red::before{background:var(--red-col)}.card-blue::before{background:var(--blue-col)}
+.card-top{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:1rem;}
+.card-title{font-size:17px;font-weight:700;letter-spacing:-0.02em;}
+.card-subtitle{font-size:12px;color:var(--muted);font-family:var(--font-mono);margin-top:2px;}
+.status-badge{font-size:10px;font-family:var(--font-mono);font-weight:500;padding:4px 10px;border-radius:20px;white-space:nowrap;letter-spacing:0.04em;text-transform:uppercase;}
+.badge-green{background:var(--green-dim);color:var(--green)}.badge-amber{background:var(--amber-dim);color:var(--amber-col)}.badge-red{background:var(--red-dim);color:var(--red-col)}.badge-blue{background:var(--blue-dim);color:var(--blue-col)}
+.progress-section{margin-bottom:1.25rem;}
+.progress-header{display:flex;justify-content:space-between;font-size:12px;color:var(--muted);font-family:var(--font-mono);margin-bottom:6px;}
+.progress-track{height:6px;background:var(--surface2);border-radius:3px;overflow:hidden;}
+.progress-fill{height:100%;border-radius:3px;transition:width 1s cubic-bezier(0.16,1,0.3,1);}
+.stats-row{display:flex;gap:12px;margin-bottom:1.25rem;}
+.stat-box{flex:1;background:var(--surface2);border-radius:8px;padding:10px 12px;text-align:center;}
+.stat-num{font-size:22px;font-weight:800;letter-spacing:-0.03em;}
+.stat-lbl{font-size:10px;color:var(--muted);font-family:var(--font-mono);margin-top:2px;letter-spacing:0.04em;}
+.alert-box{font-size:12px;font-family:var(--font-mono);padding:10px 12px;border-radius:8px;line-height:1.5;}
+.alert-green{background:var(--green-dim);color:var(--green)}.alert-amber{background:var(--amber-dim);color:var(--amber-col)}.alert-red{background:var(--red-dim);color:var(--red-col)}.alert-blue{background:var(--blue-dim);color:var(--blue-col)}
+.note-box{font-size:11px;font-family:var(--font-mono);padding:8px 10px;border-radius:6px;line-height:1.5;margin-top:8px;background:var(--blue-dim);color:var(--blue-col);}
+.chart-wrap{background:var(--surface);border:1px solid var(--border);border-radius:16px;padding:1.5rem;}
+.zones-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;}
+.zone-card{border-radius:12px;padding:1.25rem;border:1px solid;}
+.zone-card.z-green{border-color:rgba(62,207,160,0.3);background:var(--green-dim)}.zone-card.z-amber{border-color:rgba(245,166,35,0.25);background:var(--amber-dim)}.zone-card.z-red{border-color:rgba(255,87,87,0.25);background:var(--red-dim)}
+.zone-title{font-size:13px;font-weight:700;margin-bottom:4px;}.zone-title.green{color:var(--green)}.zone-title.amber{color:var(--amber-col)}.zone-title.red{color:var(--red-col)}
+.zone-range{font-size:11px;font-family:var(--font-mono);color:var(--muted);margin-bottom:10px;}
+.zone-actions{list-style:none;}
+.zone-actions li{font-size:12px;color:var(--muted);font-family:var(--font-mono);padding:4px 0;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:6px;}
+.zone-actions li:last-child{border-bottom:none;}
+.zone-actions li::before{content:'\2192';font-size:10px;}
+.strategy-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:12px;}
+.strategy-card{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:1.25rem;}
+.strategy-tag{font-size:10px;font-family:var(--font-mono);letter-spacing:0.08em;text-transform:uppercase;margin-bottom:8px;}
+.strategy-title{font-size:15px;font-weight:700;margin-bottom:8px;letter-spacing:-0.01em;}
+.strategy-body{font-size:13px;color:var(--muted);line-height:1.6;font-family:var(--font-mono);}
+.footer{text-align:center;padding:2rem;font-size:11px;color:var(--muted);font-family:var(--font-mono);border-top:1px solid var(--border);margin-top:3rem;}
+.commission-card:nth-child(1){animation-delay:0.05s}.commission-card:nth-child(2){animation-delay:0.1s}.commission-card:nth-child(3){animation-delay:0.15s}.commission-card:nth-child(4){animation-delay:0.2s}.commission-card:nth-child(5){animation-delay:0.25s}.commission-card:nth-child(6){animation-delay:0.3s}
+/* STATS SECTION */
+.stats-section{max-width:1400px;margin:0 auto;padding:0 2rem 2rem;}
+.stats-divider{border-top:1px solid var(--border);padding-top:2rem;margin-top:1rem;}
+.input-label{font-size:10px;color:var(--muted);font-family:var(--font-mono);letter-spacing:0.06em;text-transform:uppercase;display:block;margin-bottom:5px;}
+.rc-input{width:100%;padding:8px 10px;background:var(--surface2);border:1px solid var(--border2);border-radius:8px;color:var(--text);font-family:var(--font-mono);font-size:12px;outline:none;}
+.rc-input:focus{border-color:rgba(232,245,66,0.4);}
+.rc-btn-primary{padding:9px 0;background:var(--accent);color:#0D0F12;border:none;border-radius:8px;font-family:var(--font-head);font-weight:700;font-size:13px;cursor:pointer;width:100%;}
+.rc-btn-secondary{padding:7px 14px;background:var(--surface2);color:var(--muted);border:1px solid var(--border);border-radius:8px;font-family:var(--font-mono);font-size:11px;cursor:pointer;}
+.smart-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px;margin-bottom:1.5rem;}
+.charts-2col{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:1.5rem;}
+.chart-inner-box{background:var(--surface);border:1px solid var(--border);border-radius:16px;padding:1.5rem;}
+.chart-inner-title{font-size:12px;font-weight:700;margin-bottom:2px;}
+.chart-inner-sub{font-size:11px;color:var(--muted);font-family:var(--font-mono);margin-bottom:1rem;}
+.insight-item{display:flex;gap:12px;align-items:flex-start;padding:10px 12px;border-radius:10px;margin-bottom:8px;}
+.insight-icon{font-size:15px;font-weight:700;min-width:20px;}
+.insight-text{font-size:13px;font-family:var(--font-mono);color:var(--text);line-height:1.6;}
+.proj-row{display:flex;align-items:center;gap:16px;padding:10px 0;border-bottom:1px solid var(--border);flex-wrap:wrap;}
+.proj-name{min-width:180px;font-size:13px;font-weight:600;}
+.proj-bar-wrap{flex:1;min-width:120px;}
+.proj-track{height:5px;background:var(--surface2);border-radius:3px;overflow:hidden;margin-bottom:4px;}
+.proj-fill{height:100%;border-radius:3px;}
+.proj-meta{font-size:10px;color:var(--muted);font-family:var(--font-mono);}
+.proj-label{font-size:11px;font-family:var(--font-mono);padding:5px 10px;border-radius:8px;white-space:nowrap;}
+.hist-row{display:grid;grid-template-columns:90px 1fr 1fr 80px 30px;gap:4px 12px;padding:5px 0;border-bottom:1px solid var(--border);font-size:12px;font-family:var(--font-mono);}
+.hist-header{color:var(--muted);font-weight:500;padding-bottom:6px;}
+@media(max-width:700px){.zones-grid,.cards-grid,.charts-2col{grid-template-columns:1fr}.topbar{padding:1rem}.main{padding:1rem}.stats-section{padding:0 1rem 1rem}.live-dot{display:none}.toggle-btn span{display:none}}
 /* LOGIN */
-#login-screen { position: fixed; inset: 0; z-index: 9999; background: #0D0F12; display: flex; align-items: center; justify-content: center; font-family: var(--font-head); }
-.login-box { width: 100%; max-width: 380px; padding: 2.5rem 2rem; background: #141619; border: 1px solid rgba(255,255,255,0.08); border-radius: 20px; margin: 1rem; }
-.login-logo { display: flex; align-items: center; gap: 10px; margin-bottom: 2rem; }
-.login-logo-mark { width: 36px; height: 36px; background: #E8F542; border-radius: 8px; display: flex; align-items: center; justify-content: center; }
-.login-logo-mark svg { width: 20px; height: 20px; }
-.login-title { font-size: 22px; font-weight: 800; letter-spacing: -0.03em; color: #F0EDE8; margin-bottom: 4px; }
-.login-sub { font-size: 12px; color: #6B7280; font-family: var(--font-mono); }
-.login-field { margin-bottom: 1rem; }
-.login-label { font-size: 11px; color: #6B7280; font-family: var(--font-mono); letter-spacing: 0.06em; text-transform: uppercase; display: block; margin-bottom: 6px; }
-.login-input { width: 100%; padding: 10px 14px; background: #1C1F24; border: 1px solid rgba(255,255,255,0.08); border-radius: 10px; color: #F0EDE8; font-family: var(--font-mono); font-size: 14px; outline: none; transition: border-color 0.2s; }
-.login-input:focus { border-color: rgba(232,245,66,0.5); }
-.login-btn { width: 100%; padding: 12px; background: #E8F542; color: #0D0F12; border: none; border-radius: 10px; font-family: var(--font-head); font-size: 14px; font-weight: 700; cursor: pointer; margin-top: 0.5rem; transition: opacity 0.2s, transform 0.1s; letter-spacing: -0.01em; }
-.login-btn:hover { opacity: 0.9; }
-.login-btn:active { transform: scale(0.98); }
-.login-error { font-size: 12px; font-family: var(--font-mono); color: #FF5757; background: rgba(255,87,87,0.1); border-radius: 8px; padding: 8px 12px; margin-top: 1rem; display: none; text-align: center; }
-.login-attempts { font-size: 11px; color: #6B7280; font-family: var(--font-mono); text-align: center; margin-top: 0.75rem; }
-#dashboard-content { display: none; }
+#login-screen{position:fixed;inset:0;z-index:9999;background:#0D0F12;display:flex;align-items:center;justify-content:center;font-family:var(--font-head);}
+.login-box{width:100%;max-width:380px;padding:2.5rem 2rem;background:#141619;border:1px solid rgba(255,255,255,0.08);border-radius:20px;margin:1rem;}
+.login-title{font-size:22px;font-weight:800;letter-spacing:-0.03em;color:#F0EDE8;margin-bottom:4px;}
+.login-sub{font-size:12px;color:#6B7280;font-family:var(--font-mono);}
+.login-field{margin-bottom:1rem;}
+.login-label{font-size:11px;color:#6B7280;font-family:var(--font-mono);letter-spacing:0.06em;text-transform:uppercase;display:block;margin-bottom:6px;}
+.login-input{width:100%;padding:10px 14px;background:#1C1F24;border:1px solid rgba(255,255,255,0.08);border-radius:10px;color:#F0EDE8;font-family:var(--font-mono);font-size:14px;outline:none;transition:border-color 0.2s;}
+.login-input:focus{border-color:rgba(232,245,66,0.5);}
+.login-btn{width:100%;padding:12px;background:#E8F542;color:#0D0F12;border:none;border-radius:10px;font-family:var(--font-head);font-size:14px;font-weight:700;cursor:pointer;margin-top:0.5rem;transition:opacity 0.2s,transform 0.1s;letter-spacing:-0.01em;}
+.login-btn:hover{opacity:0.9}.login-btn:active{transform:scale(0.98)}
+.login-error{font-size:12px;font-family:var(--font-mono);color:#FF5757;background:rgba(255,87,87,0.1);border-radius:8px;padding:8px 12px;margin-top:1rem;display:none;text-align:center;}
+.login-attempts{font-size:11px;color:#6B7280;font-family:var(--font-mono);text-align:center;margin-top:0.75rem;}
+#dashboard-content{display:none;}
 </style>
 </head>
 <body>
 
-<!-- LOGIN SCREEN -->
 <div id="login-screen">
   <div class="login-box">
-    <div class="login-logo">
-      <div class="login-logo-mark">
-        <svg viewBox="0 0 18 18" fill="none">
-          <rect x="2" y="2" width="6" height="6" rx="1.5" fill="#0D0F12"/>
-          <rect x="10" y="2" width="6" height="6" rx="1.5" fill="#0D0F12"/>
-          <rect x="2" y="10" width="6" height="6" rx="1.5" fill="#0D0F12"/>
-          <rect x="10" y="10" width="6" height="6" rx="1.5" fill="#0D0F12" opacity="0.4"/>
-        </svg>
+    <div style="display:flex;align-items:center;gap:10px;margin-bottom:2rem;">
+      <div style="width:36px;height:36px;background:#E8F542;border-radius:8px;display:flex;align-items:center;justify-content:center;">
+        <svg viewBox="0 0 18 18" fill="none" width="20" height="20"><rect x="2" y="2" width="6" height="6" rx="1.5" fill="#0D0F12"/><rect x="10" y="2" width="6" height="6" rx="1.5" fill="#0D0F12"/><rect x="2" y="10" width="6" height="6" rx="1.5" fill="#0D0F12"/><rect x="10" y="10" width="6" height="6" rx="1.5" fill="#0D0F12" opacity="0.4"/></svg>
       </div>
-      <div>
-        <div style="font-size:14px;font-weight:700;letter-spacing:-0.02em;color:#F0EDE8;">RollingCode School</div>
-        <div style="font-size:11px;color:#6B7280;font-family:'DM Mono',monospace;">Panel de Comisiones</div>
-      </div>
+      <div><div style="font-size:14px;font-weight:700;letter-spacing:-0.02em;color:#F0EDE8;">RollingCode School</div><div style="font-size:11px;color:#6B7280;font-family:'DM Mono',monospace;">Panel de Comisiones</div></div>
     </div>
     <div class="login-title">Acceso restringido</div>
-    <div class="login-sub" style="margin-bottom:1.75rem;">Ingresá tus credenciales para continuar</div>
-    <div class="login-field">
-      <label class="login-label">Usuario</label>
-      <input class="login-input" type="text" id="login-user" placeholder="Usuario" autocomplete="username" />
-    </div>
-    <div class="login-field">
-      <label class="login-label">Contraseña</label>
-      <input class="login-input" type="password" id="login-pass" placeholder="••••••••••" autocomplete="current-password" />
-    </div>
+    <div class="login-sub" style="margin-bottom:1.75rem;">Ingres&#225; tus credenciales para continuar</div>
+    <div class="login-field"><label class="login-label">Usuario</label><input class="login-input" type="text" id="login-user" placeholder="Usuario" autocomplete="username"/></div>
+    <div class="login-field"><label class="login-label">Contrase&#241;a</label><input class="login-input" type="password" id="login-pass" placeholder="&#x2022;&#x2022;&#x2022;&#x2022;&#x2022;&#x2022;&#x2022;&#x2022;" autocomplete="current-password"/></div>
     <button class="login-btn" onclick="doLogin()">Ingresar</button>
-    <div class="login-error" id="login-error">Usuario o contraseña incorrectos</div>
+    <div class="login-error" id="login-error">Usuario o contrase&#241;a incorrectos</div>
     <div class="login-attempts" id="login-attempts"></div>
   </div>
 </div>
 
-<!-- DASHBOARD -->
 <div id="dashboard-content">
   <div class="topbar">
     <div class="logo">
-      <div class="logo-mark">
-        <svg viewBox="0 0 18 18" fill="none">
-          <rect x="2" y="2" width="6" height="6" rx="1.5" id="lm1"/>
-          <rect x="10" y="2" width="6" height="6" rx="1.5" id="lm2"/>
-          <rect x="2" y="10" width="6" height="6" rx="1.5" id="lm3"/>
-          <rect x="10" y="10" width="6" height="6" rx="1.5" id="lm4" opacity="0.4"/>
-        </svg>
-      </div>
-      <div>
-        <div class="logo-text">RollingCode School</div>
-        <div class="logo-sub">Panel de Presión de Ventas</div>
-      </div>
+      <div class="logo-mark"><svg viewBox="0 0 18 18" fill="none"><rect x="2" y="2" width="6" height="6" rx="1.5" id="lm1"/><rect x="10" y="2" width="6" height="6" rx="1.5" id="lm2"/><rect x="2" y="10" width="6" height="6" rx="1.5" id="lm3"/><rect x="10" y="10" width="6" height="6" rx="1.5" id="lm4" opacity="0.4"/></svg></div>
+      <div><div class="logo-text">RollingCode School</div><div class="logo-sub">Panel de Ventas</div></div>
     </div>
     <div class="topbar-right">
       <div class="live-dot" id="current-date"></div>
       <div class="theme-toggle">
-        <button class="toggle-btn active" id="btnDark" onclick="setTheme('dark')">
-          <svg viewBox="0 0 16 16" fill="currentColor"><path d="M6 .278a.768.768 0 0 1 .08.858 7.208 7.208 0 0 0-.878 3.46c0 4.021 3.278 7.277 7.318 7.277.527 0 1.04-.055 1.533-.16a.787.787 0 0 1 .81.316.733.733 0 0 1-.031.893A8.349 8.349 0 0 1 8.344 16C3.734 16 0 12.286 0 7.71 0 4.266 2.114 1.312 5.124.06A.752.752 0 0 1 6 .278z"/></svg>
-          <span>Dark</span>
-        </button>
-        <button class="toggle-btn" id="btnLight" onclick="setTheme('light')">
-          <svg viewBox="0 0 16 16" fill="currentColor"><path d="M8 12a4 4 0 1 0 0-8 4 4 0 0 0 0 8zM8 0a.5.5 0 0 1 .5.5v2a.5.5 0 0 1-1 0v-2A.5.5 0 0 1 8 0zm0 13a.5.5 0 0 1 .5.5v2a.5.5 0 0 1-1 0v-2A.5.5 0 0 1 8 13zm8-5a.5.5 0 0 1-.5.5h-2a.5.5 0 0 1 0-1h2a.5.5 0 0 1 .5.5zM3 8a.5.5 0 0 1-.5.5h-2a.5.5 0 0 1 0-1h2A.5.5 0 0 1 3 8zm10.657-5.657a.5.5 0 0 1 0 .707l-1.414 1.415a.5.5 0 1 1-.707-.708l1.414-1.414a.5.5 0 0 1 .707 0zm-9.193 9.193a.5.5 0 0 1 0 .707L3.05 13.657a.5.5 0 0 1-.707-.707l1.414-1.414a.5.5 0 0 1 .707 0zm9.193 2.121a.5.5 0 0 1-.707 0l-1.414-1.414a.5.5 0 0 1 .707-.707l1.414 1.414a.5.5 0 0 1 0 .707zM4.464 4.465a.5.5 0 0 1-.707 0L2.343 3.05a.5.5 0 1 1 .707-.707l1.414 1.414a.5.5 0 0 1 0 .708z"/></svg>
-          <span>Light</span>
-        </button>
+        <button class="toggle-btn active" id="btnDark" onclick="setTheme('dark')"><svg viewBox="0 0 16 16" fill="currentColor"><path d="M6 .278a.768.768 0 0 1 .08.858 7.208 7.208 0 0 0-.878 3.46c0 4.021 3.278 7.277 7.318 7.277.527 0 1.04-.055 1.533-.16a.787.787 0 0 1 .81.316.733.733 0 0 1-.031.893A8.349 8.349 0 0 1 8.344 16C3.734 16 0 12.286 0 7.71 0 4.266 2.114 1.312 5.124.06A.752.752 0 0 1 6 .278z"/></svg><span>Dark</span></button>
+        <button class="toggle-btn" id="btnLight" onclick="setTheme('light')"><svg viewBox="0 0 16 16" fill="currentColor"><path d="M8 12a4 4 0 1 0 0-8 4 4 0 0 0 0 8zM8 0a.5.5 0 0 1 .5.5v2a.5.5 0 0 1-1 0v-2A.5.5 0 0 1 8 0zm0 13a.5.5 0 0 1 .5.5v2a.5.5 0 0 1-1 0v-2A.5.5 0 0 1 8 13zm8-5a.5.5 0 0 1-.5.5h-2a.5.5 0 0 1 0-1h2a.5.5 0 0 1 .5.5zM3 8a.5.5 0 0 1-.5.5h-2a.5.5 0 0 1 0-1h2A.5.5 0 0 1 3 8zm10.657-5.657a.5.5 0 0 1 0 .707l-1.414 1.415a.5.5 0 1 1-.707-.708l1.414-1.414a.5.5 0 0 1 .707 0zm-9.193 9.193a.5.5 0 0 1 0 .707L3.05 13.657a.5.5 0 0 1-.707-.707l1.414-1.414a.5.5 0 0 1 .707 0zm9.193 2.121a.5.5 0 0 1-.707 0l-1.414-1.414a.5.5 0 0 1 .707-.707l1.414 1.414a.5.5 0 0 1 0 .707zM4.464 4.465a.5.5 0 0 1-.707 0L2.343 3.05a.5.5 0 1 1 .707-.707l1.414 1.414a.5.5 0 0 1 0 .708z"/></svg><span>Light</span></button>
       </div>
     </div>
   </div>
@@ -215,893 +161,425 @@ body { background: var(--bg); color: var(--text); font-family: var(--font-head);
   <div class="main">
     <div class="page-header">
       <h1>Comisiones <span>activas</span><br>en venta</h1>
-      <p>Análisis de urgencia · Estrategias de cierre · Actualizado 23/03/2026</p>
+      <p>An&#225;lisis de urgencia &#xB7; Estrategias de cierre &#xB7; Actualizado 23/03/2026</p>
     </div>
-
     <div class="metrics-row">
       <div class="metric"><div class="metric-label">Total comisiones</div><div class="metric-value">6</div><div class="metric-sub">En venta actualmente</div></div>
       <div class="metric"><div class="metric-label">Total inscriptos</div><div class="metric-value" style="color:var(--green)">49</div><div class="metric-sub">Acumulado todas las comisiones</div></div>
-      <div class="metric"><div class="metric-label">Acción urgente</div><div class="metric-value" style="color:var(--red-col)">2</div><div class="metric-sub">QA Automation + Web1ba</div></div>
+      <div class="metric"><div class="metric-label">Acci&#243;n urgente</div><div class="metric-value" style="color:var(--red-col)">2</div><div class="metric-sub">QA Automation + Web1ba</div></div>
       <div class="metric"><div class="metric-label">Pueden moverse</div><div class="metric-value" style="color:var(--amber-col)">3</div><div class="metric-sub">Web26, Web27, Web11p</div></div>
-      <div class="metric"><div class="metric-label">Más urgente</div><div class="metric-value" style="color:var(--red-col)">QA</div><div class="metric-sub">18/20 — solo 7 días</div></div>
+      <div class="metric"><div class="metric-label">M&#225;s urgente</div><div class="metric-value" style="color:var(--red-col)">QA</div><div class="metric-sub">18/20 &#x2014; solo 7 d&#237;as</div></div>
     </div>
-
     <div class="zone-bar">
-      <div class="zone-pill green">Zona verde · +25 días · venta orgánica</div>
-      <div class="zone-pill amber">Zona naranja · 10–25 días · activar urgencia</div>
-      <div class="zone-pill red">Zona roja · &lt;10 días · promo finita o mover</div>
+      <div class="zone-pill green">Zona verde &#xB7; +25 d&#237;as &#xB7; venta org&#225;nica</div>
+      <div class="zone-pill amber">Zona naranja &#xB7; 10&#x2013;25 d&#237;as &#xB7; activar urgencia</div>
+      <div class="zone-pill red">Zona roja &#xB7; &lt;10 d&#237;as &#xB7; promo finita o mover</div>
     </div>
-
     <div class="section-label">Comisiones activas</div>
     <div class="cards-grid" id="cards-container"></div>
-
-    <div class="chart-section">
-      <div class="section-label">Comparativa de presión de ventas</div>
-      <div class="chart-wrap">
-        <div style="position:relative;width:100%;height:280px;"><canvas id="mainChart"></canvas></div>
-      </div>
+    <div style="margin-top:2rem;animation:fadeUp 0.5s 0.2s ease both;">
+      <div class="section-label">Comparativa de presi&#243;n de ventas</div>
+      <div class="chart-wrap"><div style="position:relative;width:100%;height:280px;"><canvas id="mainChart"></canvas></div></div>
     </div>
-
-    <div class="zones-section">
-      <div class="section-label">Sistema de zonas de acción</div>
+    <div style="margin-top:2rem;animation:fadeUp 0.5s 0.4s ease both;">
+      <div class="section-label">Sistema de zonas de acci&#243;n</div>
       <div class="zones-grid">
-        <div class="zone-card z-green">
-          <div class="zone-title green">Zona verde</div>
-          <div class="zone-range">+25 días para inicio</div>
-          <ul class="zone-actions">
-            <li>Venta orgánica, sin forzar</li>
-            <li>Monitoreo semanal</li>
-            <li>No activar descuentos todavía</li>
-            <li>Comunicación de propuesta de valor</li>
-          </ul>
-        </div>
-        <div class="zone-card z-amber">
-          <div class="zone-title amber">Zona naranja</div>
-          <div class="zone-range">10–25 días para inicio</div>
-          <ul class="zone-actions">
-            <li>Comunicar cupos disponibles</li>
-            <li>Urgencia de "últimas semanas"</li>
-            <li>Activar testimonios y casos de éxito</li>
-            <li>Mover fecha si hay pocas ventas</li>
-          </ul>
-        </div>
-        <div class="zone-card z-red">
-          <div class="zone-title red">Zona roja</div>
-          <div class="zone-range">Menos de 10 días para inicio</div>
-          <ul class="zone-actions">
-            <li>Descuento finito con cupos visibles</li>
-            <li>Mensaje de cierre definitivo</li>
-            <li>Si no hay masa crítica → mover fecha</li>
-            <li>No quemar margen sin masa</li>
-          </ul>
-        </div>
+        <div class="zone-card z-green"><div class="zone-title green">Zona verde</div><div class="zone-range">+25 d&#237;as para inicio</div><ul class="zone-actions"><li>Venta org&#225;nica, sin forzar</li><li>Monitoreo semanal</li><li>No activar descuentos todav&#237;a</li><li>Comunicaci&#243;n de propuesta de valor</li></ul></div>
+        <div class="zone-card z-amber"><div class="zone-title amber">Zona naranja</div><div class="zone-range">10&#x2013;25 d&#237;as para inicio</div><ul class="zone-actions"><li>Comunicar cupos disponibles</li><li>Urgencia de &#x201C;&#250;ltimas semanas&#x201D;</li><li>Activar testimonios y casos de &#233;xito</li><li>Mover fecha si hay pocas ventas</li></ul></div>
+        <div class="zone-card z-red"><div class="zone-title red">Zona roja</div><div class="zone-range">Menos de 10 d&#237;as para inicio</div><ul class="zone-actions"><li>Descuento finito con cupos visibles</li><li>Mensaje de cierre definitivo</li><li>Si no hay masa cr&#237;tica &#x2192; mover fecha</li><li>No quemar margen sin masa</li></ul></div>
       </div>
     </div>
-
-    <div class="strategy-section">
-      <div class="section-label">Estrategias por comisión</div>
+    <div style="margin-top:2rem;animation:fadeUp 0.5s 0.3s ease both;">
+      <div class="section-label">Estrategias por comisi&#243;n</div>
       <div class="strategy-grid" id="strategy-container"></div>
     </div>
   </div>
 
-  <div class="footer">RollingCode School · Panel interno de ventas · Actualizado 23/03/2026</div>
+  <!-- ═══════════════ ESTADÍSTICAS ═══════════════ -->
+  <div class="stats-section">
+    <div class="stats-divider">
+      <div class="section-label">Estad&#237;sticas de ventas &#x2014; inteligencia de cierre</div>
+
+      <!-- REGISTRAR VENTA -->
+      <div style="background:var(--surface);border:1px solid var(--border);border-radius:16px;padding:1.5rem;margin-bottom:1.5rem;">
+        <div style="font-size:13px;font-weight:700;margin-bottom:1rem;">Registrar venta</div>
+        <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:10px;align-items:end;">
+          <div><label class="input-label">Comisi&#243;n</label>
+            <select id="sv-comision" class="rc-input">
+              <option value="">&#x2014; seleccionar &#x2014;</option>
+              <option>QA Automation</option><option>Scrum</option><option>Web 26</option><option>Web 27</option><option>Web 11p &#x2014; Tucum&#225;n</option><option>Web 1 BA &#x2014; Buenos Aires</option>
+            </select></div>
+          <div><label class="input-label">Alumno</label><input id="sv-alumno" type="text" class="rc-input" placeholder="Nombre completo"></div>
+          <div><label class="input-label">Precio $</label><input id="sv-precio" type="number" class="rc-input" placeholder="95000"></div>
+          <div><label class="input-label">Fecha y hora</label><input id="sv-fecha" type="datetime-local" class="rc-input"></div>
+          <div style="display:flex;gap:8px;">
+            <button onclick="registrarVenta()" class="rc-btn-primary">+ Agregar</button>
+            <button onclick="toggleHistorial()" class="rc-btn-secondary" title="Ver historial">&#x2261;</button>
+          </div>
+        </div>
+        <div id="sv-msg" style="font-size:11px;font-family:var(--font-mono);margin-top:8px;display:none;padding:6px 10px;border-radius:6px;"></div>
+        <!-- CSV -->
+        <div style="margin-top:1rem;padding-top:1rem;border-top:1px solid var(--border);">
+          <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px;">
+            <div><div style="font-size:12px;font-weight:700;margin-bottom:3px;">Importar desde CSV</div>
+              <div style="font-size:11px;color:var(--muted);font-family:var(--font-mono);">Columnas: <code style="background:var(--surface2);padding:1px 5px;border-radius:4px;">fecha, alumno, comision, precio</code></div></div>
+            <div style="display:flex;gap:8px;">
+              <button onclick="descargarPlantilla()" class="rc-btn-secondary">&#x2193; Plantilla</button>
+              <label style="padding:7px 14px;background:var(--blue-dim);color:var(--blue-col);border:1px solid var(--blue-col);border-radius:8px;font-family:var(--font-mono);font-size:11px;cursor:pointer;">
+                &#x2191; Subir CSV<input type="file" accept=".csv" onchange="importarCSV(event)" style="display:none;">
+              </label>
+            </div>
+          </div>
+          <div id="csv-msg" style="font-size:11px;font-family:var(--font-mono);margin-top:8px;display:none;padding:6px 10px;border-radius:6px;"></div>
+          <div id="csv-preview" style="display:none;margin-top:1rem;">
+            <div style="font-size:11px;color:var(--muted);font-family:var(--font-mono);margin-bottom:8px;" id="csv-preview-label"></div>
+            <div id="csv-preview-table" style="max-height:200px;overflow-y:auto;font-size:11px;font-family:var(--font-mono);"></div>
+            <div style="display:flex;gap:8px;margin-top:10px;">
+              <button onclick="confirmarImport()" class="rc-btn-primary" style="width:auto;padding:8px 20px;">Confirmar importaci&#243;n</button>
+              <button onclick="cancelarImport()" class="rc-btn-secondary">Cancelar</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- HISTORIAL -->
+      <div id="historial-wrap" style="display:none;background:var(--surface);border:1px solid var(--border);border-radius:16px;padding:1.5rem;margin-bottom:1.5rem;">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:1rem;">
+          <div style="font-size:13px;font-weight:700;">Historial de ventas</div>
+          <button onclick="clearVentas()" style="font-size:10px;font-family:var(--font-mono);padding:4px 10px;background:var(--red-dim);color:var(--red-col);border:1px solid var(--red-col);border-radius:6px;cursor:pointer;">Borrar todo</button>
+        </div>
+        <div class="hist-row hist-header"><span>Fecha</span><span>Alumno</span><span>Comisi&#243;n</span><span>Precio</span><span></span></div>
+        <div id="historial-list" style="max-height:260px;overflow-y:auto;"></div>
+      </div>
+
+      <!-- M&#201;TRICAS SMART -->
+      <div class="smart-grid" id="smart-metrics"></div>
+
+      <!-- CHARTS -->
+      <div class="charts-2col">
+        <div class="chart-inner-box">
+          <div class="chart-inner-title">Ventas por d&#237;a de la semana</div>
+          <div class="chart-inner-sub">&#xBF;Cu&#225;ndo se cierra m&#225;s?</div>
+          <div style="position:relative;height:180px;width:100%;"><canvas id="chart-dias"></canvas></div>
+        </div>
+        <div class="chart-inner-box">
+          <div class="chart-inner-title">Ventas por hora del d&#237;a</div>
+          <div class="chart-inner-sub">&#xBF;A qu&#233; hora se decide?</div>
+          <div style="position:relative;height:180px;width:100%;"><canvas id="chart-horas"></canvas></div>
+        </div>
+      </div>
+
+      <!-- PROYECCIONES -->
+      <div style="background:var(--surface);border:1px solid var(--border);border-radius:16px;padding:1.5rem;margin-bottom:1.5rem;">
+        <div style="font-size:12px;font-weight:700;margin-bottom:4px;">Proyecci&#243;n de cierre por comisi&#243;n</div>
+        <div style="font-size:11px;color:var(--muted);font-family:var(--font-mono);margin-bottom:1.25rem;">A este ritmo, &#xBF;lleg&#225;s al objetivo antes del inicio?</div>
+        <div id="proyecciones-list"></div>
+      </div>
+
+      <!-- INSIGHTS -->
+      <div style="background:var(--surface);border:1px solid var(--border);border-radius:16px;padding:1.5rem;">
+        <div style="font-size:12px;font-weight:700;margin-bottom:1rem;">Insights autom&#225;ticos</div>
+        <div id="insights-list"></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="footer">RollingCode School &#xB7; Panel interno de ventas &#xB7; Actualizado 23/03/2026</div>
 </div>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
 <script>
+
+// ─── DATA ────────────────────────────────────────────────────────────────────
 const comisiones = [
-  {
-    nombre: "QA Automation",
-    tipo: "Online",
-    ventas: 18,
-    objetivo: 20,
-    diasInicio: 7,
-    puedeMoverse: false,
-    zona: "red",
-    status: "Crítico — cerrar YA",
-    alerta: "18 ventas, 7 días, fecha fija. Faltan solo 2 alumnos para el objetivo. Lanzar cierre urgente hoy: últimos 2 cupos. Es el momento de mayor conversión.",
-    nota: null
-  },
-  {
-    nombre: "Scrum",
-    tipo: "Online",
-    ventas: 6,
-    objetivo: 20,
-    diasInicio: 16,
-    puedeMoverse: false,
-    zona: "amber",
-    status: "Activar urgencia",
-    alerta: "6 ventas, fecha fija, 16 días. Ritmo insuficiente para llegar al objetivo. Activar campaña de urgencia esta semana: cupos visibles, testimonios, seguimiento activo.",
-    nota: null
-  },
-  {
-    nombre: "Web 26",
-    tipo: "Online",
-    ventas: 6,
-    objetivo: 20,
-    diasInicio: 22,
-    puedeMoverse: true,
-    zona: "amber",
-    status: "Monitoreo activo",
-    alerta: "6 ventas con 3 semanas. Ritmo bajo. Dar una semana más de ventana; si no hay aceleración, mover la fecha.",
-    nota: null
-  },
-  {
-    nombre: "Web 27",
-    tipo: "Online",
-    ventas: 5,
-    objetivo: 20,
-    diasInicio: 28,
-    puedeMoverse: true,
-    zona: "green",
-    status: "Monitoreo",
-    alerta: "5 ventas con 4 semanas. Dejar madurar. Revisar en 10 días antes de activar cualquier acción.",
-    nota: null
-  },
-  {
-    nombre: "Web 11p — Tucumán",
-    tipo: "Presencial TUC",
-    ventas: 11,
-    objetivo: 20,
-    diasInicio: 15,
-    puedeMoverse: true,
-    zona: "amber",
-    status: "Mover + 2da comisión",
-    alerta: "11 ventas en 2 sem y 3 días. Buen ritmo pero requiere decisión esta semana: si se mueve, coordinar inmediatamente una 2da comisión.",
-    nota: "Al mover, coordinar 2da comisión con máx. 2 semanas de diferencia de la fecha final."
-  },
-  {
-    nombre: "Web 1 BA — Buenos Aires",
-    tipo: "Presencial BsAs",
-    ventas: 3,
-    objetivo: 20,
-    diasInicio: 22,
-    puedeMoverse: false,
-    zona: "red",
-    status: "Crítico",
-    alerta: "3 ventas, fecha fija, 3 semanas. El problema es exposición y reach en BsAs. Campaña específica para Buenos Aires urgente. No se resuelve con descuento.",
-    nota: null
-  }
+  {nombre:"QA Automation",tipo:"Online",ventas:18,objetivo:20,diasInicio:7,puedeMoverse:false,zona:"red",status:"Cr\u00edtico \u2014 cerrar YA",alerta:"18 ventas, 7 d\u00edas, fecha fija. Faltan solo 2 alumnos. Lanzar cierre urgente hoy: \u00FAltimos 2 cupos.",nota:null},
+  {nombre:"Scrum",tipo:"Online",ventas:6,objetivo:20,diasInicio:16,puedeMoverse:false,zona:"amber",status:"Activar urgencia",alerta:"6 ventas, fecha fija, 16 d\u00edas. Activar campa\u00F1a esta semana: cupos visibles, testimonios, seguimiento.",nota:null},
+  {nombre:"Web 26",tipo:"Online",ventas:6,objetivo:20,diasInicio:22,puedeMoverse:true,zona:"amber",status:"Monitoreo activo",alerta:"6 ventas con 3 semanas. Dar una semana m\u00E1s; si no hay aceleraci\u00F3n, mover la fecha.",nota:null},
+  {nombre:"Web 27",tipo:"Online",ventas:5,objetivo:20,diasInicio:28,puedeMoverse:true,zona:"green",status:"Monitoreo",alerta:"5 ventas con 4 semanas. Dejar madurar. Revisar en 10 d\u00EDas.",nota:null},
+  {nombre:"Web 11p \u2014 Tucum\u00E1n",tipo:"Presencial TUC",ventas:11,objetivo:20,diasInicio:15,puedeMoverse:true,zona:"amber",status:"Mover + 2da comisi\u00F3n",alerta:"11 ventas, 2 sem y 3 d\u00EDas. Requiere decisi\u00F3n esta semana.",nota:"Al mover, coordinar 2da comisi\u00F3n con m\u00E1x. 2 semanas de diferencia de la fecha final."},
+  {nombre:"Web 1 BA \u2014 Buenos Aires",tipo:"Presencial BsAs",ventas:3,objetivo:20,diasInicio:22,puedeMoverse:false,zona:"red",status:"Cr\u00EDtico",alerta:"3 ventas, fecha fija, 3 semanas. Campa\u00F1a espec\u00EDfica para BsAs urgente.",nota:null}
 ];
 
 const strategies = [
-  {tag:"Acción inmediata",colorKey:"red",titulo:"QA Automation — promo de cierre esta semana",cuerpo:"16 ventas y 10 días: es la comisión en mejor estado. Lanzar cierre con urgencia real: '4 últimos cupos al precio actual'. No esperar más."},
-  {tag:"Decisión urgente",colorKey:"red",titulo:"Web1ba BsAs — campaña geolocalizada",cuerpo:"3 alumnos con fecha fija no se resuelve con descuento. Necesita exposición en Buenos Aires: redes, contactos locales, alumni de la zona."},
-  {tag:"Esta semana",colorKey:"amber",titulo:"Scrum — urgencia de cupos",cuerpo:"Fecha fija, 6 ventas. Comunicar cupos con urgencia. Sin descuento todavía — primero agotar la presión de 'últimos lugares'."},
-  {tag:"Decisión próxima semana",colorKey:"amber",titulo:"Web11p Tucumán — mover + 2da comisión",cuerpo:"Si se mueve la fecha, hay que coordinar inmediatamente una 2da comisión. Máximo 2 semanas de diferencia con la fecha final de la primera."},
-  {tag:"Regla general",colorKey:"blue",titulo:"El descuento es el gatillo del último tramo",cuerpo:"Aplicarlo demasiado temprano normaliza el precio bajo y mata el valor percibido. Reservarlo para los últimos 7-10 días antes del inicio."},
-  {tag:"Web26 / Web27",colorKey:"muted",titulo:"Dejar madurar — sin intervención aún",cuerpo:"Tienen tiempo y posibilidad de moverse. Acumular ventas orgánicas y activar cierre solo en la semana previa al inicio real."},
+  {tag:"Acci\u00F3n inmediata",colorKey:"red",titulo:"QA Automation \u2014 cierre esta semana",cuerpo:"18 ventas, 7 d\u00EDas: lanzar cierre con urgencia real. \u2018\u00FAltimos 2 cupos al precio actual\u2019. No esperar m\u00E1s."},
+  {tag:"Decisi\u00F3n urgente",colorKey:"red",titulo:"Web1ba BsAs \u2014 campa\u00F1a geolocalizada",cuerpo:"3 alumnos con fecha fija no se resuelve con descuento. Necesita exposici\u00F3n en BsAs: redes, contactos locales, alumni de la zona."},
+  {tag:"Esta semana",colorKey:"amber",titulo:"Scrum \u2014 urgencia de cupos",cuerpo:"Fecha fija, 6 ventas. Comunicar cupos con urgencia. Sin descuento todav\u00EDa."},
+  {tag:"Decisi\u00F3n pr\u00F3xima semana",colorKey:"amber",titulo:"Web11p Tucum\u00E1n \u2014 mover + 2da comisi\u00F3n",cuerpo:"Si se mueve, coordinar inmediatamente la 2da comisi\u00F3n. M\u00E1ximo 2 semanas de diferencia."},
+  {tag:"Regla general",colorKey:"blue",titulo:"El descuento es el gatillo del \u00FAltimo tramo",cuerpo:"Aplicarlo temprano normaliza el precio bajo. Reservarlo para los \u00FAltimos 7\u201310 d\u00EDas antes del inicio."},
+  {tag:"Web26 / Web27",colorKey:"muted",titulo:"Dejar madurar \u2014 sin intervenci\u00F3n a\u00FAn",cuerpo:"Acumular ventas org\u00E1nicas y activar cierre solo en la semana previa al inicio real."},
 ];
 
-const DARK_BARS = {green:'#3ECFA0',amber:'#F5A623',red:'#FF5757',blue:'#60A5FA'};
-const LIGHT_BARS = {green:'#3ECFA0',amber:'#C47A00',red:'#D63333',blue:'#2563EB'};
-
+const DARK_BARS={green:'#3ECFA0',amber:'#F5A623',red:'#FF5757',blue:'#60A5FA'};
+const LIGHT_BARS={green:'#3ECFA0',amber:'#C47A00',red:'#D63333',blue:'#2563EB'};
 function isDark(){return document.documentElement.getAttribute('data-theme')==='dark';}
-function bar(zona){return(isDark()?DARK_BARS:LIGHT_BARS)[zona]||'#888';}
-function stratColor(k){
-  const d={green:'#3ECFA0',red:isDark()?'#FF5757':'#D63333',amber:isDark()?'#F5A623':'#C47A00',blue:isDark()?'#60A5FA':'#2563EB',accent:isDark()?'#E8F542':'#2D5A00',muted:isDark()?'#6B7280':'#7A7E87'};
-  return d[k]||'#888';
-}
+function bar(z){return(isDark()?DARK_BARS:LIGHT_BARS)[z]||'#888';}
+function stratColor(k){const d={green:'#3ECFA0',red:isDark()?'#FF5757':'#D63333',amber:isDark()?'#F5A623':'#C47A00',blue:isDark()?'#60A5FA':'#2563EB',accent:isDark()?'#E8F542':'#2D5A00',muted:isDark()?'#6B7280':'#7A7E87'};return d[k]||'#888';}
 
 function buildCards(){
-  const c=document.getElementById('cards-container');
-  c.innerHTML='';
+  const c=document.getElementById('cards-container'); c.innerHTML='';
   comisiones.forEach(x=>{
-    const pct=Math.round((x.ventas/x.objetivo)*100);
-    const b=bar(x.zona);
-    const notaHTML = x.nota ? `<div class="note-box">${x.nota}</div>` : '';
-    const moveTag = x.puedeMoverse
-      ? `<span style="font-size:10px;font-family:var(--font-mono);color:var(--green);background:var(--green-dim);padding:2px 8px;border-radius:10px;margin-left:6px;">puede moverse</span>`
-      : `<span style="font-size:10px;font-family:var(--font-mono);color:var(--muted);background:var(--surface2);padding:2px 8px;border-radius:10px;margin-left:6px;">fecha fija</span>`;
+    const pct=Math.round(x.ventas/x.objetivo*100), b=bar(x.zona);
+    const nota=x.nota?`<div class="note-box">${x.nota}</div>`:'';
+    const tag=x.puedeMoverse
+      ?`<span style="font-size:10px;font-family:var(--font-mono);color:var(--green);background:var(--green-dim);padding:2px 8px;border-radius:10px;margin-left:6px;">puede moverse</span>`
+      :`<span style="font-size:10px;font-family:var(--font-mono);color:var(--muted);background:var(--surface2);padding:2px 8px;border-radius:10px;margin-left:6px;">fecha fija</span>`;
     c.innerHTML+=`<div class="commission-card card-${x.zona}">
-      <div class="card-top">
-        <div>
-          <div class="card-title">${x.nombre} ${moveTag}</div>
-          <div class="card-subtitle">${x.tipo}</div>
-        </div>
-        <span class="status-badge badge-${x.zona}">${x.status}</span>
-      </div>
-      <div class="progress-section">
-        <div class="progress-header"><span>${x.ventas} inscriptos</span><span>${pct}% de ${x.objetivo}</span></div>
-        <div class="progress-track"><div class="progress-fill" style="width:${pct}%;background:${b}"></div></div>
-      </div>
-      <div class="stats-row">
-        <div class="stat-box"><div class="stat-num" style="color:${b}">${x.diasInicio}</div><div class="stat-lbl">días para inicio</div></div>
-        <div class="stat-box"><div class="stat-num">${x.ventas}</div><div class="stat-lbl">vendidos</div></div>
-        <div class="stat-box"><div class="stat-num">${x.objetivo-x.ventas}</div><div class="stat-lbl">cupos libres</div></div>
-      </div>
-      <div class="alert-box alert-${x.zona}">${x.alerta}</div>
-      ${notaHTML}
-    </div>`;
+      <div class="card-top"><div><div class="card-title">${x.nombre}${tag}</div><div class="card-subtitle">${x.tipo}</div></div><span class="status-badge badge-${x.zona}">${x.status}</span></div>
+      <div class="progress-section"><div class="progress-header"><span>${x.ventas} inscriptos</span><span>${pct}% de ${x.objetivo}</span></div><div class="progress-track"><div class="progress-fill" style="width:${pct}%;background:${b}"></div></div></div>
+      <div class="stats-row"><div class="stat-box"><div class="stat-num" style="color:${b}">${x.diasInicio}</div><div class="stat-lbl">d\u00EDas para inicio</div></div><div class="stat-box"><div class="stat-num">${x.ventas}</div><div class="stat-lbl">vendidos</div></div><div class="stat-box"><div class="stat-num">${x.objetivo-x.ventas}</div><div class="stat-lbl">cupos libres</div></div></div>
+      <div class="alert-box alert-${x.zona}">${x.alerta}</div>${nota}</div>`;
   });
 }
 
 function buildStrategies(){
-  const c=document.getElementById('strategy-container');
-  c.innerHTML='';
-  strategies.forEach(s=>{
-    c.innerHTML+=`<div class="strategy-card"><div class="strategy-tag" style="color:${stratColor(s.colorKey)}">${s.tag}</div><div class="strategy-title">${s.titulo}</div><div class="strategy-body">${s.cuerpo}</div></div>`;
-  });
+  const c=document.getElementById('strategy-container'); c.innerHTML='';
+  strategies.forEach(s=>{c.innerHTML+=`<div class="strategy-card"><div class="strategy-tag" style="color:${stratColor(s.colorKey)}">${s.tag}</div><div class="strategy-title">${s.titulo}</div><div class="strategy-body">${s.cuerpo}</div></div>`;});
 }
 
-let chart=null;
+let mainChart=null;
 function buildChart(){
-  if(chart){chart.destroy();chart=null;}
-  const dark=isDark();
-  const grid=dark?'rgba(255,255,255,0.04)':'rgba(0,0,0,0.05)';
-  const ticks=dark?'#6B7280':'#7A7E87';
-  const ctx=document.getElementById('mainChart').getContext('2d');
-  chart=new Chart(ctx,{
+  if(mainChart){mainChart.destroy();mainChart=null;}
+  const dark=isDark(), grid=dark?'rgba(255,255,255,0.04)':'rgba(0,0,0,0.05)', ticks=dark?'#6B7280':'#7A7E87';
+  mainChart=new Chart(document.getElementById('mainChart').getContext('2d'),{
     type:'bar',
-    data:{
-      labels:comisiones.map(x=>x.nombre),
-      datasets:[
-        {label:'Inscriptos',data:comisiones.map(x=>x.ventas),backgroundColor:comisiones.map(x=>bar(x.zona)+'CC'),borderColor:comisiones.map(x=>bar(x.zona)),borderWidth:1,borderRadius:6},
-        {label:'Objetivo',data:comisiones.map(x=>x.objetivo),backgroundColor:dark?'rgba(255,255,255,0.04)':'rgba(0,0,0,0.03)',borderColor:dark?'rgba(255,255,255,0.15)':'rgba(0,0,0,0.12)',borderWidth:1,borderRadius:6}
-      ]
-    },
-    options:{
-      responsive:true,maintainAspectRatio:false,
-      plugins:{
-        legend:{display:false},
-        tooltip:{backgroundColor:dark?'#1C1F24':'#fff',borderColor:dark?'rgba(255,255,255,0.1)':'rgba(0,0,0,0.1)',borderWidth:1,titleColor:dark?'#F0EDE8':'#1A1C1E',bodyColor:ticks,titleFont:{family:'Syne',size:13,weight:'700'},bodyFont:{family:'DM Mono',size:11}}
-      },
-      scales:{
-        x:{grid:{color:grid},ticks:{color:ticks,font:{family:'DM Mono',size:10}},border:{color:grid}},
-        y:{grid:{color:grid},ticks:{color:ticks,font:{family:'DM Mono',size:10}},border:{color:grid}}
-      }
-    }
+    data:{labels:comisiones.map(x=>x.nombre),datasets:[
+      {label:'Inscriptos',data:comisiones.map(x=>x.ventas),backgroundColor:comisiones.map(x=>bar(x.zona)+'CC'),borderColor:comisiones.map(x=>bar(x.zona)),borderWidth:1,borderRadius:6},
+      {label:'Objetivo',data:comisiones.map(x=>x.objetivo),backgroundColor:dark?'rgba(255,255,255,0.04)':'rgba(0,0,0,0.03)',borderColor:dark?'rgba(255,255,255,0.15)':'rgba(0,0,0,0.12)',borderWidth:1,borderRadius:6}
+    ]},
+    options:{responsive:true,maintainAspectRatio:false,animation:false,plugins:{legend:{display:false},tooltip:{backgroundColor:dark?'#1C1F24':'#fff',titleColor:dark?'#F0EDE8':'#1A1C1E',bodyColor:ticks,titleFont:{family:'Syne',size:13,weight:'700'},bodyFont:{family:'DM Mono',size:11}}},scales:{x:{grid:{color:grid},ticks:{color:ticks,font:{family:'DM Mono',size:10}},border:{color:grid}},y:{grid:{color:grid},ticks:{color:ticks,font:{family:'DM Mono',size:10}},border:{color:grid}}}}
   });
 }
 
-function updateLogoMark(){
-  const fill=isDark()?'#0D0F12':'#F5F4F0';
-  ['lm1','lm2','lm3','lm4'].forEach(id=>{const el=document.getElementById(id);if(el)el.setAttribute('fill',fill);});
+function updateLogoMark(){const fill=isDark()?'#0D0F12':'#F5F4F0';['lm1','lm2','lm3','lm4'].forEach(id=>{const el=document.getElementById(id);if(el)el.setAttribute('fill',fill);});}
+function setDate(){document.getElementById('current-date').textContent=new Date().toLocaleDateString('es-AR',{weekday:'short',year:'numeric',month:'short',day:'numeric'});}
+
+// ─── STORAGE ─────────────────────────────────────────────────────────────────
+const STORE_KEY='rc_ventas_v1';
+function loadVentas(){try{return JSON.parse(localStorage.getItem(STORE_KEY)||'[]');}catch(e){return[];}}
+function saveVentas(v){localStorage.setItem(STORE_KEY,JSON.stringify(v));}
+
+const HISTORICAL_SEED = [{"id": 1000, "comision": "Web 26", "alumno": "Ana García", "precio": 100000, "fecha": "2026-01-03T21:07:00"}, {"id": 1001, "comision": "QA Automation", "alumno": "Martín Rodríguez", "precio": 115000, "fecha": "2026-01-05T14:08:00"}, {"id": 1002, "comision": "Scrum", "alumno": "Lucía Torres", "precio": 85000, "fecha": "2026-01-05T09:01:00"}, {"id": 1003, "comision": "Web 27", "alumno": "Diego Sánchez", "precio": 100000, "fecha": "2026-01-07T19:12:00"}, {"id": 1004, "comision": "QA Automation", "alumno": "Valentina Gómez", "precio": 95000, "fecha": "2026-01-08T18:37:00"}, {"id": 1005, "comision": "Scrum", "alumno": "Pablo Fernández", "precio": 110000, "fecha": "2026-01-09T17:21:00"}, {"id": 1006, "comision": "Web 26", "alumno": "Sofía Martínez", "precio": 110000, "fecha": "2026-01-12T10:05:00"}, {"id": 1007, "comision": "Web 27", "alumno": "Rodrigo Herrera", "precio": 90000, "fecha": "2026-01-12T20:16:00"}, {"id": 1008, "comision": "Web 26", "alumno": "Camila Ruiz", "precio": 100000, "fecha": "2026-01-12T17:05:00"}, {"id": 1009, "comision": "Web 26", "alumno": "Julián Pérez", "precio": 90000, "fecha": "2026-01-13T10:02:00"}, {"id": 1010, "comision": "Web 26", "alumno": "Florencia Castro", "precio": 120000, "fecha": "2026-01-13T14:55:00"}, {"id": 1011, "comision": "Web 26", "alumno": "Nicolás Morales", "precio": 110000, "fecha": "2026-01-13T21:53:00"}, {"id": 1012, "comision": "QA Automation", "alumno": "Gabriela Romero", "precio": 95000, "fecha": "2026-01-15T14:42:00"}, {"id": 1013, "comision": "Web 27", "alumno": "Sebastián Vera", "precio": 115000, "fecha": "2026-01-16T19:46:00"}, {"id": 1014, "comision": "Scrum", "alumno": "Marina Gutiérrez", "precio": 110000, "fecha": "2026-01-16T15:59:00"}, {"id": 1015, "comision": "Web 26", "alumno": "Tomás Álvarez", "precio": 115000, "fecha": "2026-01-16T09:14:00"}, {"id": 1016, "comision": "Web 26", "alumno": "Carolina Medina", "precio": 100000, "fecha": "2026-01-18T15:04:00"}, {"id": 1017, "comision": "Web 27", "alumno": "Esteban Reyes", "precio": 95000, "fecha": "2026-01-19T21:31:00"}, {"id": 1018, "comision": "Web 26", "alumno": "Natalia Cruz", "precio": 115000, "fecha": "2026-01-19T15:08:00"}, {"id": 1019, "comision": "Scrum", "alumno": "Agustín Flores", "precio": 120000, "fecha": "2026-01-19T20:25:00"}, {"id": 1020, "comision": "QA Automation", "alumno": "Jimena López", "precio": 95000, "fecha": "2026-01-19T10:48:00"}, {"id": 1021, "comision": "Web 27", "alumno": "Federico Silva", "precio": 90000, "fecha": "2026-01-20T21:10:00"}, {"id": 1022, "comision": "Web 27", "alumno": "Valeria Díaz", "precio": 105000, "fecha": "2026-01-20T17:24:00"}, {"id": 1023, "comision": "Web 11p — Tucumán", "alumno": "Mateo Ibáñez", "precio": 105000, "fecha": "2026-01-20T19:55:00"}, {"id": 1024, "comision": "Web 27", "alumno": "Renata Suárez", "precio": 95000, "fecha": "2026-01-21T21:21:00"}, {"id": 1025, "comision": "Web 1 BA — Buenos Aires", "alumno": "Ignacio Pereyra", "precio": 95000, "fecha": "2026-01-21T18:00:00"}, {"id": 1026, "comision": "Web 26", "alumno": "Daniela Vega", "precio": 100000, "fecha": "2026-01-22T19:58:00"}, {"id": 1027, "comision": "QA Automation", "alumno": "Facundo Romero", "precio": 110000, "fecha": "2026-01-23T11:23:00"}, {"id": 1028, "comision": "Web 26", "alumno": "Belén Acosta", "precio": 105000, "fecha": "2026-01-24T18:01:00"}, {"id": 1029, "comision": "QA Automation", "alumno": "Santiago Müller", "precio": 90000, "fecha": "2026-01-26T14:03:00"}, {"id": 1030, "comision": "Scrum", "alumno": "Ana García", "precio": 95000, "fecha": "2026-01-26T18:52:00"}, {"id": 1031, "comision": "Web 11p — Tucumán", "alumno": "Martín Rodríguez", "precio": 105000, "fecha": "2026-01-26T21:30:00"}, {"id": 1032, "comision": "Scrum", "alumno": "Lucía Torres", "precio": 100000, "fecha": "2026-01-26T19:55:00"}, {"id": 1033, "comision": "Web 1 BA — Buenos Aires", "alumno": "Diego Sánchez", "precio": 120000, "fecha": "2026-01-27T15:25:00"}, {"id": 1034, "comision": "Scrum", "alumno": "Valentina Gómez", "precio": 90000, "fecha": "2026-01-27T19:28:00"}, {"id": 1035, "comision": "Scrum", "alumno": "Pablo Fernández", "precio": 100000, "fecha": "2026-01-28T16:01:00"}, {"id": 1036, "comision": "QA Automation", "alumno": "Sofía Martínez", "precio": 100000, "fecha": "2026-01-28T09:04:00"}, {"id": 1037, "comision": "Web 26", "alumno": "Rodrigo Herrera", "precio": 90000, "fecha": "2026-01-28T10:57:00"}, {"id": 1038, "comision": "Web 27", "alumno": "Camila Ruiz", "precio": 100000, "fecha": "2026-01-29T19:15:00"}, {"id": 1039, "comision": "Web 27", "alumno": "Julián Pérez", "precio": 100000, "fecha": "2026-02-02T19:08:00"}, {"id": 1040, "comision": "QA Automation", "alumno": "Florencia Castro", "precio": 90000, "fecha": "2026-02-03T18:51:00"}, {"id": 1041, "comision": "Web 27", "alumno": "Nicolás Morales", "precio": 120000, "fecha": "2026-02-03T21:27:00"}, {"id": 1042, "comision": "QA Automation", "alumno": "Gabriela Romero", "precio": 85000, "fecha": "2026-02-04T09:43:00"}, {"id": 1043, "comision": "QA Automation", "alumno": "Sebastián Vera", "precio": 100000, "fecha": "2026-02-04T17:46:00"}, {"id": 1044, "comision": "Scrum", "alumno": "Marina Gutiérrez", "precio": 115000, "fecha": "2026-02-05T14:12:00"}, {"id": 1045, "comision": "QA Automation", "alumno": "Tomás Álvarez", "precio": 120000, "fecha": "2026-02-05T11:17:00"}, {"id": 1046, "comision": "QA Automation", "alumno": "Carolina Medina", "precio": 90000, "fecha": "2026-02-06T19:06:00"}, {"id": 1047, "comision": "Web 27", "alumno": "Esteban Reyes", "precio": 100000, "fecha": "2026-02-06T14:10:00"}, {"id": 1048, "comision": "Web 27", "alumno": "Natalia Cruz", "precio": 85000, "fecha": "2026-02-07T17:57:00"}, {"id": 1049, "comision": "Web 1 BA — Buenos Aires", "alumno": "Agustín Flores", "precio": 105000, "fecha": "2026-02-09T17:16:00"}, {"id": 1050, "comision": "Web 1 BA — Buenos Aires", "alumno": "Jimena López", "precio": 95000, "fecha": "2026-02-09T17:44:00"}, {"id": 1051, "comision": "QA Automation", "alumno": "Federico Silva", "precio": 85000, "fecha": "2026-02-10T14:18:00"}, {"id": 1052, "comision": "Web 27", "alumno": "Valeria Díaz", "precio": 95000, "fecha": "2026-02-10T16:03:00"}, {"id": 1053, "comision": "Scrum", "alumno": "Mateo Ibáñez", "precio": 90000, "fecha": "2026-02-10T09:32:00"}, {"id": 1054, "comision": "Scrum", "alumno": "Renata Suárez", "precio": 115000, "fecha": "2026-02-10T20:04:00"}, {"id": 1055, "comision": "QA Automation", "alumno": "Ignacio Pereyra", "precio": 90000, "fecha": "2026-02-11T10:56:00"}, {"id": 1056, "comision": "Web 26", "alumno": "Daniela Vega", "precio": 105000, "fecha": "2026-02-11T17:42:00"}, {"id": 1057, "comision": "Scrum", "alumno": "Facundo Romero", "precio": 105000, "fecha": "2026-02-11T14:42:00"}, {"id": 1058, "comision": "Web 26", "alumno": "Belén Acosta", "precio": 120000, "fecha": "2026-02-11T17:08:00"}, {"id": 1059, "comision": "QA Automation", "alumno": "Santiago Müller", "precio": 85000, "fecha": "2026-02-11T16:59:00"}, {"id": 1060, "comision": "Web 11p — Tucumán", "alumno": "Ana García", "precio": 90000, "fecha": "2026-02-11T18:39:00"}, {"id": 1061, "comision": "Scrum", "alumno": "Martín Rodríguez", "precio": 110000, "fecha": "2026-02-12T19:13:00"}, {"id": 1062, "comision": "Web 26", "alumno": "Lucía Torres", "precio": 95000, "fecha": "2026-02-12T10:56:00"}, {"id": 1063, "comision": "Web 26", "alumno": "Diego Sánchez", "precio": 85000, "fecha": "2026-02-12T18:53:00"}, {"id": 1064, "comision": "QA Automation", "alumno": "Valentina Gómez", "precio": 95000, "fecha": "2026-02-12T21:52:00"}, {"id": 1065, "comision": "Web 11p — Tucumán", "alumno": "Pablo Fernández", "precio": 105000, "fecha": "2026-02-13T15:07:00"}, {"id": 1066, "comision": "Web 26", "alumno": "Sofía Martínez", "precio": 100000, "fecha": "2026-02-13T15:38:00"}, {"id": 1067, "comision": "Web 1 BA — Buenos Aires", "alumno": "Rodrigo Herrera", "precio": 105000, "fecha": "2026-02-14T21:40:00"}, {"id": 1068, "comision": "Web 26", "alumno": "Camila Ruiz", "precio": 85000, "fecha": "2026-02-16T09:05:00"}, {"id": 1069, "comision": "Web 26", "alumno": "Julián Pérez", "precio": 95000, "fecha": "2026-02-17T09:21:00"}, {"id": 1070, "comision": "QA Automation", "alumno": "Florencia Castro", "precio": 90000, "fecha": "2026-02-18T18:35:00"}, {"id": 1071, "comision": "Scrum", "alumno": "Nicolás Morales", "precio": 85000, "fecha": "2026-02-19T10:56:00"}, {"id": 1072, "comision": "Web 27", "alumno": "Gabriela Romero", "precio": 95000, "fecha": "2026-02-19T16:37:00"}, {"id": 1073, "comision": "QA Automation", "alumno": "Sebastián Vera", "precio": 110000, "fecha": "2026-02-20T09:19:00"}, {"id": 1074, "comision": "QA Automation", "alumno": "Marina Gutiérrez", "precio": 110000, "fecha": "2026-02-20T14:43:00"}, {"id": 1075, "comision": "Web 11p — Tucumán", "alumno": "Tomás Álvarez", "precio": 100000, "fecha": "2026-02-20T19:56:00"}, {"id": 1076, "comision": "Web 27", "alumno": "Carolina Medina", "precio": 85000, "fecha": "2026-02-20T11:51:00"}, {"id": 1077, "comision": "Web 1 BA — Buenos Aires", "alumno": "Esteban Reyes", "precio": 100000, "fecha": "2026-02-20T11:47:00"}, {"id": 1078, "comision": "QA Automation", "alumno": "Natalia Cruz", "precio": 115000, "fecha": "2026-02-20T15:10:00"}, {"id": 1079, "comision": "Scrum", "alumno": "Agustín Flores", "precio": 120000, "fecha": "2026-02-20T09:54:00"}, {"id": 1080, "comision": "Scrum", "alumno": "Jimena López", "precio": 100000, "fecha": "2026-02-20T16:19:00"}, {"id": 1081, "comision": "Web 26", "alumno": "Federico Silva", "precio": 105000, "fecha": "2026-02-20T09:42:00"}, {"id": 1082, "comision": "Web 27", "alumno": "Valeria Díaz", "precio": 110000, "fecha": "2026-02-20T10:49:00"}, {"id": 1083, "comision": "Web 1 BA — Buenos Aires", "alumno": "Mateo Ibáñez", "precio": 95000, "fecha": "2026-02-21T09:07:00"}, {"id": 1084, "comision": "Web 27", "alumno": "Renata Suárez", "precio": 110000, "fecha": "2026-02-21T20:16:00"}, {"id": 1085, "comision": "QA Automation", "alumno": "Ignacio Pereyra", "precio": 115000, "fecha": "2026-02-21T16:27:00"}, {"id": 1086, "comision": "Web 27", "alumno": "Daniela Vega", "precio": 85000, "fecha": "2026-02-21T20:12:00"}, {"id": 1087, "comision": "Scrum", "alumno": "Facundo Romero", "precio": 110000, "fecha": "2026-02-22T19:59:00"}, {"id": 1088, "comision": "Web 1 BA — Buenos Aires", "alumno": "Belén Acosta", "precio": 110000, "fecha": "2026-02-22T17:04:00"}, {"id": 1089, "comision": "Web 26", "alumno": "Santiago Müller", "precio": 105000, "fecha": "2026-02-23T21:54:00"}, {"id": 1090, "comision": "Web 26", "alumno": "Ana García", "precio": 95000, "fecha": "2026-02-23T21:26:00"}, {"id": 1091, "comision": "Web 27", "alumno": "Martín Rodríguez", "precio": 95000, "fecha": "2026-02-23T14:26:00"}, {"id": 1092, "comision": "QA Automation", "alumno": "Lucía Torres", "precio": 105000, "fecha": "2026-02-23T20:36:00"}, {"id": 1093, "comision": "Web 26", "alumno": "Diego Sánchez", "precio": 120000, "fecha": "2026-02-23T15:13:00"}, {"id": 1094, "comision": "Web 27", "alumno": "Valentina Gómez", "precio": 95000, "fecha": "2026-02-24T18:28:00"}, {"id": 1095, "comision": "Web 26", "alumno": "Pablo Fernández", "precio": 90000, "fecha": "2026-02-24T21:05:00"}, {"id": 1096, "comision": "Scrum", "alumno": "Sofía Martínez", "precio": 95000, "fecha": "2026-02-24T14:43:00"}, {"id": 1097, "comision": "Web 27", "alumno": "Rodrigo Herrera", "precio": 90000, "fecha": "2026-02-24T09:02:00"}, {"id": 1098, "comision": "Web 11p — Tucumán", "alumno": "Camila Ruiz", "precio": 115000, "fecha": "2026-02-24T18:26:00"}, {"id": 1099, "comision": "QA Automation", "alumno": "Julián Pérez", "precio": 90000, "fecha": "2026-02-24T18:25:00"}, {"id": 1100, "comision": "Web 27", "alumno": "Florencia Castro", "precio": 85000, "fecha": "2026-02-24T17:14:00"}, {"id": 1101, "comision": "Web 11p — Tucumán", "alumno": "Nicolás Morales", "precio": 120000, "fecha": "2026-02-24T19:15:00"}, {"id": 1102, "comision": "Web 26", "alumno": "Gabriela Romero", "precio": 120000, "fecha": "2026-02-25T11:51:00"}, {"id": 1103, "comision": "Web 27", "alumno": "Sebastián Vera", "precio": 120000, "fecha": "2026-02-25T20:52:00"}, {"id": 1104, "comision": "Web 1 BA — Buenos Aires", "alumno": "Marina Gutiérrez", "precio": 105000, "fecha": "2026-02-25T11:47:00"}, {"id": 1105, "comision": "Web 27", "alumno": "Tomás Álvarez", "precio": 100000, "fecha": "2026-02-25T14:53:00"}, {"id": 1106, "comision": "Web 26", "alumno": "Carolina Medina", "precio": 100000, "fecha": "2026-02-25T15:28:00"}, {"id": 1107, "comision": "QA Automation", "alumno": "Esteban Reyes", "precio": 95000, "fecha": "2026-02-25T15:21:00"}, {"id": 1108, "comision": "Scrum", "alumno": "Natalia Cruz", "precio": 100000, "fecha": "2026-02-25T11:14:00"}, {"id": 1109, "comision": "Web 27", "alumno": "Agustín Flores", "precio": 115000, "fecha": "2026-02-26T10:26:00"}, {"id": 1110, "comision": "Web 27", "alumno": "Jimena López", "precio": 85000, "fecha": "2026-02-26T09:13:00"}, {"id": 1111, "comision": "Web 26", "alumno": "Federico Silva", "precio": 105000, "fecha": "2026-02-26T20:24:00"}, {"id": 1112, "comision": "Web 1 BA — Buenos Aires", "alumno": "Valeria Díaz", "precio": 100000, "fecha": "2026-02-26T17:54:00"}, {"id": 1113, "comision": "Web 27", "alumno": "Mateo Ibáñez", "precio": 85000, "fecha": "2026-02-26T18:14:00"}, {"id": 1114, "comision": "Web 27", "alumno": "Renata Suárez", "precio": 95000, "fecha": "2026-02-26T17:21:00"}, {"id": 1115, "comision": "QA Automation", "alumno": "Ignacio Pereyra", "precio": 115000, "fecha": "2026-02-26T18:58:00"}, {"id": 1116, "comision": "QA Automation", "alumno": "Daniela Vega", "precio": 115000, "fecha": "2026-02-26T20:36:00"}, {"id": 1117, "comision": "QA Automation", "alumno": "Facundo Romero", "precio": 105000, "fecha": "2026-02-26T11:55:00"}, {"id": 1118, "comision": "Web 26", "alumno": "Belén Acosta", "precio": 110000, "fecha": "2026-02-27T17:20:00"}, {"id": 1119, "comision": "Web 27", "alumno": "Santiago Müller", "precio": 105000, "fecha": "2026-02-27T17:17:00"}, {"id": 1120, "comision": "QA Automation", "alumno": "Ana García", "precio": 110000, "fecha": "2026-02-27T10:30:00"}, {"id": 1121, "comision": "QA Automation", "alumno": "Martín Rodríguez", "precio": 85000, "fecha": "2026-02-27T14:41:00"}, {"id": 1122, "comision": "Scrum", "alumno": "Lucía Torres", "precio": 100000, "fecha": "2026-02-27T14:12:00"}, {"id": 1123, "comision": "Scrum", "alumno": "Diego Sánchez", "precio": 120000, "fecha": "2026-02-27T11:30:00"}, {"id": 1124, "comision": "QA Automation", "alumno": "Valentina Gómez", "precio": 95000, "fecha": "2026-02-27T15:49:00"}, {"id": 1125, "comision": "Web 26", "alumno": "Pablo Fernández", "precio": 115000, "fecha": "2026-02-27T15:06:00"}, {"id": 1126, "comision": "Scrum", "alumno": "Sofía Martínez", "precio": 90000, "fecha": "2026-02-27T17:45:00"}, {"id": 1127, "comision": "QA Automation", "alumno": "Rodrigo Herrera", "precio": 85000, "fecha": "2026-02-27T15:54:00"}, {"id": 1128, "comision": "Web 26", "alumno": "Camila Ruiz", "precio": 90000, "fecha": "2026-02-27T16:34:00"}, {"id": 1129, "comision": "Web 27", "alumno": "Julián Pérez", "precio": 120000, "fecha": "2026-03-01T19:41:00"}, {"id": 1130, "comision": "Web 1 BA — Buenos Aires", "alumno": "Florencia Castro", "precio": 95000, "fecha": "2026-03-02T10:27:00"}, {"id": 1131, "comision": "Web 26", "alumno": "Nicolás Morales", "precio": 120000, "fecha": "2026-03-02T17:11:00"}, {"id": 1132, "comision": "Web 26", "alumno": "Gabriela Romero", "precio": 110000, "fecha": "2026-03-02T18:27:00"}, {"id": 1133, "comision": "Web 1 BA — Buenos Aires", "alumno": "Sebastián Vera", "precio": 120000, "fecha": "2026-03-02T14:53:00"}, {"id": 1134, "comision": "Web 27", "alumno": "Marina Gutiérrez", "precio": 110000, "fecha": "2026-03-02T14:48:00"}, {"id": 1135, "comision": "Web 11p — Tucumán", "alumno": "Tomás Álvarez", "precio": 120000, "fecha": "2026-03-02T09:31:00"}, {"id": 1136, "comision": "Web 26", "alumno": "Carolina Medina", "precio": 105000, "fecha": "2026-03-02T14:22:00"}, {"id": 1137, "comision": "Web 11p — Tucumán", "alumno": "Esteban Reyes", "precio": 100000, "fecha": "2026-03-02T20:44:00"}, {"id": 1138, "comision": "Web 27", "alumno": "Natalia Cruz", "precio": 100000, "fecha": "2026-03-02T10:15:00"}, {"id": 1139, "comision": "Web 27", "alumno": "Agustín Flores", "precio": 85000, "fecha": "2026-03-03T18:41:00"}, {"id": 1140, "comision": "Scrum", "alumno": "Jimena López", "precio": 105000, "fecha": "2026-03-03T10:18:00"}, {"id": 1141, "comision": "Web 26", "alumno": "Federico Silva", "precio": 115000, "fecha": "2026-03-03T21:37:00"}, {"id": 1142, "comision": "Web 27", "alumno": "Valeria Díaz", "precio": 105000, "fecha": "2026-03-03T19:21:00"}, {"id": 1143, "comision": "Scrum", "alumno": "Mateo Ibáñez", "precio": 110000, "fecha": "2026-03-03T15:16:00"}, {"id": 1144, "comision": "Scrum", "alumno": "Renata Suárez", "precio": 100000, "fecha": "2026-03-04T10:47:00"}, {"id": 1145, "comision": "Web 26", "alumno": "Ignacio Pereyra", "precio": 90000, "fecha": "2026-03-04T14:47:00"}, {"id": 1146, "comision": "Scrum", "alumno": "Daniela Vega", "precio": 105000, "fecha": "2026-03-06T14:18:00"}, {"id": 1147, "comision": "Web 26", "alumno": "Facundo Romero", "precio": 85000, "fecha": "2026-03-06T09:45:00"}, {"id": 1148, "comision": "Scrum", "alumno": "Belén Acosta", "precio": 120000, "fecha": "2026-03-06T09:35:00"}, {"id": 1149, "comision": "Web 26", "alumno": "Santiago Müller", "precio": 120000, "fecha": "2026-03-06T10:55:00"}, {"id": 1150, "comision": "QA Automation", "alumno": "Ana García", "precio": 105000, "fecha": "2026-03-09T18:28:00"}, {"id": 1151, "comision": "Web 27", "alumno": "Martín Rodríguez", "precio": 120000, "fecha": "2026-03-09T18:07:00"}, {"id": 1152, "comision": "QA Automation", "alumno": "Lucía Torres", "precio": 95000, "fecha": "2026-03-09T10:36:00"}, {"id": 1153, "comision": "Web 26", "alumno": "Diego Sánchez", "precio": 90000, "fecha": "2026-03-09T11:51:00"}, {"id": 1154, "comision": "Web 27", "alumno": "Valentina Gómez", "precio": 100000, "fecha": "2026-03-09T14:07:00"}, {"id": 1155, "comision": "Web 27", "alumno": "Pablo Fernández", "precio": 105000, "fecha": "2026-03-09T19:24:00"}, {"id": 1156, "comision": "QA Automation", "alumno": "Sofía Martínez", "precio": 90000, "fecha": "2026-03-10T20:27:00"}, {"id": 1157, "comision": "QA Automation", "alumno": "Rodrigo Herrera", "precio": 95000, "fecha": "2026-03-10T14:40:00"}, {"id": 1158, "comision": "Scrum", "alumno": "Camila Ruiz", "precio": 85000, "fecha": "2026-03-10T14:11:00"}, {"id": 1159, "comision": "Web 27", "alumno": "Julián Pérez", "precio": 105000, "fecha": "2026-03-10T17:28:00"}, {"id": 1160, "comision": "Web 26", "alumno": "Florencia Castro", "precio": 120000, "fecha": "2026-03-10T09:14:00"}, {"id": 1161, "comision": "Web 26", "alumno": "Nicolás Morales", "precio": 100000, "fecha": "2026-03-10T10:43:00"}, {"id": 1162, "comision": "Scrum", "alumno": "Gabriela Romero", "precio": 105000, "fecha": "2026-03-10T17:07:00"}, {"id": 1163, "comision": "Web 26", "alumno": "Sebastián Vera", "precio": 105000, "fecha": "2026-03-10T11:04:00"}, {"id": 1164, "comision": "Web 26", "alumno": "Marina Gutiérrez", "precio": 115000, "fecha": "2026-03-11T18:07:00"}, {"id": 1165, "comision": "Web 27", "alumno": "Tomás Álvarez", "precio": 90000, "fecha": "2026-03-11T15:32:00"}, {"id": 1166, "comision": "Web 1 BA — Buenos Aires", "alumno": "Carolina Medina", "precio": 105000, "fecha": "2026-03-11T20:02:00"}, {"id": 1167, "comision": "QA Automation", "alumno": "Esteban Reyes", "precio": 105000, "fecha": "2026-03-12T09:05:00"}, {"id": 1168, "comision": "Scrum", "alumno": "Natalia Cruz", "precio": 120000, "fecha": "2026-03-12T20:02:00"}, {"id": 1169, "comision": "Web 26", "alumno": "Agustín Flores", "precio": 95000, "fecha": "2026-03-12T19:41:00"}, {"id": 1170, "comision": "Web 27", "alumno": "Jimena López", "precio": 90000, "fecha": "2026-03-16T20:27:00"}, {"id": 1171, "comision": "Web 26", "alumno": "Federico Silva", "precio": 90000, "fecha": "2026-03-16T18:22:00"}, {"id": 1172, "comision": "Web 27", "alumno": "Valeria Díaz", "precio": 105000, "fecha": "2026-03-16T11:21:00"}, {"id": 1173, "comision": "QA Automation", "alumno": "Mateo Ibáñez", "precio": 120000, "fecha": "2026-03-16T21:25:00"}, {"id": 1174, "comision": "QA Automation", "alumno": "Renata Suárez", "precio": 115000, "fecha": "2026-03-16T10:20:00"}, {"id": 1175, "comision": "Web 1 BA — Buenos Aires", "alumno": "Ignacio Pereyra", "precio": 115000, "fecha": "2026-03-16T19:52:00"}, {"id": 1176, "comision": "Web 27", "alumno": "Daniela Vega", "precio": 120000, "fecha": "2026-03-16T09:12:00"}, {"id": 1177, "comision": "Scrum", "alumno": "Facundo Romero", "precio": 105000, "fecha": "2026-03-17T09:13:00"}, {"id": 1178, "comision": "QA Automation", "alumno": "Belén Acosta", "precio": 85000, "fecha": "2026-03-17T18:56:00"}, {"id": 1179, "comision": "Scrum", "alumno": "Santiago Müller", "precio": 105000, "fecha": "2026-03-18T21:38:00"}, {"id": 1180, "comision": "QA Automation", "alumno": "Ana García", "precio": 100000, "fecha": "2026-03-18T19:00:00"}, {"id": 1181, "comision": "Web 11p — Tucumán", "alumno": "Martín Rodríguez", "precio": 120000, "fecha": "2026-03-19T10:29:00"}, {"id": 1182, "comision": "Web 27", "alumno": "Lucía Torres", "precio": 120000, "fecha": "2026-03-20T15:32:00"}, {"id": 1183, "comision": "Scrum", "alumno": "Diego Sánchez", "precio": 115000, "fecha": "2026-03-20T18:15:00"}, {"id": 1184, "comision": "Scrum", "alumno": "Valentina Gómez", "precio": 90000, "fecha": "2026-03-20T14:58:00"}, {"id": 1185, "comision": "Web 27", "alumno": "Pablo Fernández", "precio": 110000, "fecha": "2026-03-20T15:49:00"}, {"id": 1186, "comision": "Web 26", "alumno": "Sofía Martínez", "precio": 105000, "fecha": "2026-03-23T19:17:00"}];
+
+function seedIfEmpty(){if(loadVentas().length>0)return;saveVentas(HISTORICAL_SEED);}
+
+// ─── VENTAS UI ────────────────────────────────────────────────────────────────
+function registrarVenta(){
+  const comision=document.getElementById('sv-comision').value;
+  const alumno=document.getElementById('sv-alumno').value.trim();
+  const precio=parseFloat(document.getElementById('sv-precio').value);
+  const fecha=document.getElementById('sv-fecha').value;
+  const msg=document.getElementById('sv-msg');
+  if(!comision||!alumno||!precio||!fecha){showMsg(msg,'Complet\u00E1 todos los campos.','red');return;}
+  const v=loadVentas();
+  v.push({id:Date.now(),comision,alumno,precio,fecha:new Date(fecha).toISOString()});
+  saveVentas(v);
+  showMsg(msg,'\u2713 Venta registrada: '+alumno+' \u2192 '+comision,'green');
+  document.getElementById('sv-alumno').value='';
+  document.getElementById('sv-precio').value='';
+  renderStats();
+  setTimeout(()=>{msg.style.display='none';},3000);
 }
 
+function showMsg(el,text,tipo){
+  const bg={green:'var(--green-dim)',red:'var(--red-dim)',blue:'var(--blue-dim)'};
+  const col={green:'var(--green)',red:'var(--red-col)',blue:'var(--blue-col)'};
+  el.style.display='block';el.style.background=bg[tipo]||'var(--surface2)';el.style.color=col[tipo]||'var(--muted)';el.textContent=text;
+}
+
+function clearVentas(){if(!confirm('\u00BFBorrar todo el historial?'))return;saveVentas([]);renderStats();}
+function toggleHistorial(){const w=document.getElementById('historial-wrap');w.style.display=w.style.display==='none'?'block':'none';if(w.style.display==='block')renderHistorial();}
+
+function renderHistorial(){
+  const v=loadVentas().slice().reverse();
+  const el=document.getElementById('historial-list');
+  if(!v.length){el.innerHTML='<div style="font-size:12px;color:var(--muted);font-family:var(--font-mono);">Sin ventas registradas.</div>';return;}
+  el.innerHTML=v.map(x=>{
+    const d=new Date(x.fecha);
+    const ds=d.toLocaleDateString('es-AR',{day:'2-digit',month:'short'})+' '+d.toLocaleTimeString('es-AR',{hour:'2-digit',minute:'2-digit'});
+    return `<div class="hist-row"><span style="color:var(--muted)">${ds}</span><span>${x.alumno}</span><span style="color:var(--muted)">${x.comision.split('\u2014')[0].trim()}</span><span style="color:var(--green)">$${x.precio.toLocaleString('es-AR')}</span><button onclick="eliminarVenta('${x.id}')" style="background:none;border:none;color:var(--red-col);cursor:pointer;font-size:14px;">\u00D7</button></div>`;
+  }).join('');
+}
+
+function eliminarVenta(id){saveVentas(loadVentas().filter(v=>String(v.id)!==String(id)));renderStats();renderHistorial();}
+
+// ─── STATS RENDER ─────────────────────────────────────────────────────────────
+let chartDias=null,chartHoras=null;
+
+function renderStats(){
+  const v=loadVentas();
+  if(!v.length)return;
+  renderSmartMetrics(v);
+  renderChartDias(v);
+  renderChartHoras(v);
+  renderProyecciones(v);
+  renderInsights(v);
+  if(document.getElementById('historial-wrap').style.display==='block')renderHistorial();
+}
+
+function renderSmartMetrics(v){
+  const el=document.getElementById('smart-metrics'); if(!el)return;
+  const total=v.length, rev=v.reduce((s,x)=>s+x.precio,0), ticket=Math.round(rev/total);
+  const hace7=new Date();hace7.setDate(hace7.getDate()-7);
+  const u7=v.filter(x=>new Date(x.fecha)>=hace7).length;
+  const dias=['Dom','Lun','Mar','Mi\u00E9','Jue','Vie','S\u00E1b'];
+  const pd=Array(7).fill(0); v.forEach(x=>pd[new Date(x.fecha).getDay()]++);
+  const ph=Array(24).fill(0); v.forEach(x=>ph[new Date(x.fecha).getHours()]++);
+  const dpi=pd.indexOf(Math.max(...pd)), hpi=ph.indexOf(Math.max(...ph));
+  el.innerHTML=[
+    {l:'Total ventas',v:total,s:'todas las comisiones',c:'var(--green)'},
+    {l:'\u00DAltimos 7 d\u00EDas',v:u7,s:'ventas recientes',c:'var(--blue-col)'},
+    {l:'Ticket promedio',v:'$'+ticket.toLocaleString('es-AR'),s:'por inscripci\u00F3n',c:'var(--amber-col)'},
+    {l:'D\u00EDa pico',v:dias[dpi],s:pd[dpi]+' ventas hist\u00F3ricas',c:'var(--accent)'},
+    {l:'Hora pico',v:hpi+':00',s:'m\u00E1s cierres a esta hora',c:'var(--green)'},
+    {l:'Revenue total',v:'$'+Math.round(rev/1000)+'k',s:'acumulado Q1 2026',c:'var(--amber-col)'},
+  ].map(m=>`<div style="background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:1rem 1.25rem;"><div style="font-size:11px;color:var(--muted);font-family:var(--font-mono);letter-spacing:0.06em;text-transform:uppercase;margin-bottom:6px;">${m.l}</div><div style="font-size:24px;font-weight:800;letter-spacing:-0.03em;color:${m.c};">${m.v}</div><div style="font-size:11px;color:var(--muted);font-family:var(--font-mono);margin-top:3px;">${m.s}</div></div>`).join('');
+}
+
+function renderChartDias(v){
+  if(chartDias){chartDias.destroy();chartDias=null;}
+  const canvas=document.getElementById('chart-dias'); if(!canvas)return;
+  const dark=isDark(), dias=['Lun','Mar','Mi\u00E9','Jue','Vie','S\u00E1b','Dom'];
+  const counts=Array(7).fill(0); v.forEach(x=>counts[(new Date(x.fecha).getDay()+6)%7]++);
+  const maxC=Math.max(...counts);
+  chartDias=new Chart(canvas.getContext('2d'),{type:'bar',data:{labels:dias,datasets:[{data:counts,backgroundColor:counts.map(c=>`rgba(62,207,160,${maxC>0?0.2+c/maxC*0.8:0.2})`),borderRadius:6,borderWidth:0}]},options:{responsive:true,maintainAspectRatio:false,animation:false,plugins:{legend:{display:false},tooltip:{backgroundColor:dark?'#1C1F24':'#fff',titleColor:dark?'#F0EDE8':'#1A1C1E',bodyColor:dark?'#6B7280':'#7A7E87',bodyFont:{family:'DM Mono',size:11},callbacks:{label:ctx=>ctx.raw+' ventas'}}},scales:{x:{grid:{display:false},ticks:{color:dark?'#6B7280':'#7A7E87',font:{family:'DM Mono',size:10}},border:{display:false}},y:{grid:{color:dark?'rgba(255,255,255,0.04)':'rgba(0,0,0,0.05)'},ticks:{color:dark?'#6B7280':'#7A7E87',font:{family:'DM Mono',size:10}},border:{display:false}}}}});
+}
+
+function renderChartHoras(v){
+  if(chartHoras){chartHoras.destroy();chartHoras=null;}
+  const canvas=document.getElementById('chart-horas'); if(!canvas)return;
+  const dark=isDark();
+  const counts=Array(24).fill(0); v.forEach(x=>counts[new Date(x.fecha).getHours()]++);
+  const labels=Array.from({length:24},(_,i)=>i%3===0?i+':00':'');
+  const maxC=Math.max(...counts);
+  chartHoras=new Chart(canvas.getContext('2d'),{type:'bar',data:{labels,datasets:[{data:counts,backgroundColor:counts.map(c=>`rgba(245,166,35,${maxC>0?0.15+c/maxC*0.85:0.15})`),borderRadius:4,borderWidth:0}]},options:{responsive:true,maintainAspectRatio:false,animation:false,plugins:{legend:{display:false},tooltip:{backgroundColor:dark?'#1C1F24':'#fff',titleColor:dark?'#F0EDE8':'#1A1C1E',bodyColor:dark?'#6B7280':'#7A7E87',bodyFont:{family:'DM Mono',size:11},callbacks:{title:ctx=>ctx[0].dataIndex+':00 hs',label:ctx=>ctx.raw+' ventas'}}},scales:{x:{grid:{display:false},ticks:{color:dark?'#6B7280':'#7A7E87',font:{family:'DM Mono',size:9}},border:{display:false}},y:{grid:{color:dark?'rgba(255,255,255,0.04)':'rgba(0,0,0,0.05)'},ticks:{color:dark?'#6B7280':'#7A7E87',font:{family:'DM Mono',size:10}},border:{display:false}}}}});
+}
+
+function renderProyecciones(v){
+  const el=document.getElementById('proyecciones-list'); if(!el)return;
+  const hace14=new Date();hace14.setDate(hace14.getDate()-14);
+  const cfg=[
+    {n:"QA Automation",o:20,d:7},{n:"Scrum",o:20,d:16},{n:"Web 26",o:20,d:22},
+    {n:"Web 27",o:20,d:28},{n:"Web 11p \u2014 Tucum\u00E1n",o:20,d:15},{n:"Web 1 BA \u2014 Buenos Aires",o:20,d:22}
+  ];
+  el.innerHTML=cfg.map(c=>{
+    const vc=v.filter(x=>x.comision===c.n), rec=vc.filter(x=>new Date(x.fecha)>=hace14);
+    const ritmo=rec.length/14, vendidas=vc.length, faltan=Math.max(0,c.o-vendidas);
+    const diasNec=ritmo>0?Math.ceil(faltan/ritmo):999;
+    const pct=Math.min(100,Math.round(vendidas/c.o*100));
+    let lbl,col,bg;
+    if(vendidas>=c.o){lbl='\u00A1Objetivo cumplido!';col='var(--green)';bg='var(--green-dim)';}
+    else if(ritmo===0){lbl='Sin ventas recientes';col='var(--red-col)';bg='var(--red-dim)';}
+    else if(diasNec<=c.d){lbl='En ritmo \u2192 ~'+diasNec+' d\u00EDas';col='var(--green)';bg='var(--green-dim)';}
+    else{lbl='Ritmo insuf. \u2192 necesit\u00E1s '+diasNec+'d, quedan '+c.d;col='var(--red-col)';bg='var(--red-dim)';}
+    const rs=ritmo>0?(ritmo<1?'1 c/ '+Math.round(1/ritmo)+'d':ritmo.toFixed(1)+'/d\u00EDa'):'\u2014';
+    return `<div class="proj-row"><div class="proj-name">${c.n}</div><div class="proj-bar-wrap"><div class="proj-track"><div class="proj-fill" style="width:${pct}%;background:${col};"></div></div><div class="proj-meta">${vendidas}/${c.o} \u00B7 ritmo ${rs}</div></div><div class="proj-label" style="background:${bg};color:${col};">${lbl}</div></div>`;
+  }).join('');
+}
+
+function renderInsights(v){
+  const el=document.getElementById('insights-list'); if(!el||!v.length)return;
+  const dias=['Dom','Lun','Mar','Mi\u00E9','Jue','Vie','S\u00E1b'];
+  const pd=Array(7).fill(0); v.forEach(x=>pd[new Date(x.fecha).getDay()]++);
+  const ph=Array(24).fill(0); v.forEach(x=>ph[new Date(x.fecha).getHours()]++);
+  const dpi=pd.indexOf(Math.max(...pd)), hpi=ph.indexOf(Math.max(...ph));
+  const dpct=Math.round(pd[dpi]/v.length*100), hpct=Math.round(ph[hpi]/v.length*100);
+  const wkd=pd[0]+pd[6], wkdpct=Math.round(wkd/v.length*100);
+  const rev=v.reduce((s,x)=>s+x.precio,0), ticket=Math.round(rev/v.length);
+  const med=[...v].map(x=>x.precio).sort((a,b)=>a-b)[Math.floor(v.length/2)];
+  const ins=[
+    {tipo:'green',icon:'\u2191',t:`El <strong>${dias[dpi]}</strong> es el d\u00EDa pico con el ${dpct}% de las ventas. Coordiná campa\u00F1as para que lleguen el d\u00EDa anterior.`},
+    {tipo:'blue',icon:'\u25F7',t:`La hora con m\u00E1s cierres es las <strong>${hpi}:00 hs</strong> (${hpct}% de ventas). Public\u00E1 contenido 1\u20132 horas antes.`},
+    {tipo:'amber',icon:'\u2691',t:wkdpct>25?`El <strong>${wkdpct}% de las ventas es en fin de semana</strong>. Asegur\u00E1 cobertura s\u00E1bados y domingos.`:`Solo el <strong>${wkdpct}% es fin de semana</strong>. Foco en d\u00EDas h\u00E1biles, especialmente ${dias[dpi]}.`},
+    {tipo:ticket>med*1.05?'green':'amber',icon:'$',t:ticket>med*1.05?`Ticket promedio ($${ticket.toLocaleString('es-AR')}) est\u00E1 <strong>por encima de la mediana</strong>. Los alumnos eligen variantes premium.`:`Mayor\u00EDa elige precio base. Ticket promedio $${ticket.toLocaleString('es-AR')}. Revisar si se comunica bien la variante premium.`},
+  ];
+  const bg={green:'var(--green-dim)',blue:'var(--blue-dim)',amber:'var(--amber-dim)',red:'var(--red-dim)'};
+  const col={green:'var(--green)',blue:'var(--blue-col)',amber:'var(--amber-col)',red:'var(--red-col)'};
+  el.innerHTML=ins.map(i=>`<div class="insight-item" style="background:${bg[i.tipo]};"><span class="insight-icon" style="color:${col[i.tipo]};">${i.icon}</span><span class="insight-text">${i.t}</span></div>`).join('');
+}
+
+// ─── CSV ──────────────────────────────────────────────────────────────────────
+let csvPendiente=[];
+function descargarPlantilla(){
+  const rows=['fecha,alumno,comision,precio','2026-03-20 10:30,Ana Garc\u00EDa,QA Automation,95000','2026-03-19 15:00,Mart\u00EDn L\u00F3pez,Web 26,105000'];
+  const blob=new Blob([rows.join('\n')],{type:'text/csv;charset=utf-8;'});
+  const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='plantilla_rc.csv';a.click();
+}
+function importarCSV(e){
+  const file=e.target.files[0]; if(!file)return;
+  const r=new FileReader();
+  r.onload=function(ev){
+    const lines=ev.target.result.trim().split('\n').filter(l=>l.trim());
+    if(lines.length<2){showCsvMsg('Archivo vac\u00EDo.','red');return;}
+    const h=lines[0].toLowerCase().split(',').map(x=>x.trim().replace(/[\'"]/g,''));
+    const iF=h.findIndex(x=>x.includes('fecha')),iA=h.findIndex(x=>x.includes('alumno')||x.includes('nombre'));
+    const iC=h.findIndex(x=>x.includes('comision')||x.includes('curso')),iP=h.findIndex(x=>x.includes('precio')||x.includes('monto'));
+    if(iF<0||iA<0||iC<0||iP<0){showCsvMsg('No encontr\u00E9 todas las columnas (fecha, alumno, comision, precio)','red');return;}
+    csvPendiente=[];
+    lines.slice(1).forEach((line,i)=>{
+      const cols=line.split(',').map(c=>c.trim().replace(/^[\'"]/,'').replace(/[\'"']$/,''));
+      const fd=new Date(cols[iF]),pr=parseFloat(cols[iP]);
+      if(!cols[iA]||!cols[iC]||isNaN(pr)||isNaN(fd.getTime()))return;
+      csvPendiente.push({id:Date.now()+Math.random(),comision:cols[iC],alumno:cols[iA],precio:pr,fecha:fd.toISOString()});
+    });
+    if(!csvPendiente.length){showCsvMsg('No se pudo parsear ninguna fila v\u00E1lida.','red');return;}
+    const prev=document.getElementById('csv-preview'),lbl=document.getElementById('csv-preview-label'),tbl=document.getElementById('csv-preview-table');
+    lbl.textContent=csvPendiente.length+' ventas listas para importar:';
+    tbl.innerHTML=csvPendiente.slice(0,8).map(x=>{const d=new Date(x.fecha).toLocaleDateString('es-AR',{day:'2-digit',month:'short'});return`<div style="display:grid;grid-template-columns:80px 1fr 1fr 80px;gap:4px 12px;padding:3px 0;border-bottom:1px solid var(--border);font-size:11px;font-family:var(--font-mono);"><span style="color:var(--muted)">${d}</span><span>${x.alumno}</span><span style="color:var(--muted)">${x.comision}</span><span style="color:var(--green)">$${x.precio.toLocaleString('es-AR')}</span></div>`;}).join('');
+    prev.style.display='block';
+  };
+  r.readAsText(file); e.target.value='';
+}
+function confirmarImport(){if(!csvPendiente.length)return;saveVentas([...loadVentas(),...csvPendiente]);const n=csvPendiente.length;csvPendiente=[];document.getElementById('csv-preview').style.display='none';showCsvMsg('\u2713 '+n+' ventas importadas.','green');renderStats();setTimeout(()=>{document.getElementById('csv-msg').style.display='none';},4000);}
+function cancelarImport(){csvPendiente=[];document.getElementById('csv-preview').style.display='none';}
+function showCsvMsg(text,tipo){const el=document.getElementById('csv-msg');const bg={green:'var(--green-dim)',red:'var(--red-dim)',blue:'var(--blue-dim)'};const col={green:'var(--green)',red:'var(--red-col)',blue:'var(--blue-col)'};el.style.display='block';el.style.background=bg[tipo]||'var(--surface2)';el.style.color=col[tipo]||'var(--muted)';el.textContent=text;}
+
+// ─── THEME ────────────────────────────────────────────────────────────────────
 function setTheme(theme){
   document.documentElement.setAttribute('data-theme',theme);
   document.getElementById('btnDark').classList.toggle('active',theme==='dark');
   document.getElementById('btnLight').classList.toggle('active',theme==='light');
-  updateLogoMark();
-  buildCards();
-  buildStrategies();
-  buildChart();
+  updateLogoMark();buildCards();buildStrategies();buildChart();
+  setTimeout(()=>renderStats(),50);
 }
 
-function setDate(){
-  const d=new Date();
-  document.getElementById('current-date').textContent=d.toLocaleDateString('es-AR',{weekday:'short',year:'numeric',month:'short',day:'numeric'});
-}
-
-updateLogoMark();
-buildCards();
-buildStrategies();
-buildChart();
-setDate();
-
-const VALID_USER = "RollingDasboad";
-const VALID_HASH = "419e9b816074447e70e4d90f3f3f05e83ffdac7e0ea2b7dd315f11fd5c5c5a44";
-let attempts = 0;
-const MAX_ATTEMPTS = 5;
-let lockUntil = 0;
-
-async function sha256(str) {
-  const buf = await crypto.subtle.digest("SHA-256", new TextEncoder().encode(str));
-  return Array.from(new Uint8Array(buf)).map(b => b.toString(16).padStart(2,'0')).join('');
-}
-
-async function doLogin() {
-  const now = Date.now();
-  if (now < lockUntil) {
-    const secs = Math.ceil((lockUntil - now) / 1000);
-    document.getElementById('login-attempts').textContent = 'Bloqueado. Intentá en ' + secs + 's.';
-    return;
-  }
-  const user = document.getElementById('login-user').value.trim();
-  const pass = document.getElementById('login-pass').value;
-  const hash = await sha256(pass);
-  if (user === VALID_USER && hash === VALID_HASH) {
-    document.getElementById('login-screen').style.display = 'none';
-    document.getElementById('dashboard-content').style.display = 'block';
-    sessionStorage.setItem('rc_auth', '1');
-    attempts = 0;
+// ─── LOGIN ────────────────────────────────────────────────────────────────────
+const VALID_USER="RollingDasboad";
+const VALID_HASH="419e9b816074447e70e4d90f3f3f05e83ffdac7e0ea2b7dd315f11fd5c5c5a44";
+let attempts=0,lockUntil=0;
+async function sha256(s){const b=await crypto.subtle.digest("SHA-256",new TextEncoder().encode(s));return Array.from(new Uint8Array(b)).map(b=>b.toString(16).padStart(2,'0')).join('');}
+async function doLogin(){
+  const now=Date.now();
+  if(now<lockUntil){document.getElementById('login-attempts').textContent='Bloqueado '+Math.ceil((lockUntil-now)/1000)+'s.';return;}
+  const user=document.getElementById('login-user').value.trim();
+  const pass=document.getElementById('login-pass').value;
+  const hash=await sha256(pass);
+  if(user===VALID_USER&&hash===VALID_HASH){
+    document.getElementById('login-screen').style.display='none';
+    document.getElementById('dashboard-content').style.display='block';
+    sessionStorage.setItem('rc_auth','1');
+    attempts=0; initDashboard();
   } else {
     attempts++;
-    document.getElementById('login-error').style.display = 'block';
-    if (attempts >= MAX_ATTEMPTS) {
-      lockUntil = Date.now() + 30000;
-      document.getElementById('login-attempts').textContent = 'Demasiados intentos. Bloqueado 30 segundos.';
-    } else {
-      document.getElementById('login-attempts').textContent = 'Intentos fallidos: ' + attempts + ' / ' + MAX_ATTEMPTS;
-    }
+    document.getElementById('login-error').style.display='block';
+    if(attempts>=5){lockUntil=Date.now()+30000;document.getElementById('login-attempts').textContent='Bloqueado 30s.';}
+    else document.getElementById('login-attempts').textContent='Intentos: '+attempts+'/5';
   }
 }
+document.addEventListener('keydown',e=>{if(e.key==='Enter')doLogin();});
 
-document.addEventListener('keydown', e => { if (e.key === 'Enter') doLogin(); });
-if (sessionStorage.getItem('rc_auth') === '1') {
-  document.getElementById('login-screen').style.display = 'none';
-  document.getElementById('dashboard-content').style.display = 'block';
+function initDashboard(){
+  updateLogoMark();buildCards();buildStrategies();buildChart();setDate();
+  const now=new Date();now.setMinutes(now.getMinutes()-now.getTimezoneOffset());
+  document.getElementById('sv-fecha').value=now.toISOString().slice(0,16);
+  seedIfEmpty();renderStats();
+}
+
+if(sessionStorage.getItem('rc_auth')==='1'){
+  document.getElementById('login-screen').style.display='none';
+  document.getElementById('dashboard-content').style.display='block';
+  initDashboard();
 }
 </script>
 </div>
 </body>
 </html>
-<!-- STATISTICS PATCH: injected via script after DOM loads -->
-<script>
-// ─── STORAGE ────────────────────────────────────────────────────────────────
-const STORE_KEY = 'rc_ventas_v1';
-
-function loadVentas() {
-  try { return JSON.parse(localStorage.getItem(STORE_KEY) || '[]'); } catch(e) { return []; }
-}
-function saveVentas(v) { localStorage.setItem(STORE_KEY, JSON.stringify(v)); }
-
-// ─── SEED DATA (demo — se puede borrar) ─────────────────────────────────────
-function seedIfEmpty() {
-  if (loadVentas().length > 0) return;
-  const seed = [];
-  const courses = ["QA Automation","Scrum","Web 26","Web 27","Web 11p — Tucumán","Web 1 BA — Buenos Aires"];
-  const counts  = [16, 6, 5, 5, 10, 3];
-  const prices  = [[85000,95000,105000],[72000,80000],[95000,105000,115000],[95000,105000,115000],[90000,100000,110000],[110000,120000,130000]];
-  const names   = ["Ana López","Martín Díaz","Lucía Torres","Rodrigo Sánchez","Valentina Gómez","Pablo Fernández","Sofía Martínez","Diego Herrera","Camila Ruiz","Julián Pérez","Florencia Castro","Nicolás Morales","Gabriela Romero","Sebastián Vera","Marina Gutiérrez","Tomás Álvarez","Carolina Medina","Esteban Reyes","Natalia Cruz","Agustín Flores"];
-  let nameIdx = 0;
-  courses.forEach((c, ci) => {
-    for (let i = 0; i < counts[ci]; i++) {
-      const daysAgo = Math.floor(Math.random() * 18) + 1;
-      const hour = [9,10,11,14,15,16,17,18,19,20,21][Math.floor(Math.random()*11)];
-      const d = new Date();
-      d.setDate(d.getDate() - daysAgo);
-      d.setHours(hour, Math.floor(Math.random()*60), 0, 0);
-      const priceArr = prices[ci];
-      seed.push({ id: Date.now()+Math.random(), comision: c, alumno: names[nameIdx % names.length], precio: priceArr[Math.floor(Math.random()*priceArr.length)], fecha: d.toISOString() });
-      nameIdx++;
-    }
-  });
-  saveVentas(seed);
-}
-
-// ─── INJECT STATS SECTION ───────────────────────────────────────────────────
-function injectStatsSection() {
-  const footer = document.querySelector('.footer');
-  if (!footer || document.getElementById('stats-section')) return;
-
-  const section = document.createElement('div');
-  section.id = 'stats-section';
-  section.style.cssText = 'max-width:1400px;margin:0 auto;padding:0 2rem 2rem;';
-  section.innerHTML = `
-<div style="border-top:1px solid var(--border);padding-top:2rem;margin-top:1rem;">
-
-<div style="font-size:11px;color:var(--muted);font-family:var(--font-mono);letter-spacing:0.1em;text-transform:uppercase;margin-bottom:1rem;padding-bottom:0.5rem;border-bottom:1px solid var(--border);">
-  Estadísticas de ventas — inteligencia de cierre
-</div>
-
-<!-- CARGAR VENTA -->
-<div style="background:var(--surface);border:1px solid var(--border);border-radius:16px;padding:1.5rem;margin-bottom:1.5rem;">
-  <div style="font-size:13px;font-weight:700;margin-bottom:1rem;letter-spacing:-0.01em;">Registrar venta</div>
-  <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:10px;align-items:end;">
-    <div>
-      <div style="font-size:10px;color:var(--muted);font-family:var(--font-mono);letter-spacing:0.06em;text-transform:uppercase;margin-bottom:5px;">Comisión</div>
-      <select id="sv-comision" style="width:100%;padding:8px 10px;background:var(--surface2);border:1px solid var(--border2);border-radius:8px;color:var(--text);font-family:var(--font-mono);font-size:12px;outline:none;">
-        <option value="">— seleccionar —</option>
-        <option>QA Automation</option><option>Scrum</option><option>Web 26</option>
-        <option>Web 27</option><option>Web 11p — Tucumán</option><option>Web 1 BA — Buenos Aires</option>
-      </select>
-    </div>
-    <div>
-      <div style="font-size:10px;color:var(--muted);font-family:var(--font-mono);letter-spacing:0.06em;text-transform:uppercase;margin-bottom:5px;">Alumno</div>
-      <input id="sv-alumno" type="text" placeholder="Nombre completo" style="width:100%;padding:8px 10px;background:var(--surface2);border:1px solid var(--border2);border-radius:8px;color:var(--text);font-family:var(--font-mono);font-size:12px;outline:none;">
-    </div>
-    <div>
-      <div style="font-size:10px;color:var(--muted);font-family:var(--font-mono);letter-spacing:0.06em;text-transform:uppercase;margin-bottom:5px;">Precio $</div>
-      <input id="sv-precio" type="number" placeholder="95000" style="width:100%;padding:8px 10px;background:var(--surface2);border:1px solid var(--border2);border-radius:8px;color:var(--text);font-family:var(--font-mono);font-size:12px;outline:none;">
-    </div>
-    <div>
-      <div style="font-size:10px;color:var(--muted);font-family:var(--font-mono);letter-spacing:0.06em;text-transform:uppercase;margin-bottom:5px;">Fecha y hora</div>
-      <input id="sv-fecha" type="datetime-local" style="width:100%;padding:8px 10px;background:var(--surface2);border:1px solid var(--border2);border-radius:8px;color:var(--text);font-family:var(--font-mono);font-size:12px;outline:none;">
-    </div>
-    <div style="display:flex;gap:8px;">
-      <button onclick="registrarVenta()" style="flex:1;padding:9px 0;background:var(--accent);color:#0D0F12;border:none;border-radius:8px;font-family:var(--font-head);font-weight:700;font-size:13px;cursor:pointer;letter-spacing:-0.01em;">+ Agregar</button>
-      <button onclick="toggleHistorial()" style="padding:9px 14px;background:var(--surface2);color:var(--muted);border:1px solid var(--border);border-radius:8px;font-family:var(--font-mono);font-size:11px;cursor:pointer;" title="Ver historial">≡</button>
-    </div>
-  </div>
-  <div id="sv-msg" style="font-size:11px;font-family:var(--font-mono);margin-top:8px;display:none;padding:6px 10px;border-radius:6px;"></div>
-
-  <!-- CSV IMPORT -->
-  <div style="margin-top:1rem;padding-top:1rem;border-top:1px solid var(--border);">
-    <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px;">
-      <div>
-        <div style="font-size:12px;font-weight:700;margin-bottom:3px;">Importar desde CSV</div>
-        <div style="font-size:11px;color:var(--muted);font-family:var(--font-mono);">Columnas: <code style="background:var(--surface2);padding:1px 5px;border-radius:4px;">fecha, alumno, comision, precio</code></div>
-      </div>
-      <div style="display:flex;gap:8px;align-items:center;">
-        <button onclick="descargarPlantilla()" style="padding:7px 14px;background:var(--surface2);color:var(--muted);border:1px solid var(--border);border-radius:8px;font-family:var(--font-mono);font-size:11px;cursor:pointer;">&#x2193; Plantilla</button>
-        <label style="padding:7px 14px;background:var(--blue-dim);color:var(--blue-col);border:1px solid var(--blue-col);border-radius:8px;font-family:var(--font-mono);font-size:11px;cursor:pointer;white-space:nowrap;">
-          &#x2191; Subir CSV
-          <input type="file" accept=".csv" onchange="importarCSV(event)" style="display:none;">
-        </label>
-      </div>
-    </div>
-    <div id="csv-msg" style="font-size:11px;font-family:var(--font-mono);margin-top:8px;display:none;padding:6px 10px;border-radius:6px;"></div>
-    <div id="csv-preview" style="display:none;margin-top:1rem;">
-      <div style="font-size:11px;color:var(--muted);font-family:var(--font-mono);margin-bottom:8px;" id="csv-preview-label"></div>
-      <div id="csv-preview-table" style="max-height:200px;overflow-y:auto;font-size:11px;font-family:var(--font-mono);"></div>
-      <div style="display:flex;gap:8px;margin-top:10px;">
-        <button onclick="confirmarImport()" style="padding:8px 20px;background:var(--accent);color:#0D0F12;border:none;border-radius:8px;font-family:var(--font-head);font-weight:700;font-size:13px;cursor:pointer;">Confirmar importacion</button>
-        <button onclick="cancelarImport()" style="padding:8px 14px;background:var(--surface2);color:var(--muted);border:1px solid var(--border);border-radius:8px;font-family:var(--font-mono);font-size:11px;cursor:pointer;">Cancelar</button>
-      </div>
-    </div>
-  </div>
-</div>
-
-<!-- HISTORIAL -->
-<div id="historial-wrap" style="display:none;background:var(--surface);border:1px solid var(--border);border-radius:16px;padding:1.5rem;margin-bottom:1.5rem;">
-  <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:1rem;">
-    <div style="font-size:13px;font-weight:700;">Historial de ventas</div>
-    <button onclick="clearVentas()" style="font-size:10px;font-family:var(--font-mono);padding:4px 10px;background:var(--red-dim);color:var(--red-col);border:1px solid var(--red-col);border-radius:6px;cursor:pointer;">Borrar todo</button>
-  </div>
-  <div id="historial-list" style="max-height:260px;overflow-y:auto;"></div>
-</div>
-
-<!-- MÉTRICAS INTELIGENTES -->
-<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px;margin-bottom:1.5rem;" id="smart-metrics"></div>
-
-<!-- CHARTS ROW -->
-<div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:1.5rem;" id="charts-row">
-  <div style="background:var(--surface);border:1px solid var(--border);border-radius:16px;padding:1.5rem;">
-    <div style="font-size:12px;font-weight:700;margin-bottom:4px;">Ventas por día de la semana</div>
-    <div style="font-size:11px;color:var(--muted);font-family:var(--font-mono);margin-bottom:1rem;">¿Cuándo se cierra más?</div>
-    <div style="position:relative;height:180px;width:100%;"><canvas id="chart-dias"></canvas></div>
-  </div>
-  <div style="background:var(--surface);border:1px solid var(--border);border-radius:16px;padding:1.5rem;">
-    <div style="font-size:12px;font-weight:700;margin-bottom:4px;">Ventas por hora del día</div>
-    <div style="font-size:11px;color:var(--muted);font-family:var(--font-mono);margin-bottom:1rem;">¿A qué hora se decide?</div>
-    <div style="position:relative;height:180px;width:100%;"><canvas id="chart-horas"></canvas></div>
-  </div>
-</div>
-
-<!-- PROYECCIONES -->
-<div style="background:var(--surface);border:1px solid var(--border);border-radius:16px;padding:1.5rem;margin-bottom:1.5rem;">
-  <div style="font-size:12px;font-weight:700;margin-bottom:4px;">Proyección de cierre por comisión</div>
-  <div style="font-size:11px;color:var(--muted);font-family:var(--font-mono);margin-bottom:1.25rem;">A este ritmo, ¿llegás al objetivo antes del inicio?</div>
-  <div id="proyecciones-list"></div>
-</div>
-
-<!-- INSIGHTS AUTOMÁTICOS -->
-<div style="background:var(--surface);border:1px solid var(--border);border-radius:16px;padding:1.5rem;" id="insights-box">
-  <div style="font-size:12px;font-weight:700;margin-bottom:1rem;">Insights automáticos</div>
-  <div id="insights-list"></div>
-</div>
-
-</div>
-`;
-  footer.parentNode.insertBefore(section, footer);
-
-  // Set default datetime to now
-  const now = new Date();
-  now.setMinutes(now.getMinutes() - now.getTimezoneOffset());
-  document.getElementById('sv-fecha').value = now.toISOString().slice(0,16);
-}
-
-// ─── REGISTRAR VENTA ─────────────────────────────────────────────────────────
-function registrarVenta() {
-  const comision = document.getElementById('sv-comision').value;
-  const alumno   = document.getElementById('sv-alumno').value.trim();
-  const precio   = parseFloat(document.getElementById('sv-precio').value);
-  const fecha    = document.getElementById('sv-fecha').value;
-  const msg      = document.getElementById('sv-msg');
-
-  if (!comision || !alumno || !precio || !fecha) {
-    msg.style.display = 'block';
-    msg.style.background = 'var(--red-dim)';
-    msg.style.color = 'var(--red-col)';
-    msg.textContent = 'Completá todos los campos antes de agregar.';
-    return;
-  }
-
-  const ventas = loadVentas();
-  ventas.push({ id: Date.now(), comision, alumno, precio, fecha: new Date(fecha).toISOString() });
-  saveVentas(ventas);
-
-  msg.style.display = 'block';
-  msg.style.background = 'var(--green-dim)';
-  msg.style.color = 'var(--green)';
-  msg.textContent = '✓ Venta registrada: ' + alumno + ' → ' + comision;
-
-  document.getElementById('sv-alumno').value = '';
-  document.getElementById('sv-precio').value = '';
-
-  renderStats();
-  setTimeout(() => { msg.style.display = 'none'; }, 3000);
-}
-
-function clearVentas() {
-  if (!confirm('¿Borrar todo el historial? Esta acción no se puede deshacer.')) return;
-  saveVentas([]);
-  renderStats();
-}
-
-function toggleHistorial() {
-  const w = document.getElementById('historial-wrap');
-  w.style.display = w.style.display === 'none' ? 'block' : 'none';
-  if (w.style.display === 'block') renderHistorial();
-}
-
-function renderHistorial() {
-  const ventas = loadVentas().slice().reverse();
-  const el = document.getElementById('historial-list');
-  if (ventas.length === 0) { el.innerHTML = '<div style="font-size:12px;color:var(--muted);font-family:var(--font-mono);">Sin ventas registradas.</div>'; return; }
-  el.innerHTML = ventas.map(v => {
-    const d = new Date(v.fecha);
-    const ds = d.toLocaleDateString('es-AR',{day:'2-digit',month:'short'}) + ' ' + d.toLocaleTimeString('es-AR',{hour:'2-digit',minute:'2-digit'});
-    return `<div style="display:flex;justify-content:space-between;align-items:center;padding:7px 0;border-bottom:1px solid var(--border);font-size:12px;font-family:var(--font-mono);">
-      <span style="color:var(--muted);min-width:90px;">${ds}</span>
-      <span style="flex:1;padding:0 10px;">${v.alumno}</span>
-      <span style="color:var(--muted);min-width:100px;text-align:right;">${v.comision.split('—')[0].trim()}</span>
-      <span style="color:var(--green);min-width:80px;text-align:right;">$${v.precio.toLocaleString('es-AR')}</span>
-      <button onclick="eliminarVenta('${v.id}')" style="margin-left:10px;background:none;border:none;color:var(--red-col);cursor:pointer;font-size:13px;">×</button>
-    </div>`;
-  }).join('');
-}
-
-function eliminarVenta(id) {
-  saveVentas(loadVentas().filter(v => String(v.id) !== String(id)));
-  renderStats();
-  renderHistorial();
-}
-
-// ─── RENDER STATS ────────────────────────────────────────────────────────────
-let chartDias = null, chartHoras = null;
-
-function renderStats() {
-  const ventas = loadVentas();
-  if (!ventas.length) return;
-
-  renderSmartMetrics(ventas);
-  renderChartDias(ventas);
-  renderChartHoras(ventas);
-  renderProyecciones(ventas);
-  renderInsights(ventas);
-  if (document.getElementById('historial-wrap').style.display === 'block') renderHistorial();
-}
-
-function renderSmartMetrics(ventas) {
-  const el = document.getElementById('smart-metrics');
-  if (!el) return;
-  const total = ventas.length;
-  const totalRev = ventas.reduce((s,v) => s+v.precio, 0);
-  const ticketProm = Math.round(totalRev / total);
-
-  // Ventas últimos 7 días
-  const hace7 = new Date(); hace7.setDate(hace7.getDate()-7);
-  const ultimos7 = ventas.filter(v => new Date(v.fecha) >= hace7).length;
-
-  // Día pico
-  const dias = ['Dom','Lun','Mar','Mié','Jue','Vie','Sáb'];
-  const porDia = Array(7).fill(0);
-  ventas.forEach(v => porDia[new Date(v.fecha).getDay()]++);
-  const diaPicoIdx = porDia.indexOf(Math.max(...porDia));
-
-  // Hora pico
-  const porHora = Array(24).fill(0);
-  ventas.forEach(v => porHora[new Date(v.fecha).getHours()]++);
-  const horaPicoIdx = porHora.indexOf(Math.max(...porHora));
-
-  el.innerHTML = [
-    { label: 'Total ventas', value: total, sub: 'todas las comisiones', color: 'var(--green)' },
-    { label: 'Últimos 7 días', value: ultimos7, sub: 'ventas recientes', color: 'var(--blue-col)' },
-    { label: 'Ticket promedio', value: '$' + ticketProm.toLocaleString('es-AR'), sub: 'por inscripción', color: 'var(--amber-col)' },
-    { label: 'Día pico', value: dias[diaPicoIdx], sub: porDia[diaPicoIdx] + ' ventas históricas', color: 'var(--accent)' },
-    { label: 'Hora pico', value: horaPicoIdx + ':00', sub: 'más cierres a esta hora', color: 'var(--green)' },
-    { label: 'Revenue total', value: '$' + Math.round(totalRev/1000) + 'k', sub: 'acumulado', color: 'var(--amber-col)' },
-  ].map(m => `<div style="background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:1rem 1.25rem;">
-    <div style="font-size:11px;color:var(--muted);font-family:var(--font-mono);letter-spacing:0.06em;text-transform:uppercase;margin-bottom:6px;">${m.label}</div>
-    <div style="font-size:24px;font-weight:800;letter-spacing:-0.03em;color:${m.color};">${m.value}</div>
-    <div style="font-size:11px;color:var(--muted);font-family:var(--font-mono);margin-top:3px;">${m.sub}</div>
-  </div>`).join('');
-}
-
-function renderChartDias(ventas) {
-  if (chartDias) { chartDias.destroy(); chartDias = null; }
-  const canvas = document.getElementById('chart-dias');
-  if (!canvas) return;
-  const dark = isDark();
-  const dias = ['Lun','Mar','Mié','Jue','Vie','Sáb','Dom'];
-  const counts = Array(7).fill(0);
-  ventas.forEach(v => {
-    const d = new Date(v.fecha).getDay();
-    counts[(d + 6) % 7]++;
-  });
-  const maxC = Math.max(...counts);
-  const colors = counts.map(c => {
-    const intensity = maxC > 0 ? c / maxC : 0;
-    return `rgba(62,207,160,${0.2 + intensity * 0.8})`;
-  });
-  chartDias = new Chart(canvas.getContext('2d'), {
-    type: 'bar',
-    data: { labels: dias, datasets: [{ data: counts, backgroundColor: colors, borderRadius: 6, borderWidth: 0 }] },
-    options: {
-      responsive: true, maintainAspectRatio: false, animation: false,
-      plugins: { legend: { display: false }, tooltip: { backgroundColor: dark?'#1C1F24':'#fff', titleColor: dark?'#F0EDE8':'#1A1C1E', bodyColor: dark?'#6B7280':'#7A7E87', bodyFont:{family:'DM Mono',size:11}, callbacks: { label: ctx => ctx.raw + ' ventas' } } },
-      scales: {
-        x: { grid: { display: false }, ticks: { color: dark?'#6B7280':'#7A7E87', font: {family:'DM Mono',size:10} }, border: { display: false } },
-        y: { grid: { color: dark?'rgba(255,255,255,0.04)':'rgba(0,0,0,0.05)' }, ticks: { color: dark?'#6B7280':'#7A7E87', font: {family:'DM Mono',size:10} }, border: { display: false } }
-      }
-    }
-  });
-}
-
-function renderChartHoras(ventas) {
-  if (chartHoras) { chartHoras.destroy(); chartHoras = null; }
-  const canvas = document.getElementById('chart-horas');
-  if (!canvas) return;
-  const dark = isDark();
-  const counts = Array(24).fill(0);
-  ventas.forEach(v => counts[new Date(v.fecha).getHours()]++);
-  const labels = Array.from({length:24}, (_,i) => i%3===0 ? i+':00' : '');
-  const maxC = Math.max(...counts);
-  const colors = counts.map(c => {
-    const intensity = maxC > 0 ? c / maxC : 0;
-    return `rgba(245,166,35,${0.15 + intensity * 0.85})`;
-  });
-  chartHoras = new Chart(canvas.getContext('2d'), {
-    type: 'bar',
-    data: { labels, datasets: [{ data: counts, backgroundColor: colors, borderRadius: 4, borderWidth: 0 }] },
-    options: {
-      responsive: true, maintainAspectRatio: false, animation: false,
-      plugins: { legend: { display: false }, tooltip: { backgroundColor: dark?'#1C1F24':'#fff', titleColor: dark?'#F0EDE8':'#1A1C1E', bodyColor: dark?'#6B7280':'#7A7E87', bodyFont:{family:'DM Mono',size:11}, callbacks: { title: ctx => ctx[0].dataIndex + ':00 hs', label: ctx => ctx.raw + ' ventas' } } },
-      scales: {
-        x: { grid: { display: false }, ticks: { color: dark?'#6B7280':'#7A7E87', font: {family:'DM Mono',size:9} }, border: { display: false } },
-        y: { grid: { color: dark?'rgba(255,255,255,0.04)':'rgba(0,0,0,0.05)' }, ticks: { color: dark?'#6B7280':'#7A7E87', font: {family:'DM Mono',size:10} }, border: { display: false } }
-      }
-    }
-  });
-}
-
-function renderProyecciones(ventas) {
-  const el = document.getElementById('proyecciones-list');
-  if (!el) return;
-  const hace14 = new Date(); hace14.setDate(hace14.getDate()-14);
-
-  const comisionConfig = [
-    { nombre:"QA Automation", objetivo:20, diasInicio:7 },
-    { nombre:"Scrum", objetivo:20, diasInicio:16 },
-    { nombre:"Web 26", objetivo:20, diasInicio:22 },
-    { nombre:"Web 27", objetivo:20, diasInicio:28 },
-    { nombre:"Web 11p — Tucumán", objetivo:20, diasInicio:15 },
-    { nombre:"Web 1 BA — Buenos Aires", objetivo:20, diasInicio:22 },
-  ];
-
-  el.innerHTML = comisionConfig.map(cfg => {
-    const vComision = ventas.filter(v => v.comision === cfg.nombre);
-    const recientes = vComision.filter(v => new Date(v.fecha) >= hace14);
-    const ritmo = recientes.length / 14; // ventas por día
-    const vendidas = vComision.length;
-    const faltan = Math.max(0, cfg.objetivo - vendidas);
-    const diasNecesarios = ritmo > 0 ? Math.ceil(faltan / ritmo) : 999;
-    const va_a_llegar = diasNecesarios <= cfg.diasInicio;
-    const pct = Math.min(100, Math.round(vendidas / cfg.objetivo * 100));
-
-    let proyLabel, proyColor, proyBg;
-    if (vendidas >= cfg.objetivo) {
-      proyLabel = '¡Objetivo cumplido!'; proyColor = 'var(--green)'; proyBg = 'var(--green-dim)';
-    } else if (ritmo === 0) {
-      proyLabel = 'Sin ventas recientes — ritmo 0'; proyColor = 'var(--red-col)'; proyBg = 'var(--red-dim)';
-    } else if (va_a_llegar) {
-      proyLabel = `En ritmo → llegás en ~${diasNecesarios} días`; proyColor = 'var(--green)'; proyBg = 'var(--green-dim)';
-    } else {
-      proyLabel = `Ritmo insuficiente → necesitás ${diasNecesarios}d pero quedan ${cfg.diasInicio}`; proyColor = 'var(--red-col)'; proyBg = 'var(--red-dim)';
-    }
-
-    const ritmoStr = ritmo > 0 ? (ritmo < 1 ? '1 cada ' + Math.round(1/ritmo) + 'd' : ritmo.toFixed(1) + '/día') : '—';
-
-    return `<div style="display:flex;align-items:center;gap:16px;padding:10px 0;border-bottom:1px solid var(--border);flex-wrap:wrap;">
-      <div style="min-width:180px;font-size:13px;font-weight:600;">${cfg.nombre}</div>
-      <div style="flex:1;min-width:120px;">
-        <div style="height:5px;background:var(--surface2);border-radius:3px;overflow:hidden;margin-bottom:4px;">
-          <div style="height:100%;width:${pct}%;background:${proyColor};border-radius:3px;"></div>
-        </div>
-        <div style="font-size:10px;color:var(--muted);font-family:var(--font-mono);">${vendidas}/${cfg.objetivo} · ritmo ${ritmoStr}</div>
-      </div>
-      <div style="font-size:11px;font-family:var(--font-mono);padding:5px 10px;border-radius:8px;background:${proyBg};color:${proyColor};white-space:nowrap;">${proyLabel}</div>
-    </div>`;
-  }).join('');
-}
-
-function renderInsights(ventas) {
-  const el = document.getElementById('insights-list');
-  if (!el) return;
-  const insights = [];
-  const dias = ['Dom','Lun','Mar','Mié','Jue','Vie','Sáb'];
-  const porDia = Array(7).fill(0);
-  const porHora = Array(24).fill(0);
-  ventas.forEach(v => {
-    porDia[new Date(v.fecha).getDay()]++;
-    porHora[new Date(v.fecha).getHours()]++;
-  });
-
-  const diaPicoIdx = porDia.indexOf(Math.max(...porDia));
-  const horaPicoIdx = porHora.indexOf(Math.max(...porHora));
-  const diaBajoIdx = porDia.indexOf(Math.min(...porDia.filter(x=>x>0)));
-
-  // Insight 1: día pico
-  const diaPct = Math.round(porDia[diaPicoIdx]/ventas.length*100);
-  insights.push({ tipo:'green', icon:'↑', texto:`El <strong>${dias[diaPicoIdx]}</strong> es tu día pico: concentra el ${diaPct}% de las ventas. Coordiná campañas y seguimientos para que lleguen el día anterior.` });
-
-  // Insight 2: hora pico
-  const horaPct = Math.round(porHora[horaPicoIdx]/ventas.length*100);
-  const turno = horaPicoIdx < 12 ? 'mañana' : horaPicoIdx < 18 ? 'tarde' : 'noche';
-  insights.push({ tipo:'blue', icon:'◷', texto:`La hora con más cierres es las <strong>${horaPicoIdx}:00 hs</strong> (${turno}) con el ${horaPct}% de las ventas. Publicar contenido o hacer seguimiento 1-2 horas antes.` });
-
-  // Insight 3: weekend vs weekday
-  const wkd = porDia[0]+porDia[6];
-  const wkdPct = Math.round(wkd/ventas.length*100);
-  if (wkdPct > 25) {
-    insights.push({ tipo:'amber', icon:'⚑', texto:`El <strong>${wkdPct}% de las ventas ocurre en fin de semana</strong>. Asegurate de que el equipo comercial tenga cobertura los sábados y domingos.` });
-  } else {
-    insights.push({ tipo:'amber', icon:'⚑', texto:`Solo el <strong>${wkdPct}% de las ventas es en fin de semana</strong>. El foco de seguimiento debe estar en días hábiles, especialmente ${dias[diaPicoIdx]}.` });
-  }
-
-  // Insight 4: tickets
-  const precios = ventas.map(v=>v.precio).sort((a,b)=>a-b);
-  const mediana = precios[Math.floor(precios.length/2)];
-  const ticketProm = Math.round(ventas.reduce((s,v)=>s+v.precio,0)/ventas.length);
-  if (ticketProm > mediana * 1.05) {
-    insights.push({ tipo:'green', icon:'$', texto:`El ticket promedio ($${ticketProm.toLocaleString('es-AR')}) está <strong>por encima de la mediana</strong> ($${mediana.toLocaleString('es-AR')}). Hay alumnos que eligen variantes premium — capitalizar eso en la comunicación.` });
-  } else {
-    insights.push({ tipo:'amber', icon:'$', texto:`La mayoría elige el precio base. Ticket promedio $${ticketProm.toLocaleString('es-AR')}. Revisar si la propuesta de variantes premium está siendo comunicada.` });
-  }
-
-  const colorMap = { green:'var(--green)', blue:'var(--blue-col)', amber:'var(--amber-col)', red:'var(--red-col)' };
-  const bgMap    = { green:'var(--green-dim)', blue:'var(--blue-dim)', amber:'var(--amber-dim)', red:'var(--red-dim)' };
-
-  el.innerHTML = insights.map(ins => `
-    <div style="display:flex;gap:12px;align-items:flex-start;padding:10px 12px;border-radius:10px;background:${bgMap[ins.tipo]};margin-bottom:8px;">
-      <span style="font-size:16px;color:${colorMap[ins.tipo]};min-width:20px;font-weight:700;">${ins.icon}</span>
-      <span style="font-size:13px;font-family:var(--font-mono);color:var(--text);line-height:1.6;">${ins.texto}</span>
-    </div>`).join('');
-}
-
-// ─── PATCH setTheme TO REFRESH CHARTS ────────────────────────────────────────
-const _origSetTheme = setTheme;
-window.setTheme = function(theme) {
-  _origSetTheme(theme);
-  setTimeout(() => renderStats(), 50);
-};
-
-
-// ─── CSV IMPORT ──────────────────────────────────────────────────────────────
-let csvPendiente = [];
-
-function descargarPlantilla() {
-  const rows = [
-    'fecha,alumno,comision,precio',
-    '2026-03-20 10:30,Ana García,QA Automation,95000',
-    '2026-03-19 15:00,Martín López,Web 26,105000',
-    '2026-03-18 09:15,Lucía Torres,Scrum,80000',
-  ];
-  const blob = new Blob([rows.join('\n')], { type: 'text/csv;charset=utf-8;' });
-  const url = URL.createObjectURL(blob);
-  const a = document.createElement('a');
-  a.href = url; a.download = 'plantilla_ventas_rc.csv';
-  a.click(); URL.revokeObjectURL(url);
-}
-
-function importarCSV(event) {
-  const file = event.target.files[0];
-  if (!file) return;
-  const reader = new FileReader();
-  reader.onload = function(e) {
-    const lines = e.target.result.trim().split('\n').filter(l => l.trim());
-    if (lines.length < 2) { showCsvMsg('El archivo está vacío o solo tiene encabezado.', 'red'); return; }
-
-    const header = lines[0].toLowerCase().split(',').map(h => h.trim().replace(/['"]/g,''));
-    const idxFecha    = header.findIndex(h => h.includes('fecha'));
-    const idxAlumno   = header.findIndex(h => h.includes('alumno') || h.includes('nombre'));
-    const idxComision = header.findIndex(h => h.includes('comision') || h.includes('curso') || h.includes('comisión'));
-    const idxPrecio   = header.findIndex(h => h.includes('precio') || h.includes('monto') || h.includes('importe'));
-
-    if (idxFecha === -1 || idxAlumno === -1 || idxComision === -1 || idxPrecio === -1) {
-      showCsvMsg('No encontré todas las columnas. Revisá que el CSV tenga: fecha, alumno, comision, precio', 'red');
-      return;
-    }
-
-    csvPendiente = [];
-    const errores = [];
-
-    lines.slice(1).forEach((line, i) => {
-      const cols = line.split(',').map(c => c.trim().replace(/^["']|["']$/g,''));
-      const fechaRaw = cols[idxFecha];
-      const alumno   = cols[idxAlumno];
-      const comision = cols[idxComision];
-      const precioRaw = parseFloat(cols[idxPrecio]);
-
-      const fechaObj = new Date(fechaRaw);
-      if (!alumno || !comision || isNaN(precioRaw) || isNaN(fechaObj.getTime())) {
-        errores.push('Fila ' + (i+2) + ': dato inválido');
-        return;
-      }
-      csvPendiente.push({ id: Date.now() + Math.random(), comision, alumno, precio: precioRaw, fecha: fechaObj.toISOString() });
-    });
-
-    if (csvPendiente.length === 0) {
-      showCsvMsg('No se pudo parsear ninguna fila válida. ' + errores.join(', '), 'red');
-      return;
-    }
-
-    // Show preview
-    const preview = document.getElementById('csv-preview');
-    const label   = document.getElementById('csv-preview-label');
-    const table   = document.getElementById('csv-preview-table');
-    label.textContent = csvPendiente.length + ' ventas listas para importar' + (errores.length ? ' (' + errores.length + ' filas con error ignoradas)' : '') + ':';
-    table.innerHTML = '<div style="display:grid;grid-template-columns:90px 1fr 1fr 80px;gap:4px 12px;padding-bottom:6px;border-bottom:1px solid var(--border);color:var(--muted);font-weight:500;margin-bottom:6px;">'
-      + '<span>Fecha</span><span>Alumno</span><span>Comisión</span><span>Precio</span></div>'
-      + csvPendiente.slice(0,10).map(v => {
-          const d = new Date(v.fecha);
-          const ds = d.toLocaleDateString('es-AR',{day:'2-digit',month:'short'});
-          return '<div style="display:grid;grid-template-columns:90px 1fr 1fr 80px;gap:4px 12px;padding:3px 0;border-bottom:1px solid var(--border);">'
-            + '<span style="color:var(--muted);">' + ds + '</span>'
-            + '<span>' + v.alumno + '</span>'
-            + '<span style="color:var(--muted);">' + v.comision.split('—')[0].trim() + '</span>'
-            + '<span style="color:var(--green);">$' + v.precio.toLocaleString('es-AR') + '</span>'
-            + '</div>';
-        }).join('')
-      + (csvPendiente.length > 10 ? '<div style="color:var(--muted);padding-top:6px;">... y ' + (csvPendiente.length-10) + ' más</div>' : '');
-    preview.style.display = 'block';
-    showCsvMsg('', '');
-  };
-  reader.readAsText(file);
-  event.target.value = '';
-}
-
-function confirmarImport() {
-  if (!csvPendiente.length) return;
-  const existing = loadVentas();
-  saveVentas([...existing, ...csvPendiente]);
-  const count = csvPendiente.length;
-  csvPendiente = [];
-  document.getElementById('csv-preview').style.display = 'none';
-  showCsvMsg('✓ ' + count + ' ventas importadas correctamente.', 'green');
-  renderStats();
-  setTimeout(() => { document.getElementById('csv-msg').style.display = 'none'; }, 4000);
-}
-
-function cancelarImport() {
-  csvPendiente = [];
-  document.getElementById('csv-preview').style.display = 'none';
-}
-
-function showCsvMsg(text, tipo) {
-  const el = document.getElementById('csv-msg');
-  if (!text) { el.style.display = 'none'; return; }
-  const bgMap = { green:'var(--green-dim)', red:'var(--red-dim)', blue:'var(--blue-dim)' };
-  const colMap = { green:'var(--green)', red:'var(--red-col)', blue:'var(--blue-col)' };
-  el.style.display = 'block';
-  el.style.background = bgMap[tipo] || 'var(--surface2)';
-  el.style.color = colMap[tipo] || 'var(--muted)';
-  el.textContent = text;
-}
-
-// ─── INIT ────────────────────────────────────────────────────────────────────
-const _origShowDashboard = document.getElementById('login-screen');
-
-function initStats() {
-  if (!document.getElementById('stats-section')) {
-    injectStatsSection();
-    seedIfEmpty();
-    renderStats();
-  }
-}
-
-// Hook into login reveal
-const origDoLogin = window.doLogin;
-window.doLogin = async function() {
-  await origDoLogin();
-  setTimeout(() => initStats(), 100);
-};
-
-// If already logged in via sessionStorage
-if (sessionStorage.getItem('rc_auth') === '1') {
-  setTimeout(() => initStats(), 200);
-}
-</script>
