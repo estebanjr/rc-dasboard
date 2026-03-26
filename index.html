@@ -141,14 +141,14 @@ body{background:var(--bg);color:var(--text);font-family:var(--font-head);min-hei
   <div class="main">
     <div class="page-header">
       <h1>Comisiones <span>activas</span><br>en venta</h1>
-      <p>Análisis de urgencia · Estrategias de cierre · Actualizado 23/03/2026</p>
+      <p>Análisis de urgencia · Estrategias de cierre · Actualizado 26/03/2026</p>
     </div>
     <div class="metrics-row">
       <div class="metric"><div class="metric-label">Total comisiones</div><div class="metric-value">6</div><div class="metric-sub">En venta actualmente</div></div>
-      <div class="metric"><div class="metric-label">Total inscriptos</div><div class="metric-value" style="color:var(--green)">49</div><div class="metric-sub">Acumulado todas las comisiones</div></div>
+      <div class="metric"><div class="metric-label">Total inscriptos</div><div class="metric-value" style="color:var(--green)">54</div><div class="metric-sub">Acumulado todas las comisiones</div></div>
       <div class="metric"><div class="metric-label">Acción urgente</div><div class="metric-value" style="color:var(--red-col)">2</div><div class="metric-sub">QA Automation + Web1ba</div></div>
       <div class="metric"><div class="metric-label">Pueden moverse</div><div class="metric-value" style="color:var(--amber-col)">3</div><div class="metric-sub">Web26, Web27, Web11p</div></div>
-      <div class="metric"><div class="metric-label">Más urgente</div><div class="metric-value" style="color:var(--red-col)">QA</div><div class="metric-sub">18/20 — solo 7 días</div></div>
+      <div class="metric"><div class="metric-label">Más urgente</div><div class="metric-value" style="color:var(--red-col)">QA</div><div class="metric-sub">19/20 — solo 4 días</div></div>
     </div>
     <div class="zone-bar">
       <div class="zone-pill green">Zona verde · +25 días · venta orgánica</div>
@@ -218,25 +218,25 @@ body{background:var(--bg);color:var(--text);font-family:var(--font-head);min-hei
     </div>
   </div>
 
-  <div class="footer">RollingCode School · Panel interno de ventas · Actualizado 23/03/2026</div>
+  <div class="footer">RollingCode School · Panel interno de ventas · Actualizado 26/03/2026</div>
 </div>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
 <script>
 // DATA
 const comisiones = [
-  {nombre:"QA Automation",tipo:"Online",ventas:18,objetivo:20,diasInicio:7,fechaInicio:"30/03",puedeMoverse:false,zona:"red",status:"Crítico — cerrar YA",alerta:"18 ventas, 7 días, fecha fija. Faltan solo 2 alumnos. Lanzar cierre urgente hoy: últimos 2 cupos.",nota:null},
-  {nombre:"Scrum",tipo:"Presencial",ventas:6,objetivo:20,diasInicio:16,fechaInicio:"08/04",puedeMoverse:false,zona:"amber",status:"Activar urgencia",alerta:"6 ventas, fecha fija, 16 días. Activar campaña esta semana: cupos visibles, testimonios, seguimiento.",nota:null},
-  {nombre:"Web 26",tipo:"Online",ventas:6,objetivo:50,diasInicio:22,fechaInicio:"14/04",puedeMoverse:true,zona:"amber",status:"Monitoreo activo",alerta:"6 ventas con 3 semanas. Dar una semana más; si no hay aceleración, mover la fecha.",nota:null},
-  {nombre:"Web 27",tipo:"Online",ventas:5,objetivo:50,diasInicio:28,fechaInicio:"20/04",puedeMoverse:true,zona:"green",status:"Monitoreo",alerta:"5 ventas con 4 semanas. Dejar madurar. Revisar en 10 días.",nota:null},
-  {nombre:"Web 11p — Tucumán",tipo:"Presencial TUC",ventas:11,objetivo:20,diasInicio:15,fechaInicio:"07/04",puedeMoverse:true,zona:"amber",status:"Mover + 2da comisión",alerta:"11 ventas, 2 sem y 3 días. Requiere decisión esta semana.",nota:"Al mover, coordinar 2da comisión con máx. 2 semanas de diferencia de la fecha final."},
-  {nombre:"Web 1 BA — Buenos Aires",tipo:"Presencial BsAs",ventas:3,objetivo:20,diasInicio:22,fechaInicio:"14/04",puedeMoverse:false,zona:"red",status:"Crítico",alerta:"3 ventas, fecha fija, 3 semanas. Campaña específica para BsAs urgente.",nota:null}
+  {nombre:"QA Automation",tipo:"Online",ventas:19,objetivo:20,diasInicio:4,fechaInicio:"30/03",puedeMoverse:false,zona:"red",status:"Crítico — cerrar YA",alerta:"19 ventas, 4 días, fecha fija. Falta solo 1 alumno. Lanzar cierre urgente: último cupo disponible.",nota:null},
+  {nombre:"Scrum",tipo:"Presencial",ventas:8,objetivo:20,diasInicio:13,fechaInicio:"08/04",puedeMoverse:false,zona:"amber",status:"Activar urgencia",alerta:"8 ventas, fecha fija, 13 días. Activar campaña: cupos visibles, testimonios, seguimiento activo.",nota:null},
+  {nombre:"Web 26",tipo:"Online",ventas:7,objetivo:50,diasInicio:19,fechaInicio:"14/04",puedeMoverse:true,zona:"amber",status:"Monitoreo activo",alerta:"7 ventas con ~3 semanas. Ritmo bajo. Dar una semana más; si no hay aceleración, mover la fecha.",nota:null},
+  {nombre:"Web 27",tipo:"Online",ventas:5,objetivo:50,diasInicio:25,fechaInicio:"20/04",puedeMoverse:true,zona:"green",status:"Monitoreo",alerta:"5 ventas con ~4 semanas. Dejar madurar. Revisar en 10 días.",nota:null},
+  {nombre:"Web 11p — Tucumán",tipo:"Presencial TUC",ventas:12,objetivo:20,diasInicio:12,fechaInicio:"07/04",puedeMoverse:true,zona:"amber",status:"Mover + 2da comisión",alerta:"12 ventas, ~2 semanas. Requiere decisión esta semana.",nota:"Al mover, coordinar 2da comisión con máx. 2 semanas de diferencia de la fecha final."},
+  {nombre:"Web 1 BA — Buenos Aires",tipo:"Presencial BsAs",ventas:3,objetivo:20,diasInicio:19,fechaInicio:"14/04",puedeMoverse:false,zona:"red",status:"Crítico",alerta:"3 ventas, fecha fija, ~3 semanas. Campaña específica para BsAs urgente.",nota:null}
 ];
 const strategies = [
-  {tag:"Acción inmediata",colorKey:"red",titulo:"QA Automation — cierre esta semana",cuerpo:"18 ventas, 7 días: lanzar cierre con urgencia real. 'últimos 2 cupos al precio actual'. No esperar más."},
+  {tag:"Acción inmediata",colorKey:"red",titulo:"QA Automation — cerrar último cupo",cuerpo:"19 ventas, 4 días: falta 1 solo alumno. Lanzar cierre con urgencia máxima: 'último cupo disponible'. No esperar más."},
   {tag:"Decisión urgente",colorKey:"red",titulo:"Web1ba BsAs — campaña geolocalizada",cuerpo:"3 alumnos con fecha fija no se resuelve con descuento. Necesita exposición en BsAs: redes, contactos locales, alumni de la zona."},
-  {tag:"Esta semana",colorKey:"amber",titulo:"Scrum — urgencia de cupos",cuerpo:"Fecha fija, 6 ventas. Comunicar cupos con urgencia. Sin descuento todavía."},
-  {tag:"Decisión próxima semana",colorKey:"amber",titulo:"Web11p Tucumán — mover + 2da comisión",cuerpo:"Si se mueve, coordinar inmediatamente la 2da comisión. Máximo 2 semanas de diferencia."},
+  {tag:"Esta semana",colorKey:"amber",titulo:"Scrum — urgencia de cupos",cuerpo:"Fecha fija, 8 ventas. Comunicar cupos con urgencia. Sin descuento todavía."},
+  {tag:"Decisión próxima semana",colorKey:"amber",titulo:"Web11p Tucumán — mover + 2da comisión",cuerpo:"12 ventas. Si se mueve, coordinar inmediatamente la 2da comisión. Máximo 2 semanas de diferencia."},
   {tag:"Regla general",colorKey:"blue",titulo:"El descuento es el gatillo del último tramo",cuerpo:"Aplicarlo temprano normaliza el precio bajo. Reservarlo para los últimos 7–10 días antes del inicio."},
   {tag:"Web26 / Web27",colorKey:"muted",titulo:"Dejar madurar — sin intervención aún",cuerpo:"Acumular ventas orgánicas y activar cierre solo en la semana previa al inicio real."}
 ];
@@ -389,12 +389,12 @@ function renderProyecciones(){
   const hace14=new Date();hace14.setDate(hace14.getDate()-14);
   const v=loadVentas();
   const cfg=[
-    {n:"QA Automation",     o:20, d:7,  ventas:18},
-    {n:"Scrum",             o:20, d:16, ventas:6},
-    {n:"Web 26",            o:50, d:22, ventas:6},
-    {n:"Web 27",            o:50, d:28, ventas:5},
-    {n:"Web 11p — Tucumán",   o:20, d:15, ventas:11},
-    {n:"Web 1 BA — Buenos Aires", o:20, d:22, ventas:3}
+    {n:"QA Automation",     o:20, d:4,  ventas:19},
+    {n:"Scrum",             o:20, d:13, ventas:8},
+    {n:"Web 26",            o:50, d:19, ventas:7},
+    {n:"Web 27",            o:50, d:25, ventas:5},
+    {n:"Web 11p — Tucumán",   o:20, d:12, ventas:12},
+    {n:"Web 1 BA — Buenos Aires", o:20, d:19, ventas:3}
   ];
   el.innerHTML=cfg.map(c=>{
     const vc=v.filter(x=>x.comision===c.n),rec=vc.filter(x=>new Date(x.fecha)>=hace14);
