@@ -88,6 +88,40 @@ body{background:var(--bg);color:var(--text);font-family:var(--font-head);min-hei
 .mes-btn{font-size:11px;font-family:var(--font-mono);padding:5px 12px;border-radius:8px;border:1px solid var(--border);background:var(--surface2);color:var(--muted);cursor:pointer;transition:all .2s}
 .mes-btn.active{background:var(--accent);color:#0D0F12;border-color:var(--accent);font-weight:700}
 .footer{text-align:center;padding:2rem;font-size:11px;color:var(--muted);font-family:var(--font-mono);border-top:1px solid var(--border);margin-top:1rem}
+.v40-section{max-width:1400px;margin:0 auto;padding:0 2rem 2rem}
+.v40-header{display:flex;justify-content:space-between;align-items:flex-end;margin-bottom:1.5rem;flex-wrap:wrap;gap:12px}
+.v40-header h2{font-size:clamp(22px,3vw,32px);font-weight:800;letter-spacing:-.03em;line-height:1.1}
+.v40-header h2 span{color:var(--accent)}
+.v40-badge{font-size:10px;font-family:var(--font-mono);padding:4px 10px;border-radius:20px;letter-spacing:.06em;text-transform:uppercase;background:var(--accent);color:#0D0F12;font-weight:700}
+.q-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:2rem}
+.q-card{background:var(--surface);border:1px solid var(--border);border-radius:16px;padding:1.5rem;position:relative;overflow:hidden}
+.q-card::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;border-radius:16px 16px 0 0}
+.q-card.q-closed::before{background:var(--green)}.q-card.q-active::before{background:var(--accent)}
+.q-title{font-size:13px;font-family:var(--font-mono);letter-spacing:.06em;text-transform:uppercase;margin-bottom:4px}
+.q-big{font-size:36px;font-weight:800;letter-spacing:-.03em;line-height:1.1;margin-bottom:4px}
+.q-sub{font-size:12px;color:var(--muted);font-family:var(--font-mono);margin-bottom:1rem}
+.q-kpis{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.q-kpi{background:var(--surface2);border-radius:8px;padding:10px 12px}
+.q-kpi-val{font-size:20px;font-weight:800;letter-spacing:-.02em}
+.q-kpi-lbl{font-size:10px;color:var(--muted);font-family:var(--font-mono);margin-top:2px;letter-spacing:.04em;text-transform:uppercase}
+.v40-target{background:var(--surface);border:1px solid var(--border);border-radius:16px;padding:1.5rem;margin-bottom:1.5rem}
+.v40-target-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:1rem;flex-wrap:wrap;gap:8px}
+.v40-target-title{font-size:15px;font-weight:700}
+.v40-pct{font-size:28px;font-weight:800;color:var(--accent);letter-spacing:-.02em}
+.v40-bar{height:10px;background:var(--surface2);border-radius:5px;overflow:hidden;margin-bottom:1rem}
+.v40-bar-fill{height:100%;border-radius:5px;transition:width 1.5s cubic-bezier(.16,1,.3,1)}
+.v40-quarters{display:flex;gap:4px;margin-bottom:1rem}
+.v40-q{flex:1;border-radius:6px;padding:8px;text-align:center;font-family:var(--font-mono);font-size:11px}
+.v40-q.done{background:var(--green-dim);color:var(--green)}.v40-q.current{background:var(--amber-dim);color:var(--amber-col)}.v40-q.future{background:var(--surface2);color:var(--muted)}
+.pillar-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}
+.pillar-card{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:1.25rem;text-align:center}
+.pillar-icon{font-size:24px;margin-bottom:8px}
+.pillar-name{font-size:11px;font-family:var(--font-mono);letter-spacing:.06em;text-transform:uppercase;color:var(--muted);margin-bottom:8px}
+.pillar-val{font-size:28px;font-weight:800;letter-spacing:-.03em;margin-bottom:2px}
+.pillar-target{font-size:11px;font-family:var(--font-mono);color:var(--muted)}
+.pillar-bar{height:4px;background:var(--surface2);border-radius:2px;margin-top:10px;overflow:hidden}
+.pillar-bar-fill{height:100%;border-radius:2px}
+@media(max-width:700px){.q-grid{grid-template-columns:1fr}.pillar-grid{grid-template-columns:1fr 1fr}}
 .commission-card:nth-child(1){animation-delay:.05s}.commission-card:nth-child(2){animation-delay:.1s}.commission-card:nth-child(3){animation-delay:.15s}.commission-card:nth-child(4){animation-delay:.2s}.commission-card:nth-child(5){animation-delay:.25s}.commission-card:nth-child(6){animation-delay:.3s}
 #login-screen{position:fixed;inset:0;z-index:9999;background:#0D0F12;display:flex;align-items:center;justify-content:center;font-family:var(--font-head)}
 .login-box{width:100%;max-width:380px;padding:2.5rem 2rem;background:#141619;border:1px solid rgba(255,255,255,.08);border-radius:20px;margin:1rem}
@@ -173,6 +207,24 @@ body{background:var(--bg);color:var(--text);font-family:var(--font-head);min-hei
       <div class="section-label">Estrategias por comisión</div>
       <div class="strategy-grid" id="strategy-container"></div>
     </div>
+  </div>
+
+  <!-- V40 — VISIÓN QUARTERS -->
+  <div class="v40-section" style="animation:fadeUp .5s .5s ease both">
+    <div class="v40-header">
+      <div><h2>Visión <span>V40</span> · Plan 4×4</h2><p style="color:var(--muted);font-size:13px;font-family:var(--font-mono);margin-top:4px">Objetivos trimestrales · Metodología YPF</p></div>
+      <div class="v40-badge">2026 — H1</div>
+    </div>
+
+    <!-- OBJETIVO ANUAL -->
+    <div class="v40-target" id="v40-annual"></div>
+
+    <!-- Q1 vs Q2 -->
+    <div class="q-grid" id="q-grid"></div>
+
+    <!-- 4 PILARES -->
+    <div class="section-label">Los 4 pilares estratégicos</div>
+    <div class="pillar-grid" id="pillar-grid"></div>
   </div>
 
   <!-- ESTADÍSTICAS -->
@@ -475,9 +527,143 @@ function doLogin(){
 }
 document.addEventListener('keydown',e=>{if(e.key==='Enter')doLogin();});
 
+// V40 DATA
+const Q1_DATA = {
+  label:'Q1',period:'Ene — Mar 2026',status:'closed',
+  comisiones:[
+    {n:'Web 24',v:66,o:50,tipo:'online'},
+    {n:'Web 25',v:62,o:50,tipo:'online'},
+    {n:'Web 9p',v:22,o:20,tipo:'presencial'},
+    {n:'Web 10p',v:22,o:20,tipo:'presencial'},
+    {n:'QA Automation',v:33,o:20,tipo:'online'}
+  ]
+};
+const Q2_DATA = {
+  label:'Q2',period:'Abr — Jun 2026',status:'active',
+  comisiones:[
+    {n:'Scrum',v:18,o:20,tipo:'presencial'},
+    {n:'Web 1 BA',v:14,o:14,tipo:'presencial'},
+    {n:'Web 11p',v:22,o:20,tipo:'presencial'},
+    {n:'Web 26',v:34,o:50,tipo:'online'},
+    {n:'Web 27',v:20,o:50,tipo:'online'},
+    {n:'Web 12p',v:10,o:20,tipo:'presencial'},
+    {n:'Web 13p',v:10,o:20,tipo:'presencial'}
+  ]
+};
+const V40_ANNUAL_TARGET = 700;
+
+function calcQ(q){
+  const ventas=q.comisiones.reduce((s,c)=>s+c.v,0);
+  const obj=q.comisiones.reduce((s,c)=>s+c.o,0);
+  const fill=Math.round(ventas/obj*100);
+  const online=q.comisiones.filter(c=>c.tipo==='online').reduce((s,c)=>s+c.v,0);
+  const presencial=q.comisiones.filter(c=>c.tipo==='presencial').reduce((s,c)=>s+c.v,0);
+  const cumplieron=q.comisiones.filter(c=>c.v>=c.o).length;
+  const avg=Math.round(ventas/q.comisiones.length);
+  return{ventas,obj,fill,online,presencial,cumplieron,total:q.comisiones.length,avg};
+}
+
+function renderV40(){
+  const q1=calcQ(Q1_DATA),q2=calcQ(Q2_DATA);
+  const totalNow=q1.ventas+q2.ventas;
+  const annualPct=Math.min(100,Math.round(totalNow/V40_ANNUAL_TARGET*100));
+  const daysInQ2=30+31+30;
+  const apr28=new Date(2026,3,28);
+  const apr1=new Date(2026,3,1);
+  const daysPassed=Math.floor((apr28-apr1)/(1000*60*60*24))+1;
+  const q2Pct=Math.round(daysPassed/daysInQ2*100);
+
+  // Annual target
+  document.getElementById('v40-annual').innerHTML=`
+    <div class="v40-target-header">
+      <div>
+        <div class="v40-target-title">Meta anual V40 — ${V40_ANNUAL_TARGET} inscriptos</div>
+        <div style="font-size:12px;color:var(--muted);font-family:var(--font-mono);margin-top:2px">${totalNow} inscriptos acumulados · ${V40_ANNUAL_TARGET-totalNow} restantes</div>
+      </div>
+      <div class="v40-pct">${annualPct}%</div>
+    </div>
+    <div class="v40-bar"><div class="v40-bar-fill" style="width:${annualPct}%;background:var(--accent)"></div></div>
+    <div class="v40-quarters">
+      <div class="v40-q done"><strong>Q1</strong><br>${q1.ventas}</div>
+      <div class="v40-q current"><strong>Q2</strong><br>${q2.ventas}</div>
+      <div class="v40-q future"><strong>Q3</strong><br>—</div>
+      <div class="v40-q future"><strong>Q4</strong><br>—</div>
+    </div>
+    <div style="display:flex;gap:12px;flex-wrap:wrap">
+      <div style="flex:1;min-width:140px;background:var(--surface2);border-radius:8px;padding:10px 12px;text-align:center">
+        <div style="font-size:20px;font-weight:800">${q1.ventas+q2.ventas}</div>
+        <div style="font-size:10px;color:var(--muted);font-family:var(--font-mono);letter-spacing:.04em">H1 ACUMULADO</div>
+      </div>
+      <div style="flex:1;min-width:140px;background:var(--surface2);border-radius:8px;padding:10px 12px;text-align:center">
+        <div style="font-size:20px;font-weight:800">${q1.total+q2.total}</div>
+        <div style="font-size:10px;color:var(--muted);font-family:var(--font-mono);letter-spacing:.04em">COMISIONES H1</div>
+      </div>
+      <div style="flex:1;min-width:140px;background:var(--surface2);border-radius:8px;padding:10px 12px;text-align:center">
+        <div style="font-size:20px;font-weight:800">${Math.round((q1.ventas+q2.ventas)/(q1.total+q2.total))}</div>
+        <div style="font-size:10px;color:var(--muted);font-family:var(--font-mono);letter-spacing:.04em">PROM/COMISIÓN</div>
+      </div>
+      <div style="flex:1;min-width:140px;background:var(--surface2);border-radius:8px;padding:10px 12px;text-align:center">
+        <div style="font-size:20px;font-weight:800;color:var(--green)">${q1.cumplieron+q2.cumplieron}/${q1.total+q2.total}</div>
+        <div style="font-size:10px;color:var(--muted);font-family:var(--font-mono);letter-spacing:.04em">CUMPLIERON OBJ</div>
+      </div>
+    </div>`;
+
+  // Q cards
+  function qCard(data,stats,extra){
+    const isClosed=data.status==='closed';
+    const cls=isClosed?'q-closed':'q-active';
+    const statusBadge=isClosed
+      ?'<span style="font-size:10px;font-family:var(--font-mono);padding:3px 8px;border-radius:12px;background:var(--green-dim);color:var(--green);letter-spacing:.04em">CERRADO</span>'
+      :'<span style="font-size:10px;font-family:var(--font-mono);padding:3px 8px;border-radius:12px;background:var(--amber-dim);color:var(--amber-col);letter-spacing:.04em">EN CURSO · '+q2Pct+'% del Q</span>';
+    return `<div class="q-card ${cls}">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px">
+        <div class="q-title" style="color:${isClosed?'var(--green)':'var(--accent)'}">${data.label} · ${data.period}</div>
+        ${statusBadge}
+      </div>
+      <div class="q-big">${stats.ventas}</div>
+      <div class="q-sub">inscriptos · objetivo ${stats.obj} · fill rate ${stats.fill}%</div>
+      <div class="q-kpis">
+        <div class="q-kpi"><div class="q-kpi-val">${stats.total}</div><div class="q-kpi-lbl">Comisiones</div></div>
+        <div class="q-kpi"><div class="q-kpi-val">${stats.cumplieron}/${stats.total}</div><div class="q-kpi-lbl">Obj cumplido</div></div>
+        <div class="q-kpi"><div class="q-kpi-val">${stats.online}</div><div class="q-kpi-lbl">Online</div></div>
+        <div class="q-kpi"><div class="q-kpi-val">${stats.presencial}</div><div class="q-kpi-lbl">Presencial</div></div>
+      </div>
+      ${extra||''}
+    </div>`;
+  }
+
+  const q2extra=`<div style="margin-top:12px">
+    <div style="display:flex;justify-content:space-between;font-size:11px;font-family:var(--font-mono);color:var(--muted);margin-bottom:4px">
+      <span>Progreso Q2</span><span>${q2.fill}% del objetivo</span>
+    </div>
+    <div class="v40-bar"><div class="v40-bar-fill" style="width:${q2.fill}%;background:var(--amber-col)"></div></div>
+  </div>`;
+
+  document.getElementById('q-grid').innerHTML=qCard(Q1_DATA,q1)+qCard(Q2_DATA,q2,q2extra);
+
+  // 4 Pillars
+  const onlineV=q1.online+q2.online, presV=q1.presencial+q2.presencial;
+  const totalV=onlineV+presV;
+  const fillAll=Math.round(totalV/(q1.obj+q2.obj)*100);
+  const growthPct=q2.ventas>0&&q1.ventas>0?Math.round((q2.total/q1.total-1)*100):0;
+  const pillars=[
+    {icon:'⚡',name:'Volumen',val:totalV,target:'Meta: '+V40_ANNUAL_TARGET,pct:annualPct,color:'var(--accent)'},
+    {icon:'🎯',name:'Conversión',val:fillAll+'%',target:'Fill rate global',pct:Math.min(100,fillAll),color:'var(--green)'},
+    {icon:'📈',name:'Crecimiento',val:'+'+growthPct+'%',target:'Comisiones Q/Q',pct:Math.min(100,50+growthPct),color:'var(--blue-col)'},
+    {icon:'🔀',name:'Diversificación',val:Math.round(presV/totalV*100)+'%',target:'Presencial / Total',pct:Math.round(presV/totalV*100),color:'var(--amber-col)'}
+  ];
+  document.getElementById('pillar-grid').innerHTML=pillars.map(p=>`
+    <div class="pillar-card">
+      <div class="pillar-icon">${p.icon}</div>
+      <div class="pillar-name">${p.name}</div>
+      <div class="pillar-val">${p.val}</div>
+      <div class="pillar-target">${p.target}</div>
+      <div class="pillar-bar"><div class="pillar-bar-fill" style="width:${p.pct}%;background:${p.color}"></div></div>
+    </div>`).join('');
+}
+
 function initDashboard(){
-  updateLogoMark();buildCards();buildStrategies();setDate();
-  // Wait for Chart.js to be ready before rendering charts
+  updateLogoMark();buildCards();buildStrategies();setDate();renderV40();
   function tryInit(){
     if(typeof Chart === 'undefined'){
       setTimeout(tryInit, 50);
