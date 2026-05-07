@@ -178,11 +178,11 @@ body{background:var(--bg);color:var(--text);font-family:var(--font-head);min-hei
       <p>Análisis de urgencia · Estrategias de cierre · Actualizado 07/05/2026</p>
     </div>
     <div class="metrics-row">
-      <div class="metric"><div class="metric-label">Total comisiones</div><div class="metric-value">12</div><div class="metric-sub">1 en venta · 11 iniciadas</div></div>
+      <div class="metric"><div class="metric-label">Total comisiones</div><div class="metric-value">18</div><div class="metric-sub">7 en venta · 11 iniciadas</div></div>
       <div class="metric"><div class="metric-label">Total inscriptos</div><div class="metric-value" style="color:var(--green)">358</div><div class="metric-sub">Acumulado todas las comisiones</div></div>
-      <div class="metric"><div class="metric-label">Acción urgente</div><div class="metric-value" style="color:var(--red-col)">1</div><div class="metric-sub">Web13p</div></div>
-      <div class="metric"><div class="metric-label">Pueden moverse</div><div class="metric-value" style="color:var(--amber-col)">0</div><div class="metric-sub">Ninguna</div></div>
-      <div class="metric"><div class="metric-label">Más urgente</div><div class="metric-value" style="color:var(--red-col)">Web13p</div><div class="metric-sub">13/20 — 9 días</div></div>
+      <div class="metric"><div class="metric-label">Acción urgente</div><div class="metric-value" style="color:var(--red-col)">2</div><div class="metric-sub">Python (7d) + Web13p (9d)</div></div>
+      <div class="metric"><div class="metric-label">Pueden moverse</div><div class="metric-value" style="color:var(--amber-col)">5</div><div class="metric-sub">Web28, Web14p, IA, PM1, Claude</div></div>
+      <div class="metric"><div class="metric-label">Más urgente</div><div class="metric-value" style="color:var(--red-col)">Python</div><div class="metric-sub">0/20 — 7 días</div></div>
     </div>
     <div class="zone-bar">
       <div class="zone-pill green">Zona verde · +25 días · venta orgánica</div>
@@ -288,13 +288,19 @@ const comisiones = [
   {nombre:"Web 26",tipo:"Online",ventas:39,objetivo:50,diasInicio:0,fechaInicio:"28/04",puedeMoverse:false,zona:"amber",status:"En curso — vendiendo",alerta:"39/50 ventas. Inició 28/04. Aún acepta inscripciones.",nota:null},
   {nombre:"Web 27",tipo:"Online",ventas:29,objetivo:50,diasInicio:0,fechaInicio:"04/05",puedeMoverse:false,zona:"amber",status:"En curso — vendiendo",alerta:"29/50 ventas. Inició 04/05. Aún acepta inscripciones.",nota:null},
   {nombre:"Web 12p — Tucumán",tipo:"Presencial TUC",ventas:14,objetivo:20,diasInicio:0,fechaInicio:"05/05",puedeMoverse:false,zona:"green",status:"Iniciada ✔",alerta:"14/20 ventas. Iniciada 05/05.",nota:null},
-  {nombre:"Web 13p — Sábados",tipo:"Presencial Sáb",ventas:13,objetivo:20,diasInicio:9,fechaInicio:"16/05",puedeMoverse:false,zona:"red",status:"Cierre urgente",alerta:"13 ventas, 9 días, fecha fija. Campaña de cierre activa.",nota:null}
+  {nombre:"Web 13p — Sábados",tipo:"Presencial Sáb",ventas:13,objetivo:20,diasInicio:9,fechaInicio:"16/05",puedeMoverse:false,zona:"red",status:"Cierre urgente",alerta:"13 ventas, 9 días, fecha fija. Campaña de cierre activa.",nota:null},
+  {nombre:"Python On-Demand",tipo:"On-Demand",ventas:0,objetivo:20,diasInicio:7,fechaInicio:"14/05",puedeMoverse:false,zona:"red",status:"Cierre urgente",alerta:"0 ventas, 7 días. Workshop el 14/05, curso posterior.",nota:"Posterior al Workshop Jueves 14/05."},
+  {nombre:"Web 28",tipo:"Online · L-M 19-21hs",ventas:0,objetivo:50,diasInicio:32,fechaInicio:"08/06",puedeMoverse:true,zona:"green",status:"A la venta",alerta:"0/50 ventas. 32 días. Inicio de campaña.",nota:null},
+  {nombre:"Web 14p",tipo:"Presencial · M-J 14-18hs",ventas:0,objetivo:20,diasInicio:33,fechaInicio:"09/06",puedeMoverse:true,zona:"green",status:"A la venta",alerta:"0/20 ventas. 33 días. Inicio de campaña presencial.",nota:null},
+  {nombre:"IA For Dev",tipo:"Online · L-M 18-20hs",ventas:0,objetivo:20,diasInicio:32,fechaInicio:"08/06",puedeMoverse:true,zona:"green",status:"A la venta",alerta:"0/20 ventas. 32 días. Nueva comisión.",nota:null},
+  {nombre:"PM1",tipo:"Online · Mié 18hs",ventas:0,objetivo:20,diasInicio:34,fechaInicio:"10/06",puedeMoverse:true,zona:"green",status:"A la venta",alerta:"0/20 ventas. 34 días. Inicio de campaña.",nota:null},
+  {nombre:"Claude",tipo:"Por definir",ventas:0,objetivo:20,diasInicio:0,fechaInicio:"Jun TBD",puedeMoverse:true,zona:"green",status:"Fecha a definir",alerta:"Fecha a definir en junio.",nota:"Fecha a definir en junio."}
 ];
 const strategies = [
-  {tag:"Urgente",colorKey:"red",titulo:"Web13p — cierre en 9 días",cuerpo:"13/20, fecha fija 16/05. No se puede mover. Campaña de cierre máxima."},
+  {tag:"Urgente",colorKey:"red",titulo:"Python + Web13p — zona roja",cuerpo:"Python: 0/20, workshop 14/05 (7 días). Web13p: 13/20, fecha fija 16/05 (9 días). Cierre máximo."},
   {tag:"En curso",colorKey:"amber",titulo:"Web26 + Web27 — vendiendo",cuerpo:"Web26: 39/50 (inició 28/04). Web27: 29/50 (inició 04/05). Seguir empujando inscripciones."},
-  {tag:"Iniciada",colorKey:"green",titulo:"Web12p — en curso",cuerpo:"14/20, inició 05/05 en Tucumán. Buena tracción."},
-  {tag:"Iniciadas",colorKey:"green",titulo:"11 comisiones en curso",cuerpo:"Web24 (66), Web25 (62), Web9p (22), Web10p (22), Web11p (22), QA (33), Scrum (18), Web1ba (14), Web26 (39), Web27 (29), Web12p (14). Total: 341 alumnos en curso."}
+  {tag:"Nuevas",colorKey:"green",titulo:"6 comisiones nuevas a la venta",cuerpo:"Web28, Web14p, IA For Dev, PM1 (junio). Python On-Demand (14/05). Claude (fecha TBD). Arrancar campañas."},
+  {tag:"Iniciadas",colorKey:"green",titulo:"11 comisiones en curso",cuerpo:"Web24 (66), Web25 (62), Web9p (22), Web10p (22), Web11p (22), QA (33), Scrum (18), Web1ba (14), Web26 (39), Web27 (29), Web12p (14). Total: 341 en curso."}
 ];
 
 const DARK_BARS={green:'#3ECFA0',amber:'#F5A623',red:'#FF5757',blue:'#60A5FA'};
@@ -456,7 +462,13 @@ function renderProyecciones(){
     {n:"Web 26",            o:50, d:0,  ventas:39},
     {n:"Web 27",            o:50, d:0,  ventas:29},
     {n:"Web 12p — Tucumán",  o:20, d:0,  ventas:14},
-    {n:"Web 13p — Sábados",  o:20, d:9, ventas:13}
+    {n:"Web 13p — Sábados",  o:20, d:9, ventas:13},
+    {n:"Python On-Demand",   o:20, d:7,  ventas:0},
+    {n:"Web 28",             o:50, d:32, ventas:0},
+    {n:"Web 14p",            o:20, d:33, ventas:0},
+    {n:"IA For Dev",         o:20, d:32, ventas:0},
+    {n:"PM1",                o:20, d:34, ventas:0},
+    {n:"Claude",             o:20, d:0,  ventas:0}
   ];
   el.innerHTML=cfg.map(c=>{
     const vc=v.filter(x=>x.comision===c.n),rec=vc.filter(x=>new Date(x.fecha)>=hace14);
@@ -547,7 +559,13 @@ const Q2_DATA = {
     {n:'Web 26',v:39,o:50,tipo:'online'},
     {n:'Web 27',v:29,o:50,tipo:'online'},
     {n:'Web 12p',v:14,o:20,tipo:'presencial'},
-    {n:'Web 13p',v:13,o:20,tipo:'presencial'}
+    {n:'Web 13p',v:13,o:20,tipo:'presencial'},
+    {n:'Python',v:0,o:20,tipo:'online'},
+    {n:'Web 28',v:0,o:50,tipo:'online'},
+    {n:'Web 14p',v:0,o:20,tipo:'presencial'},
+    {n:'IA For Dev',v:0,o:20,tipo:'online'},
+    {n:'PM1',v:0,o:20,tipo:'online'},
+    {n:'Claude',v:0,o:20,tipo:'online'}
   ]
 };
 const V40_ANNUAL_TARGET = 700;
