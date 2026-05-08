@@ -192,7 +192,16 @@ body{background:var(--bg);color:var(--text);font-family:var(--font-head);min-hei
       <div class="zone-pill amber">Zona naranja · 10–25 días · activar urgencia</div>
       <div class="zone-pill red">Zona roja · &lt;10 días · promo finita o mover</div>
     </div>
-    <div class="section-label">Comisiones activas</div>
+    <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px;margin-bottom:.5rem">
+      <div class="section-label" style="margin:0">Comisiones activas</div>
+      <div id="q-filter-cards" style="display:flex;gap:4px">
+        <button class="q-tab active" onclick="setQFilter('all')">Todas</button>
+        <button class="q-tab" onclick="setQFilter(1)">Q1</button>
+        <button class="q-tab" onclick="setQFilter(2)">Q2</button>
+        <button class="q-tab" onclick="setQFilter(3)">Q3</button>
+        <button class="q-tab" onclick="setQFilter(4)">Q4</button>
+      </div>
+    </div>
     <div class="cards-grid" id="cards-container"></div>
     <div style="margin-top:2rem;animation:fadeUp .5s .2s ease both">
       <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px;margin-bottom:.5rem">
@@ -323,7 +332,9 @@ function stratColor(k){const d={green:'#3ECFA0',red:isDark()?'#FF5757':'#D63333'
 
 function buildCards(){
   const c=document.getElementById('cards-container');c.innerHTML='';
-  comisiones.forEach(x=>{
+  const list=activeQ==='all'?comisiones:comisiones.filter(x=>getQ(x.fechaInicio)===activeQ);
+  if(list.length===0){c.innerHTML='<div style="grid-column:1/-1;text-align:center;padding:2rem;color:var(--muted);font-family:var(--font-mono);font-size:13px">Sin comisiones en este trimestre</div>';return;}
+  list.forEach(x=>{
     const pct=Math.round(x.ventas/x.objetivo*100),b=bar(x.zona);
     const nota=x.nota?`<div class="note-box">${x.nota}</div>`:'';
     const tag=x.puedeMoverse
@@ -361,6 +372,7 @@ function setQFilter(q){
   document.querySelectorAll('.q-tab').forEach(t=>{
     t.classList.toggle('active',t.textContent===(q==='all'?'Todas':'Q'+q));
   });
+  buildCards();
   buildChart();
 }
 
