@@ -78,6 +78,13 @@ body{background:var(--bg);color:var(--text);font-family:var(--font-head);min-hei
 .q-tab{font-family:var(--font-mono);font-size:11px;padding:5px 14px;border-radius:8px;border:1px solid var(--border);background:var(--surface);color:var(--muted);cursor:pointer;transition:all .15s}
 .q-tab:hover{border-color:var(--text);color:var(--text)}
 .q-tab.active{background:var(--text);color:var(--bg);border-color:var(--text);font-weight:700}
+.cards-group-header{grid-column:1/-1;display:flex;align-items:center;gap:10px;margin:1rem 0 .25rem;padding:0 2px}
+.cards-group-label{font-family:var(--font-mono);font-size:11px;letter-spacing:.1em;text-transform:uppercase;font-weight:700}
+.cards-group-count{font-family:var(--font-mono);font-size:10px;padding:2px 8px;border-radius:10px}
+.cards-group-line{flex:1;height:1px;background:var(--border)}
+.card-selling{border-left:4px solid var(--amber-col) !important;position:relative}
+.card-selling::after{content:'VENDIENDO';position:absolute;top:10px;right:10px;font-family:var(--font-mono);font-size:9px;font-weight:700;letter-spacing:.1em;color:#fff;background:var(--amber-col);padding:3px 8px;border-radius:6px;animation:pulse-sell 2s ease-in-out infinite}
+@keyframes pulse-sell{0%,100%{opacity:1}50%{opacity:.6}}
 .strategy-card{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:1.25rem}
 .strategy-tag{font-size:10px;font-family:var(--font-mono);letter-spacing:.08em;text-transform:uppercase;margin-bottom:8px}
 .strategy-title{font-size:15px;font-weight:700;margin-bottom:8px;letter-spacing:-.01em}
@@ -334,14 +341,31 @@ function buildCards(){
   const c=document.getElementById('cards-container');c.innerHTML='';
   const list=activeQ==='all'?comisiones:comisiones.filter(x=>getQ(x.fechaInicio)===activeQ);
   if(list.length===0){c.innerHTML='<div style="grid-column:1/-1;text-align:center;padding:2rem;color:var(--muted);font-family:var(--font-mono);font-size:13px">Sin comisiones en este trimestre</div>';return;}
-  list.forEach(x=>{
+
+  const started=list.filter(x=>x.diasInicio===0&&!x.fechaInicio.includes('TBD')&&!x.fechaInicio.includes('Post'));
+  const selling=list.filter(x=>x.diasInicio>0||(x.diasInicio===0&&(x.fechaInicio.includes('TBD')||x.fechaInicio.includes('Post'))));
+  const isSelling=x=>x.ventas<x.objetivo&&x.status.includes('vendiendo');
+
+  function renderCard(x){
     const pct=Math.round(x.ventas/x.objetivo*100),b=bar(x.zona);
     const nota=x.nota?`<div class="note-box">${x.nota}</div>`:'';
     const tag=x.puedeMoverse
       ?`<span style="font-size:10px;font-family:var(--font-mono);color:var(--green);background:var(--green-dim);padding:2px 8px;border-radius:10px;margin-left:6px;">puede moverse</span>`
       :`<span style="font-size:10px;font-family:var(--font-mono);color:var(--muted);background:var(--surface2);padding:2px 8px;border-radius:10px;margin-left:6px;">fecha fija</span>`;
-    c.innerHTML+=`<div class="commission-card card-${x.zona}"><div class="card-top"><div><div class="card-title">${x.nombre}${tag}</div><div class="card-subtitle">${x.tipo} · inicio ${x.fechaInicio}</div></div><span class="status-badge badge-${x.zona}">${x.status}</span></div><div class="progress-section"><div class="progress-header"><span>${x.ventas} inscriptos</span><span>${pct}% de ${x.objetivo}</span></div><div class="progress-track"><div class="progress-fill" style="width:${pct}%;background:${b}"></div></div></div><div class="stats-row"><div class="stat-box"><div class="stat-num" style="color:${b}">${x.diasInicio}</div><div class="stat-lbl">días inicio</div></div><div class="stat-box"><div class="stat-num">${x.ventas}</div><div class="stat-lbl">vendidos</div></div><div class="stat-box"><div class="stat-num">${x.objetivo-x.ventas}</div><div class="stat-lbl">cupos libres</div></div></div><div class="alert-box alert-${x.zona}">${x.alerta}</div>${nota}</div>`;
-  });
+    const sell=isSelling(x)?' card-selling':'';
+    return `<div class="commission-card card-${x.zona}${sell}"><div class="card-top"><div><div class="card-title">${x.nombre}${tag}</div><div class="card-subtitle">${x.tipo} · inicio ${x.fechaInicio}</div></div><span class="status-badge badge-${x.zona}">${x.status}</span></div><div class="progress-section"><div class="progress-header"><span>${x.ventas} inscriptos</span><span>${pct}% de ${x.objetivo}</span></div><div class="progress-track"><div class="progress-fill" style="width:${pct}%;background:${b}"></div></div></div><div class="stats-row"><div class="stat-box"><div class="stat-num" style="color:${b}">${x.diasInicio}</div><div class="stat-lbl">días inicio</div></div><div class="stat-box"><div class="stat-num">${x.ventas}</div><div class="stat-lbl">vendidos</div></div><div class="stat-box"><div class="stat-num">${x.objetivo-x.ventas}</div><div class="stat-lbl">cupos libres</div></div></div><div class="alert-box alert-${x.zona}">${x.alerta}</div>${nota}</div>`;
+  }
+
+  if(started.length>0){
+    const sellCount=started.filter(isSelling).length;
+    const sellNote=sellCount>0?` · <span style="color:var(--amber-col)">${sellCount} aún vendiendo</span>`:'';
+    c.innerHTML+=`<div class="cards-group-header"><span class="cards-group-label" style="color:var(--green)">En curso</span><span class="cards-group-count" style="background:var(--green-dim);color:var(--green)">${started.length}</span>${sellNote}<div class="cards-group-line"></div></div>`;
+    started.forEach(x=>{c.innerHTML+=renderCard(x);});
+  }
+  if(selling.length>0){
+    c.innerHTML+=`<div class="cards-group-header"><span class="cards-group-label" style="color:var(--amber-col)">A la venta</span><span class="cards-group-count" style="background:var(--amber-dim);color:var(--amber-col)">${selling.length}</span><div class="cards-group-line"></div></div>`;
+    selling.forEach(x=>{c.innerHTML+=renderCard(x);});
+  }
 }
 
 function buildStrategies(){
