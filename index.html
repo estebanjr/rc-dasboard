@@ -85,6 +85,11 @@ body{background:var(--bg);color:var(--text);font-family:var(--font-head);min-hei
 .card-selling{border-left:4px solid var(--amber-col) !important;position:relative}
 .card-selling::after{content:'VENDIENDO';position:absolute;top:10px;right:10px;font-family:var(--font-mono);font-size:9px;font-weight:700;letter-spacing:.1em;color:#fff;background:var(--amber-col);padding:3px 8px;border-radius:6px;animation:pulse-sell 2s ease-in-out infinite}
 @keyframes pulse-sell{0%,100%{opacity:1}50%{opacity:.6}}
+.coverage-banner{border-radius:12px;padding:1rem 1.25rem;margin-bottom:1rem;display:flex;align-items:flex-start;gap:12px;font-family:var(--font-mono);font-size:12px;line-height:1.6;animation:fadeUp .4s ease both}
+.coverage-ok{background:var(--green-dim);border:1px solid rgba(62,207,160,.3);color:var(--green)}
+.coverage-warn{background:var(--red-dim);border:2px solid var(--red-col);color:var(--red-col);animation:pulse-sell 2s ease-in-out infinite}
+.coverage-icon{font-size:20px;line-height:1;flex-shrink:0;margin-top:1px}
+.coverage-text strong{font-weight:700}
 .strategy-card{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:1.25rem}
 .strategy-tag{font-size:10px;font-family:var(--font-mono);letter-spacing:.08em;text-transform:uppercase;margin-bottom:8px}
 .strategy-title{font-size:15px;font-weight:700;margin-bottom:8px;letter-spacing:-.01em}
@@ -194,6 +199,7 @@ body{background:var(--bg);color:var(--text);font-family:var(--font-head);min-hei
       <div class="metric"><div class="metric-label">Pueden moverse</div><div class="metric-value" style="color:var(--amber-col)">6</div><div class="metric-sub">Web28, Web14p, IA, PM1, Claude, Python</div></div>
       <div class="metric"><div class="metric-label">Más urgente</div><div class="metric-value" style="color:var(--red-col)">Web13p</div><div class="metric-sub">13/20 — 9 días</div></div>
     </div>
+    <div id="coverage-alert"></div>
     <div class="zone-bar">
       <div class="zone-pill green">Zona verde · +25 días · venta orgánica</div>
       <div class="zone-pill amber">Zona naranja · 10–25 días · activar urgencia</div>
@@ -814,8 +820,46 @@ function renderV40(){
     </div>`).join('');
 }
 
+function checkCoverage(){
+  const el=document.getElementById('coverage-alert');if(!el)return;
+  const MAX_DAYS=28;
+  const now=new Date();
+  const isWeb=x=>x.nombre.toLowerCase().startsWith('web');
+  const isOnline=x=>isWeb(x)&&(x.tipo.toLowerCase().includes('online')||x.tipo.toLowerCase().includes('l-m')||x.tipo.toLowerCase().includes('19-21'));
+  const isPresencial=x=>isWeb(x)&&!isOnline(x);
+
+  function available(filterFn){
+    return comisiones.filter(x=>{
+      if(!filterFn(x))return false;
+      if(x.fechaInicio.includes('TBD')||x.fechaInicio.includes('Post'))return false;
+      if(x.diasInicio>0&&x.diasInicio<=MAX_DAYS)return true;
+      if(x.diasInicio===0&&x.ventas<x.objetivo){
+        const p=x.fechaInicio.split('/').map(Number);
+        const ini=new Date(2026,p[1]-1,p[0]);
+        const d=Math.floor((now-ini)/864e5);
+        if(d<=11)return true;
+      }
+      return false;
+    });
+  }
+
+  const onl=available(isOnline);
+  const pres=available(isPresencial);
+  const problems=[];
+  if(onl.length===0)problems.push('No hay comisión <strong>Web ONLINE</strong> a la venta en las próximas 4 semanas. Programar nueva comisión.');
+  if(pres.length===0)problems.push('No hay comisión <strong>Web PRESENCIAL</strong> a la venta en las próximas 4 semanas. Programar nueva comisión.');
+
+  if(problems.length>0){
+    el.innerHTML=`<div class="coverage-banner coverage-warn"><span class="coverage-icon">⚠</span><div class="coverage-text">${problems.join('<br>')}</div></div>`;
+  } else {
+    const oNames=onl.map(x=>x.nombre).join(', ');
+    const pNames=pres.map(x=>x.nombre).join(', ');
+    el.innerHTML=`<div class="coverage-banner coverage-ok"><span class="coverage-icon">✓</span><div class="coverage-text">Cobertura OK — Online: ${oNames} · Presencial: ${pNames}</div></div>`;
+  }
+}
+
 function initDashboard(){
-  updateLogoMark();buildCards();buildStrategies();setDate();renderV40();
+  updateLogoMark();buildCards();buildStrategies();setDate();renderV40();checkCoverage();
   function tryInit(){
     if(typeof Chart === 'undefined'){
       setTimeout(tryInit, 50);
