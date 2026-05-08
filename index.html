@@ -330,7 +330,49 @@ let mainChart=null;
 function buildChart(){
   if(mainChart){mainChart.destroy();mainChart=null;}
   const dark=isDark(),grid=dark?'rgba(255,255,255,0.04)':'rgba(0,0,0,0.05)',ticks=dark?'#6B7280':'#7A7E87';
-  mainChart=new Chart(document.getElementById('mainChart').getContext('2d'),{type:'bar',data:{labels:comisiones.map(x=>x.nombre),datasets:[{label:'Inscriptos',data:comisiones.map(x=>x.ventas),backgroundColor:comisiones.map(x=>bar(x.zona)+'CC'),borderColor:comisiones.map(x=>bar(x.zona)),borderWidth:1,borderRadius:6},{label:'Objetivo',data:comisiones.map(x=>x.objetivo),backgroundColor:dark?'rgba(255,255,255,0.04)':'rgba(0,0,0,0.03)',borderColor:dark?'rgba(255,255,255,0.15)':'rgba(0,0,0,0.12)',borderWidth:1,borderRadius:6}]},options:{responsive:true,maintainAspectRatio:false,animation:false,plugins:{legend:{display:false}},scales:{x:{grid:{color:grid},ticks:{color:ticks,font:{family:'DM Mono',size:10}},border:{color:grid}},y:{grid:{color:grid},ticks:{color:ticks,font:{family:'DM Mono',size:10}},border:{color:grid}}}}});
+
+  const parseF=f=>{
+    if(!f||f.includes('TBD'))return new Date(2099,0,1);
+    const p=f.split('/').map(Number);return new Date(2026,p[1]-1,p[0]);
+  };
+  const sorted=[...comisiones].sort((a,b)=>parseF(a.fechaInicio)-parseF(b.fechaInicio));
+
+  let lastStartedIdx=-1;
+  sorted.forEach((x,i)=>{if(x.diasInicio===0&&!x.fechaInicio.includes('TBD'))lastStartedIdx=i;});
+
+  const todayPlugin={
+    id:'todayLine',
+    afterDraw(chart){
+      if(lastStartedIdx<0)return;
+      const{ctx,chartArea,scales}=chart;
+      const xS=scales.x;
+      const px1=xS.getPixelForValue(lastStartedIdx);
+      const px2=lastStartedIdx+1<sorted.length?xS.getPixelForValue(lastStartedIdx+1):chartArea.right;
+      const xPos=(px1+px2)/2;
+      const now=new Date();
+      const lbl='HOY '+String(now.getDate()).padStart(2,'0')+'/'+String(now.getMonth()+1).padStart(2,'0');
+      ctx.save();
+      ctx.strokeStyle='#FF5757';ctx.lineWidth=2;ctx.setLineDash([6,4]);
+      ctx.beginPath();ctx.moveTo(xPos,chartArea.top);ctx.lineTo(xPos,chartArea.bottom);ctx.stroke();
+      ctx.setLineDash([]);
+      ctx.beginPath();ctx.moveTo(xPos-6,chartArea.top-2);ctx.lineTo(xPos+6,chartArea.top-2);ctx.lineTo(xPos,chartArea.top+6);ctx.fillStyle='#FF5757';ctx.fill();
+      ctx.font='bold 10px "DM Mono",monospace';ctx.textAlign='center';ctx.fillStyle='#FF5757';
+      ctx.fillText(lbl,xPos,chartArea.top-8);
+      ctx.restore();
+    }
+  };
+
+  mainChart=new Chart(document.getElementById('mainChart').getContext('2d'),{type:'bar',
+    data:{labels:sorted.map(x=>[x.nombre,x.fechaInicio]),
+      datasets:[{label:'Inscriptos',data:sorted.map(x=>x.ventas),backgroundColor:sorted.map(x=>bar(x.zona)+'CC'),borderColor:sorted.map(x=>bar(x.zona)),borderWidth:1,borderRadius:6},
+        {label:'Objetivo',data:sorted.map(x=>x.objetivo),backgroundColor:dark?'rgba(255,255,255,0.04)':'rgba(0,0,0,0.03)',borderColor:dark?'rgba(255,255,255,0.15)':'rgba(0,0,0,0.12)',borderWidth:1,borderRadius:6}]},
+    options:{responsive:true,maintainAspectRatio:false,animation:false,
+      layout:{padding:{top:25}},
+      plugins:{legend:{display:false}},
+      scales:{x:{grid:{color:grid},ticks:{color:ticks,font:{family:'DM Mono',size:9},maxRotation:45,minRotation:0},border:{color:grid}},
+        y:{grid:{color:grid},ticks:{color:ticks,font:{family:'DM Mono',size:10}},border:{color:grid}}}},
+    plugins:[todayPlugin]
+  });
 }
 
 function updateLogoMark(){const fill=isDark()?'#0D0F12':'#F5F4F0';['lm1','lm2','lm3','lm4'].forEach(id=>{const el=document.getElementById(id);if(el)el.setAttribute('fill',fill);});}
