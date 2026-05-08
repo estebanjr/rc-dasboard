@@ -344,7 +344,15 @@ function buildCards(){
 
   const started=list.filter(x=>x.diasInicio===0&&!x.fechaInicio.includes('TBD')&&!x.fechaInicio.includes('Post'));
   const selling=list.filter(x=>x.diasInicio>0||(x.diasInicio===0&&(x.fechaInicio.includes('TBD')||x.fechaInicio.includes('Post'))));
-  const isSelling=x=>x.ventas<x.objetivo&&x.status.includes('vendiendo');
+  const isSelling=x=>{
+    if(x.ventas>=x.objetivo)return false;
+    if(x.diasInicio!==0)return false;
+    if(x.fechaInicio.includes('TBD')||x.fechaInicio.includes('Post'))return false;
+    const p=x.fechaInicio.split('/').map(Number);
+    const ini=new Date(2026,p[1]-1,p[0]);
+    const dias=Math.floor((new Date()-ini)/(864e5));
+    return dias<=11;
+  };
 
   function renderCard(x){
     const pct=Math.round(x.ventas/x.objetivo*100),b=bar(x.zona);
