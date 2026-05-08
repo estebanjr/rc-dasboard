@@ -90,6 +90,25 @@ body{background:var(--bg);color:var(--text);font-family:var(--font-head);min-hei
 .coverage-warn{background:var(--red-dim);border:2px solid var(--red-col);color:var(--red-col);animation:pulse-sell 2s ease-in-out infinite}
 .coverage-icon{font-size:20px;line-height:1;flex-shrink:0;margin-top:1px}
 .coverage-text strong{font-weight:700}
+.tbl-section{margin-top:2rem;animation:fadeUp .5s .3s ease both}
+.tbl-filters{display:flex;gap:6px;flex-wrap:wrap;align-items:center}
+.tbl-filter{font-family:var(--font-mono);font-size:10px;padding:4px 10px;border-radius:6px;border:1px solid var(--border);background:var(--surface);color:var(--muted);cursor:pointer;transition:all .15s}
+.tbl-filter:hover{border-color:var(--text);color:var(--text)}
+.tbl-filter.active{background:var(--text);color:var(--bg);border-color:var(--text);font-weight:700}
+.tbl-filter-sep{width:1px;height:18px;background:var(--border);margin:0 4px}
+.com-table{width:100%;border-collapse:separate;border-spacing:0;font-family:var(--font-mono);font-size:12px;overflow:hidden;border-radius:12px;border:1px solid var(--border)}
+.com-table th{background:var(--surface2);color:var(--muted);font-size:10px;letter-spacing:.06em;text-transform:uppercase;padding:10px 12px;text-align:left;font-weight:600;cursor:pointer;user-select:none;white-space:nowrap;border-bottom:1px solid var(--border)}
+.com-table th:hover{color:var(--text)}
+.com-table th .sort-arrow{opacity:.3;margin-left:3px;font-size:9px}
+.com-table th.sorted .sort-arrow{opacity:1;color:var(--accent)}
+.com-table td{padding:8px 12px;border-bottom:1px solid var(--border);vertical-align:middle;white-space:nowrap}
+.com-table tr:last-child td{border-bottom:none}
+.com-table tbody tr{transition:background .12s}
+.com-table tbody tr:hover{background:var(--surface2)}
+.tbl-zone{display:inline-block;width:8px;height:8px;border-radius:50%;margin-right:6px}
+.tbl-bar{display:inline-block;height:6px;border-radius:3px;min-width:2px}
+.tbl-bar-track{display:inline-block;width:60px;height:6px;background:var(--surface2);border-radius:3px;overflow:hidden;vertical-align:middle}
+.tbl-status{font-size:10px;padding:2px 8px;border-radius:6px;font-weight:600}
 .strategy-card{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:1.25rem}
 .strategy-tag{font-size:10px;font-family:var(--font-mono);letter-spacing:.08em;text-transform:uppercase;margin-bottom:8px}
 .strategy-title{font-size:15px;font-weight:700;margin-bottom:8px;letter-spacing:-.01em}
@@ -229,6 +248,25 @@ body{background:var(--bg);color:var(--text);font-family:var(--font-head);min-hei
       </div>
       <div class="chart-wrap"><div style="position:relative;width:100%;height:320px"><canvas id="mainChart"></canvas></div></div>
     </div>
+    <div class="tbl-section">
+      <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px;margin-bottom:.75rem">
+        <div class="section-label" style="margin:0">Vista tabla</div>
+        <div class="tbl-filters" id="tbl-filters">
+          <button class="tbl-filter active" data-g="all" onclick="setTblFilter('g','all')">Todas</button>
+          <button class="tbl-filter" data-g="curso" onclick="setTblFilter('g','curso')">En curso</button>
+          <button class="tbl-filter" data-g="venta" onclick="setTblFilter('g','venta')">A la venta</button>
+          <div class="tbl-filter-sep"></div>
+          <button class="tbl-filter active" data-t="all" onclick="setTblFilter('t','all')">Todos</button>
+          <button class="tbl-filter" data-t="online" onclick="setTblFilter('t','online')">Online</button>
+          <button class="tbl-filter" data-t="presencial" onclick="setTblFilter('t','presencial')">Presencial</button>
+          <button class="tbl-filter" data-t="otro" onclick="setTblFilter('t','otro')">Otros</button>
+        </div>
+      </div>
+      <div style="overflow-x:auto;border-radius:12px">
+        <table class="com-table" id="com-table"></table>
+      </div>
+    </div>
+
     <div style="margin-top:2rem;animation:fadeUp .5s .4s ease both">
       <div class="section-label">Sistema de zonas de acción</div>
       <div class="zones-grid">
@@ -380,6 +418,104 @@ function buildCards(){
     c.innerHTML+=`<div class="cards-group-header"><span class="cards-group-label" style="color:var(--amber-col)">A la venta</span><span class="cards-group-count" style="background:var(--amber-dim);color:var(--amber-col)">${selling.length}</span><div class="cards-group-line"></div></div>`;
     selling.forEach(x=>{c.innerHTML+=renderCard(x);});
   }
+}
+
+let tblG='all',tblT='all',tblSort='nombre',tblAsc=true;
+
+function setTblFilter(dim,val){
+  if(dim==='g')tblG=val;
+  if(dim==='t')tblT=val;
+  document.querySelectorAll(`.tbl-filter[data-${dim}]`).forEach(b=>{
+    b.classList.toggle('active',b.dataset[dim]===val);
+  });
+  buildTable();
+}
+
+function setTblSort(col){
+  if(tblSort===col)tblAsc=!tblAsc;
+  else{tblSort=col;tblAsc=true;}
+  buildTable();
+}
+
+function buildTable(){
+  const tbl=document.getElementById('com-table');if(!tbl)return;
+  const now=new Date();
+
+  const isStarted=x=>x.diasInicio===0&&!x.fechaInicio.includes('TBD')&&!x.fechaInicio.includes('Post');
+  const tipoNorm=x=>{
+    const t=x.tipo.toLowerCase();
+    if(t.includes('online')||t.includes('19-21')||t.includes('l-m'))return 'online';
+    if(t.includes('presencial')||t.includes('tuc')||t.includes('bsas')||t.includes('sáb')||t.includes('m-j'))return 'presencial';
+    return 'otro';
+  };
+
+  let list=[...comisiones];
+  if(tblG==='curso')list=list.filter(isStarted);
+  if(tblG==='venta')list=list.filter(x=>!isStarted(x));
+  if(tblT!=='all')list=list.filter(x=>tipoNorm(x)===tblT);
+
+  const parseF=f=>{
+    if(!f||f.includes('TBD')||f.includes('Post'))return new Date(2099,0,1);
+    const p=f.split('/').map(Number);return new Date(2026,p[1]-1,p[0]);
+  };
+
+  list.sort((a,b)=>{
+    let va,vb;
+    if(tblSort==='nombre'){va=a.nombre;vb=b.nombre;}
+    else if(tblSort==='ventas'){va=a.ventas;vb=b.ventas;}
+    else if(tblSort==='objetivo'){va=a.objetivo;vb=b.objetivo;}
+    else if(tblSort==='pct'){va=a.ventas/a.objetivo;vb=b.ventas/b.objetivo;}
+    else if(tblSort==='faltan'){va=a.objetivo-a.ventas;vb=b.objetivo-b.ventas;}
+    else if(tblSort==='dias'){va=isStarted(a)?-1:a.diasInicio;vb=isStarted(b)?-1:b.diasInicio;}
+    else if(tblSort==='fecha'){va=parseF(a.fechaInicio);vb=parseF(b.fechaInicio);}
+    else if(tblSort==='tipo'){va=tipoNorm(a);vb=tipoNorm(b);}
+    else if(tblSort==='q'){va=getQ(a.fechaInicio);vb=getQ(b.fechaInicio);}
+    else{va=a.nombre;vb=b.nombre;}
+    if(va<vb)return tblAsc?-1:1;
+    if(va>vb)return tblAsc?1:-1;
+    return 0;
+  });
+
+  const arrow=col=>col===tblSort?`<span class="sort-arrow">${tblAsc?'▲':'▼'}</span>`:'<span class="sort-arrow">▲</span>';
+  const cols=[
+    {k:'nombre',l:'Comisión'},{k:'tipo',l:'Tipo'},{k:'q',l:'Q'},
+    {k:'ventas',l:'Ventas'},{k:'objetivo',l:'Obj'},{k:'pct',l:'%'},{k:'faltan',l:'Faltan'},
+    {k:'fecha',l:'Inicio'},{k:'dias',l:'Días'}
+  ];
+
+  let html='<thead><tr>';
+  cols.forEach(c=>{html+=`<th class="${tblSort===c.k?'sorted':''}" onclick="setTblSort('${c.k}')">${c.l}${arrow(c.k)}</th>`;});
+  html+='<th>Estado</th></tr></thead><tbody>';
+
+  if(list.length===0){
+    html+=`<tr><td colspan="${cols.length+1}" style="text-align:center;padding:1.5rem;color:var(--muted)">Sin comisiones con estos filtros</td></tr>`;
+  }
+
+  list.forEach(x=>{
+    const pct=Math.round(x.ventas/x.objetivo*100);
+    const faltan=Math.max(0,x.objetivo-x.ventas);
+    const zoneCol={green:'var(--green)',amber:'var(--amber-col)',red:'var(--red-col)'}[x.zona]||'var(--muted)';
+    const statusBg={green:'var(--green-dim)',amber:'var(--amber-dim)',red:'var(--red-dim)'}[x.zona]||'var(--surface2)';
+    const barW=Math.min(100,pct);
+    const q='Q'+getQ(x.fechaInicio);
+    const diasLabel=isStarted(x)?'—':x.diasInicio;
+
+    html+=`<tr>`;
+    html+=`<td style="font-weight:600"><span class="tbl-zone" style="background:${zoneCol}"></span>${x.nombre}</td>`;
+    html+=`<td style="color:var(--muted)">${tipoNorm(x)}</td>`;
+    html+=`<td>${q}</td>`;
+    html+=`<td style="font-weight:700">${x.ventas}</td>`;
+    html+=`<td>${x.objetivo}</td>`;
+    html+=`<td><div class="tbl-bar-track"><div class="tbl-bar" style="width:${barW}%;background:${zoneCol}"></div></div> ${pct}%</td>`;
+    html+=`<td style="font-weight:600;color:${faltan===0?'var(--green)':'var(--text)'}">${faltan}</td>`;
+    html+=`<td>${x.fechaInicio}</td>`;
+    html+=`<td style="color:${x.diasInicio>0&&x.diasInicio<10?'var(--red-col)':'var(--muted)'}">${diasLabel}</td>`;
+    html+=`<td><span class="tbl-status" style="background:${statusBg};color:${zoneCol}">${x.status}</span></td>`;
+    html+=`</tr>`;
+  });
+
+  html+='</tbody>';
+  tbl.innerHTML=html;
 }
 
 function buildStrategies(){
@@ -859,7 +995,7 @@ function checkCoverage(){
 }
 
 function initDashboard(){
-  updateLogoMark();buildCards();buildStrategies();setDate();renderV40();checkCoverage();
+  updateLogoMark();buildCards();buildTable();buildStrategies();setDate();renderV40();checkCoverage();
   function tryInit(){
     if(typeof Chart === 'undefined'){
       setTimeout(tryInit, 50);
