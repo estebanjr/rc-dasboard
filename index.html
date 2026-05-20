@@ -166,6 +166,69 @@ body{background:var(--bg);color:var(--text);font-family:var(--font-head);min-hei
 #login-error{font-size:12px;font-family:var(--font-mono);color:#FF5757;background:rgba(255,87,87,.1);border-radius:8px;padding:8px 12px;margin-top:1rem;display:none;text-align:center}
 #login-attempts{font-size:11px;color:#6B7280;font-family:var(--font-mono);text-align:center;margin-top:.75rem}
 #dashboard-content{display:none}
+.nav-tabs{display:flex;gap:4px;padding:8px 2rem;border-bottom:1px solid var(--border);background:var(--surface)}
+.nav-tab{font-family:var(--font-mono);font-size:12px;padding:6px 16px;border-radius:8px;border:1px solid var(--border);background:transparent;color:var(--muted);cursor:pointer;transition:all .15s;font-weight:500;letter-spacing:.02em}
+.nav-tab:hover{border-color:var(--text);color:var(--text)}
+.nav-tab.active{background:var(--text);color:var(--bg);border-color:var(--text);font-weight:700}
+.view-panel,.view-ads{display:none}.view-panel.active,.view-ads.active{display:block}
+.ads-main{padding:2.5rem 2rem;max-width:960px;margin:0 auto}
+.ads-header{margin-bottom:2.5rem}
+.ads-header h1{font-size:clamp(28px,4vw,42px);font-weight:800;letter-spacing:-.03em;line-height:1.1;margin-bottom:8px}
+.ads-header h1 em{color:var(--accent);font-style:normal}
+.ads-header p{font-size:13px;color:var(--muted);font-family:var(--font-mono)}
+.price-alert{background:var(--amber-dim);border:1px solid var(--amber-col);border-radius:12px;padding:1.25rem 1.5rem;margin-bottom:2rem;display:flex;align-items:flex-start;gap:14px}
+.price-alert-icon{width:32px;height:32px;flex-shrink:0;background:var(--amber-col);border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:16px}
+.price-alert-title{font-size:14px;font-weight:700;color:var(--amber-col);margin-bottom:4px}
+.price-alert-body{font-size:12px;color:var(--amber-col);font-family:var(--font-mono);opacity:.85;line-height:1.6}
+.ads-progress{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:1.25rem 1.5rem;margin-bottom:2rem;display:flex;align-items:center;gap:2rem;flex-wrap:wrap}
+.ads-progress-stat{text-align:center}
+.ads-progress-num{font-size:28px;font-weight:800;letter-spacing:-.03em}
+.ads-progress-lbl{font-size:10px;color:var(--muted);font-family:var(--font-mono);letter-spacing:.05em;text-transform:uppercase}
+.ads-progress-bar{flex:1;min-width:200px}
+.ads-section{margin-bottom:2.5rem}
+.curso-card{background:var(--surface);border:1px solid var(--border);border-radius:16px;margin-bottom:12px;overflow:hidden;transition:border-color .2s}
+.curso-card:hover{border-color:var(--border2)}
+.curso-header{display:flex;align-items:center;justify-content:space-between;padding:1.25rem 1.5rem;cursor:pointer;gap:12px}
+.curso-left{display:flex;align-items:center;gap:14px;flex:1;min-width:0}
+.curso-dot{width:10px;height:10px;border-radius:50%;flex-shrink:0}
+.dot-active{background:var(--accent)}.dot-urgente{background:var(--red-col)}.dot-nuevo{background:var(--blue-col)}.dot-sin{background:var(--muted);opacity:.5}
+.curso-name{font-size:16px;font-weight:700;letter-spacing:-.02em}
+.curso-meta{font-size:11px;color:var(--muted);font-family:var(--font-mono);margin-top:2px}
+.curso-right{display:flex;align-items:center;gap:10px;flex-shrink:0}
+.ads-badge{font-size:10px;font-family:var(--font-mono);font-weight:500;padding:4px 10px;border-radius:20px;white-space:nowrap;text-transform:uppercase;letter-spacing:.05em}
+.ads-badge-active{background:rgba(232,245,66,.15);color:var(--accent);border:1px solid rgba(232,245,66,.3)}
+.ads-badge-urgente{background:var(--red-dim);color:var(--red-col);border:1px solid rgba(255,87,87,.25)}
+.ads-badge-nuevo{background:var(--blue-dim);color:var(--blue-col);border:1px solid rgba(96,165,250,.25)}
+.ads-badge-sin{background:var(--surface2);color:var(--muted);border:1px solid var(--border)}
+.chevron{width:20px;height:20px;color:var(--muted);transition:transform .3s;flex-shrink:0}
+.curso-card.open .chevron{transform:rotate(180deg)}
+.curso-body{border-top:1px solid var(--border);padding:1.25rem 1.5rem;display:none}
+.curso-card.open .curso-body{display:block}
+.piezas-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:10px;margin-bottom:1rem}
+.pieza-card{background:var(--surface2);border:1px solid var(--border);border-radius:10px;padding:1rem}
+.pieza-top{display:flex;align-items:center;gap:8px;margin-bottom:10px}
+.pieza-icon{width:28px;height:28px;border-radius:7px;display:flex;align-items:center;justify-content:center;font-size:13px;flex-shrink:0}
+.pieza-name{font-size:13px;font-weight:700}
+.pieza-spec{font-size:11px;color:var(--muted);font-family:var(--font-mono);line-height:1.5}
+.ads-checklist{list-style:none;margin-top:10px}
+.ads-checklist li{display:flex;align-items:flex-start;gap:8px;font-size:12px;font-family:var(--font-mono);color:var(--muted);padding:5px 0;border-bottom:1px solid var(--border);line-height:1.4}
+.ads-checklist li:last-child{border-bottom:none}
+.check-box{width:16px;height:16px;border-radius:4px;border:1.5px solid var(--border2);flex-shrink:0;cursor:pointer;margin-top:1px;display:flex;align-items:center;justify-content:center;transition:all .2s}
+.check-box:hover{border-color:var(--accent)}
+.check-box.checked{background:var(--accent);border-color:var(--accent)}
+.check-box.checked::after{content:'';width:8px;height:5px;border-left:2px solid #0D0F12;border-bottom:2px solid #0D0F12;transform:rotate(-45deg) translateY(-1px);display:block}
+.ads-checklist li.done .check-label{color:var(--muted);text-decoration:line-through;opacity:.5}
+.copy-section{margin-top:1.25rem}
+.copy-title{font-size:10px;font-family:var(--font-mono);letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin-bottom:8px}
+.copy-block{background:var(--bg);border:1px solid var(--border);border-radius:8px;padding:12px 14px;font-size:12px;font-family:var(--font-mono);color:var(--text);line-height:1.7}
+.copy-block strong{color:var(--accent);font-weight:500}
+.nota-ads{margin-top:10px;padding:10px 14px;border-radius:8px;font-size:12px;font-family:var(--font-mono);line-height:1.6}
+.nota-ads-amber{background:var(--amber-dim);color:var(--amber-col)}
+.watchlist-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:10px}
+.watchlist-item{background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:1rem 1.25rem}
+.watchlist-name{font-size:14px;font-weight:700;letter-spacing:-.01em;margin-bottom:4px}
+.watchlist-row{display:flex;justify-content:space-between;font-size:11px;font-family:var(--font-mono);color:var(--muted);margin-top:4px}
+.watchlist-trigger{font-size:11px;font-family:var(--font-mono);margin-top:8px;line-height:1.5}
 @media(max-width:700px){.zones-grid,.cards-grid,.charts-2col{grid-template-columns:1fr}.topbar{padding:1rem}.main,.stats-section{padding:1rem}.live-dot{display:none}.toggle-btn span{display:none}}
 </style>
 </head>
@@ -206,6 +269,12 @@ body{background:var(--bg);color:var(--text);font-family:var(--font-head);min-hei
     </div>
   </div>
 
+  <div class="nav-tabs">
+    <button class="nav-tab active" onclick="switchView('panel')">Panel</button>
+    <button class="nav-tab" onclick="switchView('ads')">ADS</button>
+  </div>
+
+  <div class="view-panel active">
   <div class="main">
     <div class="page-header">
       <h1>Comisiones <span>activas</span><br>en venta</h1>
@@ -341,6 +410,293 @@ body{background:var(--bg);color:var(--text);font-family:var(--font-head);min-hei
       </div>
     </div>
   </div>
+
+  </div><!-- /view-panel -->
+
+  <div class="view-ads">
+    <div class="ads-main">
+      <div class="ads-header">
+        <h1>Brief de <em>ads</em><br>Mayo — Junio 2026</h1>
+        <p>Walter × Miguel · Actualizado: <span id="ads-date"></span></p>
+      </div>
+
+      <div class="price-alert">
+        <div class="price-alert-icon">⚠</div>
+        <div>
+          <div class="price-alert-title">PRECIOS CONGELADOS — 10 días quedan</div>
+          <div class="price-alert-body">
+            El 1 de junio se actualizan los precios en todos los cursos.<br>
+            Este es el urgency driver principal de TODAS las comunicaciones de esta semana.<br>
+            Toda pieza debe incluir este mensaje: <strong>"Precio de hoy solo hasta el 31 de mayo."</strong>
+          </div>
+        </div>
+      </div>
+
+      <div class="ads-progress">
+        <div class="ads-progress-stat">
+          <div class="ads-progress-num" id="ads-stat-done" style="color:var(--accent)">0</div>
+          <div class="ads-progress-lbl">Piezas listas</div>
+        </div>
+        <div class="ads-progress-stat">
+          <div class="ads-progress-num" id="ads-stat-total">0</div>
+          <div class="ads-progress-lbl">Total piezas</div>
+        </div>
+        <div class="ads-progress-bar">
+          <div style="display:flex;justify-content:space-between;font-size:11px;color:var(--muted);font-family:var(--font-mono);margin-bottom:6px">
+            <span>Progreso general</span>
+            <span id="ads-stat-pct">0%</span>
+          </div>
+          <div class="progress-track"><div class="progress-fill" id="ads-progress-fill" style="width:0%"></div></div>
+        </div>
+      </div>
+
+      <div class="ads-section">
+        <div class="section-label">Cursos con ADS activos — producir ahora</div>
+
+        <div class="curso-card" id="card-rtc">
+          <div class="curso-header" onclick="toggleCurso('card-rtc')">
+            <div class="curso-left">
+              <div class="curso-dot dot-active"></div>
+              <div>
+                <div class="curso-name">Ready to Code</div>
+                <div class="curso-meta">On Demand · Sin fecha de inicio fija · Listo para venta</div>
+              </div>
+            </div>
+            <div class="curso-right">
+              <span class="ads-badge ads-badge-active">ADS: SI</span>
+              <svg class="chevron" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M5.23 7.21a.75.75 0 011.06.02L10 11.168l3.71-3.938a.75.75 0 111.08 1.04l-4.25 4.5a.75.75 0 01-1.08 0l-4.25-4.5a.75.75 0 01.02-1.06z" clip-rule="evenodd"/></svg>
+            </div>
+          </div>
+          <div class="curso-body">
+            <div class="piezas-grid">
+              <div class="pieza-card">
+                <div class="pieza-top"><div class="pieza-icon" style="background:rgba(232,245,66,0.15)">▶</div><div class="pieza-name">Motion</div></div>
+                <div class="pieza-spec">6–15 seg · Sin voz · Texto animado + precio + CTA</div>
+                <ul class="ads-checklist">
+                  <li><div class="check-box" onclick="toggleCheck(this)"></div><span class="check-label">Brief visual aprobado</span></li>
+                  <li><div class="check-box" onclick="toggleCheck(this)"></div><span class="check-label">Animación producida</span></li>
+                  <li><div class="check-box" onclick="toggleCheck(this)"></div><span class="check-label">Formatos exportados (1:1, 9:16, 4:5)</span></li>
+                  <li><div class="check-box" onclick="toggleCheck(this)"></div><span class="check-label">Copy revisado y aprobado</span></li>
+                  <li><div class="check-box" onclick="toggleCheck(this)"></div><span class="check-label">Pieza publicada</span></li>
+                </ul>
+              </div>
+              <div class="pieza-card">
+                <div class="pieza-top"><div class="pieza-icon" style="background:var(--blue-dim)">◼</div><div class="pieza-name">Placa fija</div></div>
+                <div class="pieza-spec">Feed/Story · Precio · Fecha · CTA</div>
+                <ul class="ads-checklist">
+                  <li><div class="check-box" onclick="toggleCheck(this)"></div><span class="check-label">Diseño producido</span></li>
+                  <li><div class="check-box" onclick="toggleCheck(this)"></div><span class="check-label">Formatos exportados (1:1, 9:16, 4:5)</span></li>
+                  <li><div class="check-box" onclick="toggleCheck(this)"></div><span class="check-label">Copy revisado y aprobado</span></li>
+                  <li><div class="check-box" onclick="toggleCheck(this)"></div><span class="check-label">Pieza publicada</span></li>
+                </ul>
+              </div>
+              <div class="pieza-card">
+                <div class="pieza-top"><div class="pieza-icon" style="background:var(--red-dim)">▶▶</div><div class="pieza-name">Video</div></div>
+                <div class="pieza-spec">Reel/TikTok · 20–45 seg · Con voz o texto</div>
+                <ul class="ads-checklist">
+                  <li><div class="check-box" onclick="toggleCheck(this)"></div><span class="check-label">Script escrito</span></li>
+                  <li><div class="check-box" onclick="toggleCheck(this)"></div><span class="check-label">Script aprobado</span></li>
+                  <li><div class="check-box" onclick="toggleCheck(this)"></div><span class="check-label">Video producido</span></li>
+                  <li><div class="check-box" onclick="toggleCheck(this)"></div><span class="check-label">Subtítulos/captions añadidos</span></li>
+                  <li><div class="check-box" onclick="toggleCheck(this)"></div><span class="check-label">Formatos exportados</span></li>
+                  <li><div class="check-box" onclick="toggleCheck(this)"></div><span class="check-label">Pieza publicada</span></li>
+                </ul>
+              </div>
+              <div class="pieza-card">
+                <div class="pieza-top"><div class="pieza-icon" style="background:rgba(167,139,250,0.12)">≡</div><div class="pieza-name">Carrusel</div></div>
+                <div class="pieza-spec">3–5 slides · Hook → Info → Precio + CTA</div>
+                <ul class="ads-checklist">
+                  <li><div class="check-box" onclick="toggleCheck(this)"></div><span class="check-label">Slide 1 — Hook aprobado</span></li>
+                  <li><div class="check-box" onclick="toggleCheck(this)"></div><span class="check-label">Slides 2–4 — Contenido producido</span></li>
+                  <li><div class="check-box" onclick="toggleCheck(this)"></div><span class="check-label">Slide final — Precio + CTA</span></li>
+                  <li><div class="check-box" onclick="toggleCheck(this)"></div><span class="check-label">Copy revisado y aprobado</span></li>
+                  <li><div class="check-box" onclick="toggleCheck(this)"></div><span class="check-label">Carrusel publicado</span></li>
+                </ul>
+              </div>
+            </div>
+            <div class="copy-section">
+              <div class="copy-title">Copy de referencia</div>
+              <div class="copy-block">
+                <strong>Hook:</strong> "Ya sabés programar. Ahora aprendé a conseguir trabajo."<br>
+                <strong>Ángulo:</strong> Es el único on-demand activo. El foco es el precio que sube el 1/6.<br>
+                <strong>Urgencia:</strong> "Empezás cuando querés. Al precio de hoy, solo hasta el 31 de mayo."<br>
+                <strong>CTA:</strong> Inscribite hoy → link directo al checkout
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="curso-card" id="card-fsp-siesta">
+          <div class="curso-header" onclick="toggleCurso('card-fsp-siesta')">
+            <div class="curso-left">
+              <div class="curso-dot dot-active"></div>
+              <div>
+                <div class="curso-name">FullStack Presencial — Siesta</div>
+                <div class="curso-meta">Presencial TUC · Inicia 16 junio · Se puede mover</div>
+              </div>
+            </div>
+            <div class="curso-right">
+              <span class="ads-badge ads-badge-active">ADS: SI</span>
+              <svg class="chevron" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M5.23 7.21a.75.75 0 011.06.02L10 11.168l3.71-3.938a.75.75 0 111.08 1.04l-4.25 4.5a.75.75 0 01-1.08 0l-4.25-4.5a.75.75 0 01.02-1.06z" clip-rule="evenodd"/></svg>
+            </div>
+          </div>
+          <div class="curso-body">
+            <div class="nota-ads nota-ads-amber">⚠ Motion: NO. Solo placa fija + video + carrusel. Zona naranja: 27 días para inicio.</div>
+            <div class="piezas-grid" style="margin-top:14px">
+              <div class="pieza-card">
+                <div class="pieza-top"><div class="pieza-icon" style="background:var(--blue-dim)">◼</div><div class="pieza-name">Placa fija</div></div>
+                <div class="pieza-spec">Feed/Story · Horario siesta · Precio · Fecha</div>
+                <ul class="ads-checklist">
+                  <li><div class="check-box" onclick="toggleCheck(this)"></div><span class="check-label">Diseño producido</span></li>
+                  <li><div class="check-box" onclick="toggleCheck(this)"></div><span class="check-label">Formatos exportados (1:1, 9:16, 4:5)</span></li>
+                  <li><div class="check-box" onclick="toggleCheck(this)"></div><span class="check-label">Copy revisado y aprobado</span></li>
+                  <li><div class="check-box" onclick="toggleCheck(this)"></div><span class="check-label">Pieza publicada</span></li>
+                </ul>
+              </div>
+              <div class="pieza-card">
+                <div class="pieza-top"><div class="pieza-icon" style="background:var(--red-dim)">▶▶</div><div class="pieza-name">Video</div></div>
+                <div class="pieza-spec">Reel · 20–45 seg · Ángulo: horario diferenciador</div>
+                <ul class="ads-checklist">
+                  <li><div class="check-box" onclick="toggleCheck(this)"></div><span class="check-label">Script escrito</span></li>
+                  <li><div class="check-box" onclick="toggleCheck(this)"></div><span class="check-label">Script aprobado</span></li>
+                  <li><div class="check-box" onclick="toggleCheck(this)"></div><span class="check-label">Video producido</span></li>
+                  <li><div class="check-box" onclick="toggleCheck(this)"></div><span class="check-label">Subtítulos/captions añadidos</span></li>
+                  <li><div class="check-box" onclick="toggleCheck(this)"></div><span class="check-label">Formatos exportados</span></li>
+                  <li><div class="check-box" onclick="toggleCheck(this)"></div><span class="check-label">Pieza publicada</span></li>
+                </ul>
+              </div>
+              <div class="pieza-card">
+                <div class="pieza-top"><div class="pieza-icon" style="background:rgba(167,139,250,0.12)">≡</div><div class="pieza-name">Carrusel</div></div>
+                <div class="pieza-spec">3–5 slides · Hook horario → cursado → precio</div>
+                <ul class="ads-checklist">
+                  <li><div class="check-box" onclick="toggleCheck(this)"></div><span class="check-label">Slide 1 — Hook aprobado</span></li>
+                  <li><div class="check-box" onclick="toggleCheck(this)"></div><span class="check-label">Slides 2–4 — Contenido producido</span></li>
+                  <li><div class="check-box" onclick="toggleCheck(this)"></div><span class="check-label">Slide final — Precio + CTA</span></li>
+                  <li><div class="check-box" onclick="toggleCheck(this)"></div><span class="check-label">Copy revisado y aprobado</span></li>
+                  <li><div class="check-box" onclick="toggleCheck(this)"></div><span class="check-label">Carrusel publicado</span></li>
+                </ul>
+              </div>
+            </div>
+            <div class="copy-section">
+              <div class="copy-title">Copy de referencia</div>
+              <div class="copy-block">
+                <strong>Hook:</strong> "Horario de siesta. Carrera de 9 meses."<br>
+                <strong>Ángulo:</strong> El horario es el diferenciador. Hablarle a quien tiene mañana ocupada (profesionales, madres/padres, freelancers).<br>
+                <strong>Urgencia:</strong> "Inscribite antes del 1 de junio y pagás el precio de hoy."<br>
+                <strong>CTA:</strong> Reservá tu lugar → link directo
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="ads-section">
+        <div class="section-label">Urgentes — sin ADS ahora, monitor activo</div>
+        <div class="watchlist-grid">
+          <div class="watchlist-item">
+            <div class="watchlist-name" style="color:var(--red-col)">FullStack Virtual — Tarde</div>
+            <div class="watchlist-row"><span>Inicio</span><span>15 junio</span></div>
+            <div class="watchlist-row"><span>Días restantes</span><span style="color:var(--red-col)">~26 días · Zona naranja</span></div>
+            <div class="watchlist-row"><span>Se puede mover</span><span>Sí</span></div>
+            <div class="watchlist-trigger" style="color:var(--amber-col)">→ Si no hay movimiento esta semana: mover +2 semanas y lanzar ads para nueva fecha.</div>
+            <ul class="ads-checklist" style="margin-top:10px">
+              <li><div class="check-box" onclick="toggleCheck(this)"></div><span class="check-label">Revisar inscriptos esta semana</span></li>
+              <li><div class="check-box" onclick="toggleCheck(this)"></div><span class="check-label">Decisión: mover fecha o no</span></li>
+              <li><div class="check-box" onclick="toggleCheck(this)"></div><span class="check-label">Si se mueve: brief de ads para nueva fecha</span></li>
+            </ul>
+          </div>
+          <div class="watchlist-item">
+            <div class="watchlist-name" style="color:var(--red-col)">PM</div>
+            <div class="watchlist-row"><span>Inicio</span><span>17 junio</span></div>
+            <div class="watchlist-row"><span>Días restantes</span><span style="color:var(--red-col)">~28 días · Zona naranja</span></div>
+            <div class="watchlist-row"><span>Se puede mover</span><span>Sí</span></div>
+            <div class="watchlist-trigger" style="color:var(--amber-col)">→ Necesita acción esta semana. Sin masa crítica → mover.</div>
+            <ul class="ads-checklist" style="margin-top:10px">
+              <li><div class="check-box" onclick="toggleCheck(this)"></div><span class="check-label">Revisar inscriptos esta semana</span></li>
+              <li><div class="check-box" onclick="toggleCheck(this)"></div><span class="check-label">Decisión: mover fecha o no</span></li>
+              <li><div class="check-box" onclick="toggleCheck(this)"></div><span class="check-label">Si se mueve: brief de ads para nueva fecha</span></li>
+            </ul>
+          </div>
+          <div class="watchlist-item">
+            <div class="watchlist-name" style="color:var(--red-col)">FullStack Presencial TUC — Sábado tarde</div>
+            <div class="watchlist-row"><span>Inicio</span><span>20 junio</span></div>
+            <div class="watchlist-row"><span>Días restantes</span><span style="color:var(--amber-col)">~31 días · Zona naranja</span></div>
+            <div class="watchlist-row"><span>Se puede mover</span><span>Sí</span></div>
+            <div class="watchlist-trigger" style="color:var(--amber-col)">→ Dar una semana más. Sin movimiento → mover +2 semanas.</div>
+            <ul class="ads-checklist" style="margin-top:10px">
+              <li><div class="check-box" onclick="toggleCheck(this)"></div><span class="check-label">Revisar inscriptos esta semana</span></li>
+              <li><div class="check-box" onclick="toggleCheck(this)"></div><span class="check-label">Decisión: mover fecha o no</span></li>
+              <li><div class="check-box" onclick="toggleCheck(this)"></div><span class="check-label">Si se mueve: brief de ads para nueva fecha</span></li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <div class="ads-section">
+        <div class="section-label">Cursos nuevos — sin ADS, dejar madurar</div>
+        <div class="watchlist-grid">
+          <div class="watchlist-item">
+            <div class="watchlist-name" style="color:var(--blue-col)">FullStack Online — Sábado mañana</div>
+            <div class="watchlist-row"><span>Inicio</span><span>20 junio</span></div>
+            <div class="watchlist-row"><span>Modalidad</span><span>Online</span></div>
+            <div class="watchlist-trigger" style="color:var(--blue-col)">→ Recién lanzado. Dejar venta orgánica. Activar en semana previa al inicio.</div>
+            <ul class="ads-checklist" style="margin-top:10px">
+              <li><div class="check-box" onclick="toggleCheck(this)"></div><span class="check-label">Revisar inscriptos en 10 días</span></li>
+              <li><div class="check-box" onclick="toggleCheck(this)"></div><span class="check-label">Definir si requiere ADS activo</span></li>
+            </ul>
+          </div>
+          <div class="watchlist-item">
+            <div class="watchlist-name" style="color:var(--blue-col)">FullStack Presencial BsAs — L y M tarde</div>
+            <div class="watchlist-row"><span>Inicio</span><span>Lunes 22 junio</span></div>
+            <div class="watchlist-row"><span>Modalidad</span><span>Presencial BsAs</span></div>
+            <div class="watchlist-trigger" style="color:var(--blue-col)">→ Necesita campaña geolocalizada para BsAs. No antes de tener runway suficiente.</div>
+            <ul class="ads-checklist" style="margin-top:10px">
+              <li><div class="check-box" onclick="toggleCheck(this)"></div><span class="check-label">Revisar inscriptos en 10 días</span></li>
+              <li><div class="check-box" onclick="toggleCheck(this)"></div><span class="check-label">Definir estrategia geo BsAs</span></li>
+              <li><div class="check-box" onclick="toggleCheck(this)"></div><span class="check-label">Brief específico para campaña BsAs</span></li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <div class="ads-section">
+        <div class="section-label">On Demand — sin ADS esta tanda</div>
+        <div class="watchlist-grid">
+          <div class="watchlist-item">
+            <div class="watchlist-name" style="color:var(--muted)">Python — On Demand</div>
+            <div class="watchlist-row"><span>Inicio</span><span>22 mayo (ya arrancó)</span></div>
+            <div class="watchlist-trigger" style="color:var(--muted)">→ Ya casi iniciado. No aplica para esta tanda de ads.</div>
+          </div>
+          <div class="watchlist-item">
+            <div class="watchlist-name" style="color:var(--muted)">Claude Code — On Demand</div>
+            <div class="watchlist-row"><span>Inicio</span><span>1 junio</span></div>
+            <div class="watchlist-trigger" style="color:var(--muted)">→ Brief del curso en desarrollo. ADS cuando el curso esté listo.</div>
+            <ul class="ads-checklist" style="margin-top:10px">
+              <li><div class="check-box" onclick="toggleCheck(this)"></div><span class="check-label">Curso terminado y cargado</span></li>
+              <li><div class="check-box" onclick="toggleCheck(this)"></div><span class="check-label">Brief de ads armado</span></li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <div class="ads-section">
+        <div class="section-label">Resumen de producción — esta semana</div>
+        <div style="background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:1.5rem;font-family:var(--font-mono);font-size:13px;line-height:2">
+          <div style="display:grid;grid-template-columns:1fr auto;gap:4px 24px;align-items:center">
+            <span style="color:var(--muted)">Ready to Code · Motion</span><span style="color:var(--accent)">✓ producir</span>
+            <span style="color:var(--muted)">Ready to Code · Placa fija</span><span style="color:var(--accent)">✓ producir</span>
+            <span style="color:var(--muted)">Ready to Code · Video</span><span style="color:var(--accent)">✓ producir</span>
+            <span style="color:var(--muted)">Ready to Code · Carrusel</span><span style="color:var(--accent)">✓ producir</span>
+            <span style="color:var(--muted)">FullStack Siesta · Placa fija</span><span style="color:var(--accent)">✓ producir</span>
+            <span style="color:var(--muted)">FullStack Siesta · Video</span><span style="color:var(--accent)">✓ producir</span>
+            <span style="color:var(--muted)">FullStack Siesta · Carrusel</span><span style="color:var(--accent)">✓ producir</span>
+            <span style="font-weight:700;padding-top:8px;border-top:1px solid var(--border)">Total piezas</span><span style="font-weight:700;padding-top:8px;border-top:1px solid var(--border)">7</span>
+            <span style="color:var(--muted)">Mensaje transversal en todas</span><span style="color:var(--amber-col)">Precios congelados hasta el 31/5</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div><!-- /view-ads -->
 
   <div class="footer">RollingCode School · Panel interno de ventas · Actualizado 20/05/2026</div>
 </div>
@@ -1053,10 +1409,60 @@ function initDashboard(){
   tryInit();
 }
 
+function switchView(view){
+  document.querySelectorAll('.nav-tab').forEach(t=>t.classList.toggle('active',t.textContent.toLowerCase()===view));
+  document.querySelector('.view-panel').classList.toggle('active',view==='panel');
+  document.querySelector('.view-ads').classList.toggle('active',view==='ads');
+  if(view==='ads'){initAds();}
+}
+
+function toggleCurso(id){document.getElementById(id).classList.toggle('open');}
+
+function toggleCheck(box){
+  box.classList.toggle('checked');
+  const li=box.closest('li');
+  li.classList.toggle('done',box.classList.contains('checked'));
+  updateAdsProgress();
+  saveAdsState();
+}
+
+function updateAdsProgress(){
+  const all=document.querySelectorAll('.view-ads .check-box');
+  const done=document.querySelectorAll('.view-ads .check-box.checked');
+  const total=all.length,doneCount=done.length;
+  const pct=total?Math.round(doneCount/total*100):0;
+  const el1=document.getElementById('ads-stat-done');if(el1)el1.textContent=doneCount;
+  const el2=document.getElementById('ads-stat-total');if(el2)el2.textContent=total;
+  const el3=document.getElementById('ads-stat-pct');if(el3)el3.textContent=pct+'%';
+  const el4=document.getElementById('ads-progress-fill');if(el4)el4.style.width=pct+'%';
+}
+
+function saveAdsState(){
+  const state=[];
+  document.querySelectorAll('.view-ads .check-box').forEach((b,i)=>{if(b.classList.contains('checked'))state.push(i);});
+  localStorage.setItem('rc_ads_checks',JSON.stringify(state));
+}
+
+function loadAdsState(){
+  try{
+    const state=JSON.parse(localStorage.getItem('rc_ads_checks')||'[]');
+    const boxes=document.querySelectorAll('.view-ads .check-box');
+    state.forEach(i=>{if(boxes[i]){boxes[i].classList.add('checked');const li=boxes[i].closest('li');if(li)li.classList.add('done');}});
+  }catch(e){}
+}
+
+function initAds(){
+  const d=document.getElementById('ads-date');
+  if(d)d.textContent=new Date().toLocaleDateString('es-AR',{day:'numeric',month:'long',year:'numeric'});
+  document.querySelectorAll('.view-ads .curso-card').forEach(c=>c.classList.add('open'));
+  updateAdsProgress();
+}
+
 if(sessionStorage.getItem('rc_auth')==='1'){
   document.getElementById('login-screen').style.display='none';
   document.getElementById('dashboard-content').style.display='block';
   initDashboard();
+  loadAdsState();
 }
 </script>
 </div>
